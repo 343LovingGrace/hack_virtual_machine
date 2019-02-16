@@ -16,6 +16,15 @@ class InstructionStack {
 
     fun pushHead(value: Boolean) = instructionStack.push(StackPermittedDataType.BooleanWrapper(value))
 
+    fun peekHead() : StackPermittedDataType = instructionStack.peekFirst()
+
+    fun peekSecond() : StackPermittedDataType {
+        val head = instructionStack.pop()
+        val second = instructionStack.peekFirst()
+        instructionStack.addFirst(head)
+        return second
+    }
+
     fun print() {
         instructionStack.forEach {
             if (it is StackPermittedDataType.IntegerWrapper) {
@@ -25,6 +34,10 @@ class InstructionStack {
             }
         }
         println()
+    }
+
+    fun equals(instructionStack2: InstructionStack) : Boolean {
+        return instructionStack2.instructionStack.equals(instructionStack)
     }
 
     fun copy() : InstructionStack = this
