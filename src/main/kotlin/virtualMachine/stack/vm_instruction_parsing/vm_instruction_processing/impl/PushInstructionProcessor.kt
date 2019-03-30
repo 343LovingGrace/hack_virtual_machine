@@ -1,9 +1,10 @@
-package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing
+package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl
 
 import virtualMachine.stack.InstructionStack
 import virtualMachine.stack.StackMemory
 import virtualMachine.stack.StaticVariables
 import virtualMachine.stack.vm_instruction_parsing.getValueFromCommand
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor
 
 class PushInstructionProcessor : InstructionProcessor {
 

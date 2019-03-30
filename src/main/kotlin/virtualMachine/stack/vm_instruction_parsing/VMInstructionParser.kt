@@ -5,6 +5,10 @@ import virtualMachine.stack.StackMemory
 import virtualMachine.stack.StaticVariables
 import virtualMachine.stack.THIS
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.*
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.BinaryInstructionProcessor
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PopInstructionProcessor
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PushInstructionProcessor
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.UnaryInstructionProcessor
 
 fun getValueFromCommand(instruction: String) : String {
     if (instruction.contains(" ")) {

@@ -3,7 +3,7 @@ package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing
 import java.util.logging.Level
 import java.util.logging.Logger
 
-open class StackComputations {
+abstract class StackComputations {
 
     protected fun calculateIntegerInstruction(a: Int, b: Int, instruction: String): Int {
         return when (instruction) {
