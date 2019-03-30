@@ -3,7 +3,6 @@
  */
 package virtualMachine
 
-import virtualMachine.io.VMParser
 import java.io.File
 import java.nio.charset.Charset
 

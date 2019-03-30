@@ -1,4 +1,4 @@
-package virtualMachine.Translators
+package virtualMachine.hack_translation.translators
 
 class HackAssemblyTranslation {
     private val assemblyCode = StringBuilder()

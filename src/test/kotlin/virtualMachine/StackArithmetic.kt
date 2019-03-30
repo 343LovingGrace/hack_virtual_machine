@@ -3,7 +3,6 @@ package virtualMachine
 import org.junit.Assert
 import virtualMachine.stack.datawrappers.StackPermittedDataType
 import virtualMachine.stack.datawrappers.getValue
-import virtualMachine.io.VMParser
 import virtualMachine.stack.InstructionStack
 import virtualMachine.stack.processing.bitWiseNot16Bit
 import virtualMachine.stack.processing.padStringTo16bit

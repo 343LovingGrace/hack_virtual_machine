@@ -1,7 +1,7 @@
-package virtualMachine.io
+package virtualMachine
 
-import virtualMachine.Translators.HackAssemblyTranslation
-import virtualMachine.Translators.TranslateVMToHack
+import virtualMachine.hack_translation.translators.HackAssemblyTranslation
+import virtualMachine.hack_translation.translators.TranslateVMToHack
 import virtualMachine.stack.InstructionStack
 import virtualMachine.stack.processing.StackProcessor
 

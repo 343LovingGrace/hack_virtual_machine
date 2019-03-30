@@ -1,4 +1,4 @@
-package virtualMachine.Translators
+package virtualMachine.hack_translation.translators
 
 import virtualMachine.stack.InstructionStack
 
