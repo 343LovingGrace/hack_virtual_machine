@@ -2,7 +2,7 @@ package virtualMachine
 
 import org.junit.Test
 import virtualMachine.stack.InstructionStack
-import virtualMachine.stack.processing.StackProcessor
+import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 import kotlin.test.assertEquals
 
 class Pointers {
@@ -12,7 +12,7 @@ class Pointers {
         val line1 = "push constant 1450"
         val line2 = "pop pointer 0"
 
-        val vmProcessor = StackProcessor()
+        val vmProcessor = VMInstructionParser()
         val stack = InstructionStack()
         vmProcessor.processInstruction(stack, line1)
         vmProcessor.processInstruction(stack, line2)

@@ -4,8 +4,8 @@ import org.junit.Assert
 import virtualMachine.stack.datawrappers.StackPermittedDataType
 import virtualMachine.stack.datawrappers.getValue
 import virtualMachine.stack.InstructionStack
-import virtualMachine.stack.processing.bitWiseNot16Bit
-import virtualMachine.stack.processing.padStringTo16bit
+import virtualMachine.stack.vm_instruction_parsing.bitWiseNot16Bit
+import virtualMachine.stack.vm_instruction_parsing.padStringTo16bit
 import kotlin.test.Test
 
 class StackArithmetic {
@@ -30,7 +30,7 @@ class StackArithmetic {
                 "add"
         )
         instructions.forEach {
-            it -> vmParser.readLine(it)
+            vmParser.readLine(it)
         }
         val instructionStack: InstructionStack = vmParser.getInstructionStack()
         val result: StackPermittedDataType = instructionStack.popHead()
@@ -49,7 +49,7 @@ class StackArithmetic {
                 "add"
         )
         instructions.forEach {
-            it -> vmParser.readLine(it)
+            vmParser.readLine(it)
         }
         val instructionStack: InstructionStack = vmParser.getInstructionStack()
         val result: StackPermittedDataType = instructionStack.popHead()
@@ -68,7 +68,7 @@ class StackArithmetic {
                 "gt"
         )
         instructions.forEach {
-            it -> vmParser.readLine(it)
+            vmParser.readLine(it)
         }
         val instructionStack: InstructionStack = vmParser.getInstructionStack()
         val result: StackPermittedDataType = instructionStack.popHead()
@@ -78,7 +78,7 @@ class StackArithmetic {
 
     @Test
     fun testLoadFile() {
-        val vmParser : VMParser = App().processInputFile("/home/ed/Documents/Studying/mynand2tetris2/projects/07/StackArithmetic/StackTest/StackTest.vm")
+        val vmParser : VMParser = App().processInputFile("./src/test/StackArithmetic/StackTest/StackTest.vm")
         val instructionStack: InstructionStack = vmParser.getInstructionStack()
         val result: StackPermittedDataType = instructionStack.popHead()
         val actualData = getValue(result)

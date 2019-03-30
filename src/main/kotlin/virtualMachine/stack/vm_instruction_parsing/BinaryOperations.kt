@@ -1,4 +1,4 @@
-package virtualMachine.stack.processing
+package virtualMachine.stack.vm_instruction_parsing
 
 import java.lang.StringBuilder
 

@@ -13,8 +13,11 @@ class App {
         val vmParser = VMParser()
         bufferedReader
                 .lines()
+                .filter {
+                    !it.isEmpty() && !it.startsWith("//")
+                }
                 .forEach {
-                    it -> vmParser.readLine(it)
+                    vmParser.readLine(it)
                 }
         //do nothing with processed stack for now
         return vmParser
