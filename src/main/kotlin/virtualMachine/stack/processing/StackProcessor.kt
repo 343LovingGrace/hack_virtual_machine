@@ -105,9 +105,9 @@ class StackProcessor {
 
     private fun processIntegerInstruction(a: Int, b: Int, instruction: String): Int {
         return when (instruction) {
-            "add" -> add(a, b)
-            "sub" -> sub(a, b)
-            "neg" -> neg(a)
+            "add" -> a + b
+            "sub" -> a - b
+            "neg" -> -a
             else -> {
                 Logger.getLogger("StackProcessor").log(Level.WARNING, "unrecognised command $instruction")
                 -1
@@ -118,10 +118,10 @@ class StackProcessor {
     private fun processBooleanInstruction(a: Boolean, b: Boolean, instruction: String): Boolean {
         println("doing some boolean stuff")
         return when (instruction) {
-            "eq" -> eq(a, b)
-            "and" -> and(a, b)
-            "or" -> or(a, b)
-            "not" -> not(a)
+            "eq" -> a == b
+            "and" -> a && b
+            "or" ->  a || b
+            "not" -> !a
             else -> {
                 Logger.getLogger("StackProcessor").log(Level.WARNING, "unrecognised command $instruction")
                 false
