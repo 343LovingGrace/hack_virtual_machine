@@ -1,36 +1,58 @@
 package virtualMachine.stackArithmetic
 
 import virtualMachine.datawrappers.StackPermittedDataType
+import virtualMachine.datawrappers.getValue
 import virtualMachine.stack.InstructionStack
+import virtualMachine.stack.StackMemory
+import virtualMachine.stack.StaticVariables
+import virtualMachine.stack.THIS
 import virtualMachine.util.bitWiseNot16Bit
 import virtualMachine.util.bitWiseOp16Bit
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class StackArithmeticProcessor {
+//todo: doing too much refactor
+class StackProcessor {
+
+    private val staticVariables = StaticVariables()
+    private val stackMemory = StackMemory()
 
     private val allBinaryInstructions: Set<String> = setOf("add", "sub", "eq", "gt", "lt", "and", "or")
     private val allUnaryInstructions: Set<String> = setOf("neg", "not")
 
-    fun processArthimeticOrLogicalInstruction(instructionStack: InstructionStack, instruction: String): InstructionStack {
+    fun processInstruction(instructionStack: InstructionStack, instruction: String): InstructionStack {
         when {
             instruction.contains("pop") -> {
-
+                val head : StackPermittedDataType = instructionStack.popHead()
+                val headValue : Int = getValue(head) as Int
+                if (instruction.contains("pointer")) {
+                    val pointerOffset = 3
+                    val addressToSet: String = getValueFromCommand(instruction)
+                    stackMemory.setAddress(pointerOffset + addressToSet.toInt(), headValue)
+                }
             }
             instruction.contains("push") -> processPushCommand(instruction, instructionStack)
             allUnaryInstructions.contains(instruction) -> processUnaryInstruction(instructionStack, instruction)
             allBinaryInstructions.contains(instruction) -> processBinaryInstruction(instructionStack, instruction)
-            else -> Logger.getLogger("StackArithmeticProcessor").log(Level.SEVERE, "invalid message provided" + instruction)
+            else -> Logger.getLogger("StackProcessor").log(Level.SEVERE, "invalid message provided" + instruction)
         }
         return instructionStack
     }
 
+    //interface with classes constructed for each command
     private fun processPushCommand(instruction: String, instructionStack: InstructionStack) {
+        val constant: String = getValueFromCommand(instruction)
+
         if (instruction.contains("constant")) {
-            val splitCommand: List<String> = instruction.split(" ")
-            val constant: String = splitCommand[splitCommand.size - 1]
             instructionStack.pushHead(constant.toInt())
+        } else if (instruction.contains("static")) {
+            staticVariables.addVariable(constant.toInt())
         }
+    }
+
+    private fun getValueFromCommand(instruction: String) : String {
+        val splitCommand: List<String> = instruction.split(" ")
+        return splitCommand[splitCommand.size - 1]
     }
 
     private fun processBinaryInstruction(instructionStack: InstructionStack, instruction: String) {
@@ -89,7 +111,7 @@ class StackArithmeticProcessor {
             "sub" -> sub(a, b)
             "neg" -> neg(a)
             else -> {
-                Logger.getLogger("StackArithmeticProcessor").log(Level.WARNING, "unrecognised command $instruction")
+                Logger.getLogger("StackProcessor").log(Level.WARNING, "unrecognised command $instruction")
                 -1
             }
         }
@@ -103,10 +125,14 @@ class StackArithmeticProcessor {
             "or" -> or(a, b)
             "not" -> not(a)
             else -> {
-                Logger.getLogger("StackArithmeticProcessor").log(Level.WARNING, "unrecognised command $instruction")
+                Logger.getLogger("StackProcessor").log(Level.WARNING, "unrecognised command $instruction")
                 false
             }
         }
+    }
+
+    fun getThis() : Int {
+        return stackMemory.getAddress(THIS)
     }
 
 }

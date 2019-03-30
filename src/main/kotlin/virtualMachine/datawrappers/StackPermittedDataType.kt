@@ -1,5 +1,6 @@
 package virtualMachine.datawrappers
 
+///why did i do this to myself
 sealed class StackPermittedDataType {
     class BooleanWrapper(val value: Boolean) : StackPermittedDataType()
     class IntegerWrapper(val i: SixteenBitInteger) : StackPermittedDataType()

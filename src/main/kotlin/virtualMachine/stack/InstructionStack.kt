@@ -37,8 +37,10 @@ class InstructionStack {
     }
 
     fun equals(instructionStack2: InstructionStack) : Boolean {
-        return instructionStack2.instructionStack.equals(instructionStack)
+        return instructionStack2.instructionStack == instructionStack
     }
 
     fun copy() : InstructionStack = this
+
+    fun isEmpty() : Boolean = instructionStack.isEmpty()
 }

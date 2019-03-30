@@ -5,12 +5,12 @@ import virtualMachine.datawrappers.StackPermittedDataType
 import virtualMachine.datawrappers.getValue
 import virtualMachine.io.VMParser
 import virtualMachine.stack.InstructionStack
+import virtualMachine.stackArithmetic.StackProcessor
 import virtualMachine.util.bitWiseNot16Bit
 import virtualMachine.util.padStringTo16bit
-import java.lang.StringBuilder
 import kotlin.test.Test
 
-class AppTest {
+class StackArithmetic {
 
     @Test
     fun testLoadConstants() {
