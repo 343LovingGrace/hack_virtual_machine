@@ -1,13 +1,11 @@
-package virtualMachine.stackArithmetic
+package virtualMachine.stack.processing
 
-import virtualMachine.datawrappers.StackPermittedDataType
-import virtualMachine.datawrappers.getValue
+import virtualMachine.stack.datawrappers.StackPermittedDataType
+import virtualMachine.stack.datawrappers.getValue
 import virtualMachine.stack.InstructionStack
 import virtualMachine.stack.StackMemory
 import virtualMachine.stack.StaticVariables
 import virtualMachine.stack.THIS
-import virtualMachine.util.bitWiseNot16Bit
-import virtualMachine.util.bitWiseOp16Bit
 import java.util.logging.Level
 import java.util.logging.Logger
 

@@ -1,6 +1,6 @@
-package virtualMachine.datawrappers
+package virtualMachine.stack.datawrappers
 
-import virtualMachine.util.padStringTo16bit
+import virtualMachine.stack.processing.padStringTo16bit
 
 class SixteenBitInteger(val value: Int) {
 

@@ -3,9 +3,9 @@ package virtualMachine.io
 import virtualMachine.Translators.HackAssemblyTranslation
 import virtualMachine.Translators.TranslateVMToHack
 import virtualMachine.stack.InstructionStack
-import virtualMachine.stackArithmetic.StackProcessor
+import virtualMachine.stack.processing.StackProcessor
 
-//todo: kind of a pointless class really
+//todo: kind of a pointless class really remove
 class VMParser {
 
     private val instructionStack = InstructionStack()

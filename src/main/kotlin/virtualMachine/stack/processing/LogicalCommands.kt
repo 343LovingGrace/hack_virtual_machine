@@ -1,4 +1,4 @@
-package virtualMachine.stackArithmetic
+package virtualMachine.stack.processing
 
 fun eq(a: Int, b: Int) : Boolean = a == b
 

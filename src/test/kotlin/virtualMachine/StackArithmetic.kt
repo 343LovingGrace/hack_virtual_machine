@@ -1,13 +1,12 @@
 package virtualMachine
 
 import org.junit.Assert
-import virtualMachine.datawrappers.StackPermittedDataType
-import virtualMachine.datawrappers.getValue
+import virtualMachine.stack.datawrappers.StackPermittedDataType
+import virtualMachine.stack.datawrappers.getValue
 import virtualMachine.io.VMParser
 import virtualMachine.stack.InstructionStack
-import virtualMachine.stackArithmetic.StackProcessor
-import virtualMachine.util.bitWiseNot16Bit
-import virtualMachine.util.padStringTo16bit
+import virtualMachine.stack.processing.bitWiseNot16Bit
+import virtualMachine.stack.processing.padStringTo16bit
 import kotlin.test.Test
 
 class StackArithmetic {

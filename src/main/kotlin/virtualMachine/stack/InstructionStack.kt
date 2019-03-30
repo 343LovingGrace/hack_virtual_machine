@@ -1,7 +1,7 @@
 package virtualMachine.stack
 
-import virtualMachine.datawrappers.SixteenBitInteger
-import virtualMachine.datawrappers.StackPermittedDataType
+import virtualMachine.stack.datawrappers.SixteenBitInteger
+import virtualMachine.stack.datawrappers.StackPermittedDataType
 import java.util.*
 
 class InstructionStack {

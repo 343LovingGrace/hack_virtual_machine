@@ -1,4 +1,4 @@
-package virtualMachine.stackArithmetic
+package virtualMachine.stack.processing
 
 fun add(a: Int, b: Int) : Int = a + b
 

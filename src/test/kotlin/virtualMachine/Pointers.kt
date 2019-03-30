@@ -2,7 +2,7 @@ package virtualMachine
 
 import org.junit.Test
 import virtualMachine.stack.InstructionStack
-import virtualMachine.stackArithmetic.StackProcessor
+import virtualMachine.stack.processing.StackProcessor
 import kotlin.test.assertEquals
 
 class Pointers {

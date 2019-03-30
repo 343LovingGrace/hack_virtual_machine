@@ -1,4 +1,4 @@
-package virtualMachine.util
+package virtualMachine.stack.processing
 
 import java.lang.StringBuilder
 
@@ -43,8 +43,8 @@ private fun not(a : Char) : Char {
     }
 }
 
-private fun charToBoolean(a : Char) : Boolean {
-    return a == '1'
+private fun charToBoolean(letter : Char) : Boolean {
+    return letter == '1'
 }
 
 private fun andToChar(a : Boolean, b : Boolean) : Char {

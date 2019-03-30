@@ -1,4 +1,4 @@
-package virtualMachine.datawrappers
+package virtualMachine.stack.datawrappers
 
 ///why did i do this to myself
 sealed class StackPermittedDataType {
