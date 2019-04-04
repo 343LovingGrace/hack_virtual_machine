@@ -11,6 +11,9 @@ public class SixteenBit {
     }
 
     public SixteenBit(int operand) {
+        if (operand > 1 << 17) {
+            throw new IllegalArgumentException("The operand is too big, but be 16 bit");
+        }
         sixteenBit = new boolean[16];
         for (int i = 15; i >= 0; i--) {
             int powerOfTwo = 1 << i;
@@ -61,19 +64,6 @@ public class SixteenBit {
         return Arrays.copyOf(sixteenBit, 16);
     }
 
-    private boolean[] convertIntTo16Bit(int operand) {
-        boolean[] bits = new boolean[16];
-
-        for (int i = 15; i >= 0; i--) {
-            double power = Math.pow(2, i);
-            int divisor = (int) (operand / Math.pow(2, i));
-            if (divisor == 1) {
-                operand -= power;
-            }
-        }
-
-        return bits;
-    }
 
     @Override
     public String toString() {

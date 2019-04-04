@@ -30,16 +30,12 @@ class VMInstructionParser {
     }
 
     private fun getInstructionProcessor(instruction: String) : InstructionProcessor {
-        if (instruction.contains("pop")) {
-            return PopInstructionProcessor()
-        } else if (instruction.contains("push")) {
-            return PushInstructionProcessor()
-        } else if (allBinaryInstructions.contains(instruction)) {
-            return BinaryInstructionProcessor()
-        } else if (allUnaryInstructions.contains(instruction)) {
-            return UnaryInstructionProcessor()
-        } else {
-            throw RuntimeException("Unknown instruction " + instruction)
+        when {
+            instruction.contains("pop") -> return PopInstructionProcessor()
+            instruction.contains("push") -> return PushInstructionProcessor()
+            allBinaryInstructions.contains(instruction) -> return BinaryInstructionProcessor()
+            allUnaryInstructions.contains(instruction) -> return UnaryInstructionProcessor()
+            else -> throw RuntimeException("Unknown instruction " + instruction)
         }
     }
 
