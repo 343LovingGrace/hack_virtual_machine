@@ -1,9 +1,6 @@
 package virtualMachine.stack.vm_instruction_parsing
 
-import virtualMachine.stack.InstructionStack
-import virtualMachine.stack.StackMemory
-import virtualMachine.stack.StaticVariables
-import virtualMachine.stack.THIS
+import virtualMachine.stack.*
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.*
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.BinaryInstructionProcessor
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PopInstructionProcessor
@@ -48,6 +45,10 @@ class VMInstructionParser {
 
     fun getThis() : Int {
         return stackMemory.getAddress(THIS)
+    }
+
+    fun getThat() : Int {
+        return stackMemory.getAddress(THAT)
     }
 
 }

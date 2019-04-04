@@ -6,6 +6,7 @@ const val ARG = 2
 const val THIS = 3
 const val THAT = 4
 class StackMemory {
+
     private val pseudoRam : IntArray = IntArray(4096)
 
     fun setAddress(address : Int, value : Int) {
