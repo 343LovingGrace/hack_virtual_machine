@@ -12,7 +12,7 @@ public class SixteenBit {
 
     public SixteenBit(int operand) {
         if (operand > 1 << 17) {
-            throw new IllegalArgumentException("The operand is too big, but be 16 bit");
+            throw new IllegalArgumentException("The operand is too big, must be 16 bit");
         }
         sixteenBit = new boolean[16];
         for (int i = 15; i >= 0; i--) {
@@ -20,6 +20,20 @@ public class SixteenBit {
             if (operand / powerOfTwo > 0) {
                 sixteenBit[i] = true;
                 operand -= powerOfTwo;
+            }
+        }
+    }
+
+    /**
+     * returns 0000 0000 0000 0000 as false
+     * and     1111 1111 1111 1111 as true
+     * @param operand boolean value to make 16 bit
+     */
+    public SixteenBit(boolean operand) {
+        sixteenBit = new boolean[16];
+        if (operand) {
+            for (int i = 0; i < 16; i++) {
+                sixteenBit[i] = true;
             }
         }
     }
@@ -50,11 +64,24 @@ public class SixteenBit {
         return new SixteenBit(orArray);
     }
 
+    //could optimise these methods
+    public SixteenBit lessThan16Bit(SixteenBit opeand) {
+        int thisValue = this.convertToInteger();
+        int thatValue = opeand.convertToInteger();
+        return new SixteenBit(thisValue < thatValue);
+    }
+
+    public SixteenBit greaterThan16Bit(SixteenBit opeand) {
+        int thisValue = this.convertToInteger();
+        int thatValue = opeand.convertToInteger();
+        return new SixteenBit(thisValue > thatValue);
+    }
+
     public int convertToInteger() {
         int res = 0;
-        for (int i = 15; i >= 0; i--) {
+        for (int i = 0; i < 16; i++) {
             if (sixteenBit[i]) {
-                res += Math.pow(2, i);
+                res += 1 << i;
             }
         }
         return res;
@@ -64,6 +91,58 @@ public class SixteenBit {
         return Arrays.copyOf(sixteenBit, 16);
     }
 
+    public SixteenBit equals(SixteenBit operand) {
+        boolean isEqual = true;
+        for (byte i = 0; i < 16; i++) {
+            if (operand.get(i) != sixteenBit[i]) {
+                isEqual = false;
+                break;
+            }
+        }
+        return new SixteenBit(isEqual);
+    }
+
+    public SixteenBit add16Bit(SixteenBit operand) {
+        boolean[] additionProduct = new boolean[16];
+        boolean overFlowBit = false;
+
+        System.out.println("        " + this.toString());
+        System.out.println("        " + operand.toString());
+
+        for (byte i = 0; i < 16; i++) {
+
+            boolean thisVal = sixteenBit[i];
+            boolean opVal = operand.get(i);
+
+            if (overFlowBit) {
+                if (thisVal && opVal) {
+                    additionProduct[i] = true;
+                    overFlowBit = true;
+                } else if (thisVal || opVal) {
+                    overFlowBit = true;
+                } else {
+                    additionProduct[i] = true;
+                    overFlowBit = false;
+                }
+            } else {
+                if (thisVal && opVal) {
+                    overFlowBit = true;
+                } else if (thisVal || opVal) {
+                    additionProduct[i] = true;
+                }
+            }
+        }
+
+        return new SixteenBit(additionProduct);
+    }
+
+    public boolean get(byte index) {
+        return sixteenBit[index];
+    }
+
+    public byte size() {
+        return 16;
+    }
 
     @Override
     public String toString() {
