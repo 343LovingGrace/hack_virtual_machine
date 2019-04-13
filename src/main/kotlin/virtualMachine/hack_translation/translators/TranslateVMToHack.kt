@@ -1,6 +1,6 @@
 package virtualMachine.hack_translation.translators
 
-import virtualMachine.stack.InstructionStack
+import virtualMachine.stack.vm_instruction_parsing.InstructionStack
 
 class TranslateVMToHack {
 

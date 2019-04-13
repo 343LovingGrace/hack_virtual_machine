@@ -2,7 +2,7 @@ package virtualMachine
 
 import virtualMachine.hack_translation.translators.HackAssemblyTranslation
 import virtualMachine.hack_translation.translators.TranslateVMToHack
-import virtualMachine.stack.InstructionStack
+import virtualMachine.stack.vm_instruction_parsing.InstructionStack
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 
 //todo: kind of a pointless class really remove
@@ -20,6 +20,6 @@ class VMParser {
         processor.processInstruction(instructionStack, line)
     }
 
-    fun getInstructionStack() : InstructionStack = instructionStack.copy()
+    fun getInstructionStack() : InstructionStack = instructionStack
 
 }

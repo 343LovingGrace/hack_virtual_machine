@@ -7,6 +7,7 @@ import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.imp
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PushInstructionProcessor
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.UnaryInstructionProcessor
 
+// <command> <datatype> <value>
 fun getValueFromCommand(instruction: String) : String {
     if (instruction.contains(" ")) {
         val splitCommand: List<String> = instruction.split(" ")
@@ -23,19 +24,18 @@ class VMInstructionParser {
     private val allBinaryInstructions: Set<String> = setOf("add", "sub", "eq", "gt", "lt", "and", "or")
     private val allUnaryInstructions: Set<String> = setOf("neg", "not")
 
-    fun processInstruction(instructionStack: InstructionStack, instruction: String): InstructionStack {
+    fun processInstruction(instructionStack: InstructionStack, instruction: String) {
         val processor : InstructionProcessor = getInstructionProcessor(instruction)
         processor.processInstruction(instruction, instructionStack, staticVariables, stackMemory)
-        return instructionStack
     }
 
     private fun getInstructionProcessor(instruction: String) : InstructionProcessor {
-        when {
-            instruction.contains("pop") -> return PopInstructionProcessor()
-            instruction.contains("push") -> return PushInstructionProcessor()
-            allBinaryInstructions.contains(instruction) -> return BinaryInstructionProcessor()
-            allUnaryInstructions.contains(instruction) -> return UnaryInstructionProcessor()
-            else -> throw RuntimeException("Unknown instruction " + instruction)
+        return when {
+            instruction.contains("pop") -> PopInstructionProcessor()
+            instruction.contains("push") -> PushInstructionProcessor()
+            allBinaryInstructions.contains(instruction) -> BinaryInstructionProcessor()
+            allUnaryInstructions.contains(instruction) -> UnaryInstructionProcessor()
+            else -> throw RuntimeException("Unknown instruction $instruction")
         }
     }
 

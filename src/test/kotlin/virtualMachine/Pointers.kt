@@ -1,7 +1,7 @@
 package virtualMachine
 
 import org.junit.Test
-import virtualMachine.stack.InstructionStack
+import virtualMachine.stack.vm_instruction_parsing.InstructionStack
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 import kotlin.test.assertEquals
 

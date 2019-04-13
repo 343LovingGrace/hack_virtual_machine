@@ -91,23 +91,9 @@ public class SixteenBit {
         return Arrays.copyOf(sixteenBit, 16);
     }
 
-    public SixteenBit equals(SixteenBit operand) {
-        boolean isEqual = true;
-        for (byte i = 0; i < 16; i++) {
-            if (operand.get(i) != sixteenBit[i]) {
-                isEqual = false;
-                break;
-            }
-        }
-        return new SixteenBit(isEqual);
-    }
-
     public SixteenBit add16Bit(SixteenBit operand) {
         boolean[] additionProduct = new boolean[16];
         boolean overFlowBit = false;
-
-        System.out.println("        " + this.toString());
-        System.out.println("        " + operand.toString());
 
         for (byte i = 0; i < 16; i++) {
 
@@ -136,6 +122,13 @@ public class SixteenBit {
         return new SixteenBit(additionProduct);
     }
 
+    //todo: implement bitwise subtract
+    public SixteenBit subtract(SixteenBit tobeSubbed) {
+        int thisVal = this.convertToInteger();
+        int operandValue = tobeSubbed.convertToInteger();
+        return new SixteenBit(thisVal - operandValue);
+    }
+
     public boolean get(byte index) {
         return sixteenBit[index];
     }
@@ -155,5 +148,19 @@ public class SixteenBit {
             }
         }
         return '[' + dfs.toString() + ']';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SixteenBit that = (SixteenBit) o;
+        return Arrays.equals(sixteenBit, that.sixteenBit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(sixteenBit);
     }
 }
