@@ -12,17 +12,20 @@ public class VirtualMemory {
     //Pointer -> a 2 entry segment that holds the addresses of the this and that segments
     //this, that pseudo heap memory
     //static => constants shared across all vm files (i.e. classes)
-    //local => stores a functions local variables
+    //local => stores a functions local variables dynamic and per function
     //argument - methods arguments
     // global - kind of a clunge
 
+    private static final int SIXTEEN_BIT_LENGTH = 32768;
+    private static final SixteenBit[] virtualRam = new SixteenBit[SIXTEEN_BIT_LENGTH];
+
     private final Map<MemorySegments, SixteenBit[]> memory =
             Map.of(
-                    THIS, new SixteenBit[100],
-                    THAT, new SixteenBit[100],
+                    THIS, virtualRam,
+                    THAT, virtualRam,
                     STATIC, new SixteenBit[100],
                     LOCAL, new SixteenBit[100],
-                    ARGUMENT, new SixteenBit[100],
+                    ARGUMENT, new SixteenBit[15],
                     GLOBAL, new SixteenBit[10],
                     POINTER, new SixteenBit[2]);
 
@@ -52,7 +55,13 @@ public class VirtualMemory {
             return new SixteenBit(address);
         }
 
+        if (segment == THIS || segment == THAT) {
+            int offset = getFromMemory(segment.getPointerToSelf(), POINTER).convertToInteger();
+            address += offset;
+        }
+
         var memorySegment = memory.get(segment);
         return memorySegment[address];
     }
+
 }
