@@ -16,14 +16,15 @@ fun getValueFromCommand(instruction: String) : String {
     return instruction
 }
 
+private val allBinaryInstructions: Set<String> = setOf("add", "sub", "eq", "gt", "lt", "and", "or")
+private val allUnaryInstructions: Set<String> = setOf("neg", "not")
+
 class VMInstructionParser {
 
     private val virtualMemory = VirtualMemory()
+    private val instructionStack = InstructionStack()
 
-    private val allBinaryInstructions: Set<String> = setOf("add", "sub", "eq", "gt", "lt", "and", "or")
-    private val allUnaryInstructions: Set<String> = setOf("neg", "not")
-
-    fun processInstruction(instructionStack: InstructionStack, instruction: String) {
+    fun processInstruction(instruction: String) {
         val processor : InstructionProcessor = getInstructionProcessor(instruction)
         processor.processInstruction(instruction, instructionStack, virtualMemory)
     }
@@ -40,6 +41,10 @@ class VMInstructionParser {
 
     fun getVirtualMemory() : VirtualMemory {
         return virtualMemory
+    }
+
+    fun getInstructionStack() : InstructionStack {
+        return instructionStack
     }
 
 }

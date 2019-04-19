@@ -2,8 +2,7 @@ package virtualMachine.stack.memory;
 
 import virtualMachine.stack.datawrappers.SixteenBit;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
@@ -14,21 +13,29 @@ public class VirtualMemory {
     //this, that pseudo heap memory
     //static => constants shared across all vm files (i.e. classes)
     //local => stores a functions local variables
+    //argument - methods arguments
+    // global - kind of a clunge
 
-    private final Map<MemorySegments, List<SixteenBit>> memory =
+    private final Map<MemorySegments, SixteenBit[]> memory =
             Map.of(
-                    THIS, new ArrayList<>(),
-                    THAT, new ArrayList<>(),
-                    STATIC, new ArrayList<>(),
-                    LOCAL, new ArrayList<>(),
-                    POINTER, new ArrayList<>(2));
+                    THIS, new SixteenBit[100],
+                    THAT, new SixteenBit[100],
+                    STATIC, new SixteenBit[100],
+                    LOCAL, new SixteenBit[100],
+                    ARGUMENT, new SixteenBit[100],
+                    GLOBAL, new SixteenBit[10],
+                    POINTER, new SixteenBit[2]);
 
 
     public void loadIntoMemory(SixteenBit variable, int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
         var memorySegment = memory.get(segment);
-        memorySegment.add(address, variable);
+        if (address > memorySegment.length) {
+            memorySegment = Arrays.copyOf(memorySegment, memorySegment.length * 2);
+        }
+
+        memorySegment[address] = variable;
     }
 
     private void checkPointerInBounds(int address, MemorySegments segment) {
@@ -46,6 +53,6 @@ public class VirtualMemory {
         }
 
         var memorySegment = memory.get(segment);
-        return memorySegment.get(address);
+        return memorySegment[address];
     }
 }

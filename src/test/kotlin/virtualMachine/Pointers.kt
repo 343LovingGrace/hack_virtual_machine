@@ -15,9 +15,8 @@ class Pointers {
         val line2 = "pop pointer 0"
 
         val vmProcessor = VMInstructionParser()
-        val stack = InstructionStack()
-        vmProcessor.processInstruction(stack, line1)
-        vmProcessor.processInstruction(stack, line2)
+        vmProcessor.processInstruction(line1)
+        vmProcessor.processInstruction(line2)
 
         val memory = vmProcessor.getVirtualMemory()
         val storedInPointer : SixteenBit = memory.getFromMemory(0, MemorySegments.POINTER)

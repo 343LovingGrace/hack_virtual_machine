@@ -3,6 +3,7 @@ package virtualMachine
 import org.junit.Assert
 import virtualMachine.stack.datawrappers.SixteenBit
 import virtualMachine.stack.vm_instruction_parsing.InstructionStack
+import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 import kotlin.test.Test
 
 class StackArithmetic {
@@ -10,8 +11,8 @@ class StackArithmetic {
     @Test
     fun testLoadConstants() {
         val line = "push constant 2"
-        val vmParser = VMParser()
-        vmParser.readLine(line)
+        val vmParser = VMInstructionParser()
+        vmParser.processInstruction(line)
         val currentStack: InstructionStack = vmParser.getInstructionStack()
         val data = currentStack.pop()
         Assert.assertEquals(2, data.convertToInteger())
@@ -19,14 +20,14 @@ class StackArithmetic {
 
     @Test
     fun testSimpleAddition() {
-        val vmParser = VMParser()
+        val vmParser = VMInstructionParser()
         val instructions: List<String> = listOf(
                 "push constant 2",
                 "push constant 7",
                 "add"
         )
         instructions.forEach {
-            vmParser.readLine(it)
+            vmParser.processInstruction(it)
         }
         val instructionStack: InstructionStack = vmParser.getInstructionStack()
         val result: SixteenBit = instructionStack.pop()
@@ -35,7 +36,7 @@ class StackArithmetic {
 
     @Test
     fun testMoreComplexAddition() {
-        val vmParser = VMParser()
+        val vmParser = VMInstructionParser()
         val instructions: List<String> = listOf(
                 "push constant 2",
                 "push constant 7",
@@ -44,7 +45,7 @@ class StackArithmetic {
                 "add"
         )
         instructions.forEach {
-            vmParser.readLine(it)
+            vmParser.processInstruction(it)
         }
         val instructionStack: InstructionStack = vmParser.getInstructionStack()
         val result: SixteenBit = instructionStack.pop()
@@ -53,7 +54,7 @@ class StackArithmetic {
 
     @Test
     fun testExampleWithLogicalInputs() {
-        val vmParser = VMParser()
+        val vmParser = VMInstructionParser()
         val instructions: List<String> = listOf(
                 "push constant 2",
                 "push constant 7",
@@ -62,7 +63,7 @@ class StackArithmetic {
                 "gt"
         )
         instructions.forEach {
-            vmParser.readLine(it)
+            vmParser.processInstruction(it)
         }
         val instructionStack: InstructionStack = vmParser.getInstructionStack()
         val result: SixteenBit = instructionStack.pop()
@@ -73,7 +74,7 @@ class StackArithmetic {
 
     @Test
     fun testLoadFile() {
-        val vmParser : VMParser = App().processInputFile("./src/test/StackArithmetic/StackTest/StackTest.vm")
+        val vmParser : VMInstructionParser = ReadInputFile().processInputFile("./src/test/StackArithmetic/StackTest/StackTest.vm")
         val instructionStack: InstructionStack = vmParser.getInstructionStack()
         val result: SixteenBit = instructionStack.pop()
         Assert.assertEquals(65453, result.convertToInteger())

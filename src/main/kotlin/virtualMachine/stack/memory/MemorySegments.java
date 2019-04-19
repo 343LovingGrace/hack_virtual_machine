@@ -8,6 +8,8 @@ public enum MemorySegments {
     STATIC("static"),
     LOCAL("local"),
     POINTER("pointer"),
+    ARGUMENT("argument"),
+    GLOBAL("global"),
     CONSTANT("constant");
 
     final String name;
@@ -26,7 +28,7 @@ public enum MemorySegments {
                 return segment;
             }
         }
-        throw new RuntimeException("Unrecognised segment name, use one of" +
+        throw new RuntimeException("Unrecognised segment name " + name + ", use one of" +
                 Arrays.toString(MemorySegments.values()));
     }
 }
