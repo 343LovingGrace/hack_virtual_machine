@@ -1,6 +1,8 @@
 package virtualMachine
 
 import org.junit.Test
+import virtualMachine.stack.datawrappers.SixteenBit
+import virtualMachine.stack.memory.MemorySegments
 import virtualMachine.stack.vm_instruction_parsing.InstructionStack
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 import kotlin.test.assertEquals
@@ -17,7 +19,10 @@ class Pointers {
         vmProcessor.processInstruction(stack, line1)
         vmProcessor.processInstruction(stack, line2)
 
-        assertEquals(1450, vmProcessor.getThis())
+        val memory = vmProcessor.getVirtualMemory()
+        val storedInPointer : SixteenBit = memory.getFromMemory(0, MemorySegments.POINTER)
+
+        assertEquals(1450, storedInPointer.convertToInteger())
     }
 
 }

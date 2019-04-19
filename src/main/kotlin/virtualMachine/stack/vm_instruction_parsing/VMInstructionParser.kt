@@ -1,7 +1,7 @@
 package virtualMachine.stack.vm_instruction_parsing
 
-import virtualMachine.stack.*
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.*
+import virtualMachine.stack.memory.VirtualMemory
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.BinaryInstructionProcessor
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PopInstructionProcessor
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PushInstructionProcessor
@@ -18,15 +18,14 @@ fun getValueFromCommand(instruction: String) : String {
 
 class VMInstructionParser {
 
-    private val staticVariables = StaticVariables()
-    private val stackMemory = StackMemory()
+    private val virtualMemory = VirtualMemory()
 
     private val allBinaryInstructions: Set<String> = setOf("add", "sub", "eq", "gt", "lt", "and", "or")
     private val allUnaryInstructions: Set<String> = setOf("neg", "not")
 
     fun processInstruction(instructionStack: InstructionStack, instruction: String) {
         val processor : InstructionProcessor = getInstructionProcessor(instruction)
-        processor.processInstruction(instruction, instructionStack, staticVariables, stackMemory)
+        processor.processInstruction(instruction, instructionStack, virtualMemory)
     }
 
     private fun getInstructionProcessor(instruction: String) : InstructionProcessor {
@@ -39,12 +38,8 @@ class VMInstructionParser {
         }
     }
 
-    fun getThis() : Int {
-        return stackMemory.getAddress(THIS)
-    }
-
-    fun getThat() : Int {
-        return stackMemory.getAddress(THAT)
+    fun getVirtualMemory() : VirtualMemory {
+        return virtualMemory
     }
 
 }
