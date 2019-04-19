@@ -10,10 +10,14 @@ import static virtualMachine.stack.memory.MemorySegments.*;
 
 public class VirtualMemory {
 
-    //Pointer -> a 2 entry segment that holds the addresses of the
-    //this and that segments
+    //Pointer -> a 2 entry segment that holds the addresses of the this and that segments
+    //this, that pseudo heap memory
+    //static => constants shared across all vm files (i.e. classes)
+    //local => stores a functions local variables
+
     private final Map<MemorySegments, List<SixteenBit>> memory =
-            Map.of(THIS, new ArrayList<>(),
+            Map.of(
+                    THIS, new ArrayList<>(),
                     THAT, new ArrayList<>(),
                     STATIC, new ArrayList<>(),
                     LOCAL, new ArrayList<>(),
