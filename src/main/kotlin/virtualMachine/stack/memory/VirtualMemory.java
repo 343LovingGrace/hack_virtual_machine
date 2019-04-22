@@ -33,8 +33,8 @@ public class VirtualMemory {
     public void loadIntoMemory(SixteenBit variable, int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
-        var memorySegment = memory.get(segment);
-        if (address > memorySegment.length) {
+        SixteenBit[] memorySegment = memory.get(segment);
+        while (address > memorySegment.length) {
             memorySegment = Arrays.copyOf(memorySegment, memorySegment.length * 2);
         }
 
@@ -56,7 +56,7 @@ public class VirtualMemory {
         }
 
         if (segment == THIS || segment == THAT) {
-            int offset = getFromMemory(segment.getPointerToSelf(), POINTER).convertToInteger();
+            int offset = getFromMemory(segment.getFixedAddress(), POINTER).convertToInteger();
             address += offset;
         }
 

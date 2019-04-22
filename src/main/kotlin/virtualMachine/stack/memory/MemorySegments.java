@@ -13,27 +13,27 @@ public enum MemorySegments {
     CONSTANT("constant");
 
     private final String name;
-    private int pointerToSelf = -1;
+    private int fixedAddress = -1;
 
     MemorySegments(String input) {
         this.name = input;
     }
 
-    MemorySegments(String input, int pointerToSelf) {
+    MemorySegments(String input, int fixedAddress) {
         this.name = input;
-        this.pointerToSelf = pointerToSelf;
+        this.fixedAddress = fixedAddress;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getPointerToSelf() {
-        return pointerToSelf;
+    public int getFixedAddress() {
+        return fixedAddress;
     }
 
     public boolean hasPointerToSelf() {
-        return pointerToSelf != -1;
+        return fixedAddress != -1;
     }
 
     public static MemorySegments getFromName(String name) {
