@@ -11,9 +11,10 @@ class StaticTest {
     @Test
     fun testScript() {
         val vmParser : VMInstructionParser = ReadInputFile()
-                .processInputFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/StaticTest/StaticTest.vm")
+                .processInputFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/StaticTest/StaticTest.vm",
+                        VMInstructionParser())
 
-        Assert.assertEquals(1110, vmParser.getVirtualMemory().popLocalStack()
+        Assert.assertEquals(1110, vmParser.getVirtualMemory().popStack()
                 .convertToInteger())
 
         Assert.assertEquals(888, vmParser.getVirtualMemory()

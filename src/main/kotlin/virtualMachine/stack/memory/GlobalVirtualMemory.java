@@ -16,6 +16,8 @@ public class GlobalVirtualMemory {
     //argument - methods arguments
     // global - kind of a clunge
 
+    //Important: everything shares same pseudo address space - should be fine to assume that they don't though
+
     private static final int SIXTEEN_BIT_LENGTH = 32768;
     private static final SixteenBit[] virtualRam = new SixteenBit[SIXTEEN_BIT_LENGTH];
     private static final int STACK_POINTER_OFFSET = 256;
@@ -27,11 +29,11 @@ public class GlobalVirtualMemory {
             Map.of(
                     THIS, virtualRam,
                     THAT, virtualRam,
-                    STATIC, new SixteenBit[100],
-                    LOCAL, new SixteenBit[100],
+                    STATIC, new SixteenBit[10],
+                    LOCAL, new SixteenBit[10],
                     ARGUMENT, new SixteenBit[15],
                     GLOBAL, new SixteenBit[10],
-                    POINTER, new SixteenBit[2],
+                    POINTER, new SixteenBit[] {new SixteenBit(0), new SixteenBit(1)},
                     GLOBAL_STACK, new SixteenBit[100]);
 
 
@@ -43,17 +45,11 @@ public class GlobalVirtualMemory {
             memorySegment = Arrays.copyOf(memorySegment, memorySegment.length * 2);
         }
 
-        if (segment == GLOBAL_STACK) {
-            address -= STACK_POINTER_OFFSET;
-        }
+        address += getThisThatOffset(segment);
 
-        synchronized (this) {
-            memorySegment[address] = variable;
-            stackPointer++;
-        }
-
-
+        memorySegment[address] = variable;
     }
+
 
     private void checkPointerInBounds(int address, MemorySegments segment) {
         if (segment == POINTER && (address < 0 || address > 1)) {
@@ -69,31 +65,38 @@ public class GlobalVirtualMemory {
             return new SixteenBit(address);
         }
 
-        if (segment == THIS || segment == THAT) {
-            int offset = getFromMemory(segment.getFixedAddress(), POINTER).convertToInteger();
-            address += offset;
-        }
+        address += getThisThatOffset(segment);
 
         var memorySegment = memory.get(segment);
-        SixteenBit value = memorySegment[address];
-        memory.get(GLOBAL_STACK)[stackPointer - STACK_POINTER_OFFSET] = value;
-        stackPointer--;
+        return memorySegment[address];
+    }
 
-        return value;
+    private void decremenetSp() {
+        if (stackPointer > STACK_POINTER_OFFSET) {
+            stackPointer--;
+        }
     }
 
     public int getStackPointer() {
         return stackPointer;
     }
 
-    public SixteenBit popLocalStack() {
-        stackPointer--;
+    public SixteenBit popStack() {
+        decremenetSp();
         return instructionStack.pop();
     }
 
-    public void pushToLocalStack(SixteenBit value) {
+    public void pushToStack(SixteenBit value) {
         stackPointer++;
         instructionStack.push(value);
+        memory.get(GLOBAL_STACK)[stackPointer - STACK_POINTER_OFFSET] = value;
+    }
+
+    private int getThisThatOffset(MemorySegments segment) {
+        if (segment == THIS || segment == THAT) {
+            return getFromMemory(segment.getFixedAddress(), POINTER).convertToInteger();
+        }
+        return 0;
     }
 
 }

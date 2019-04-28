@@ -1,4 +1,3 @@
-
 push constant 10
 pop local 0 // pop the top stack value and store in local[0]
 push constant 21

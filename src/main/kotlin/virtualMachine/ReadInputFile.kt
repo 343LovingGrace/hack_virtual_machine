@@ -8,10 +8,11 @@ import java.io.File
 import java.nio.charset.Charset
 
 class ReadInputFile {
-    fun processInputFile(pathToInput: String) : VMInstructionParser {
+
+    //TODO: have some kind of initialization
+    fun processInputFile(pathToInput: String,  vmParser: VMInstructionParser) : VMInstructionParser {
         val file = File(pathToInput)
         val bufferedReader = file.bufferedReader(Charset.defaultCharset())
-        val vmParser = VMInstructionParser()
         bufferedReader
                 .lines()
                 .map {

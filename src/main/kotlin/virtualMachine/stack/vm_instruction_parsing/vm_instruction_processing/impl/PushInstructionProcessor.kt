@@ -14,7 +14,7 @@ class PushInstructionProcessor : InstructionProcessor {
         val segment = MemorySegments.getFromName(splitCommand[1])
 
         val storedVariable : SixteenBit = virtualMemory.getFromMemory(index, segment)
-        virtualMemory.pushToLocalStack(storedVariable)
+        virtualMemory.pushToStack(storedVariable)
     }
 
 }

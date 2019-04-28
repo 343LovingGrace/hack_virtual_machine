@@ -12,7 +12,7 @@ class StackArithmetic {
         val line = "push constant 2"
         val vmParser = VMInstructionParser()
         vmParser.processInstruction(line)
-        val data = vmParser.getVirtualMemory().popLocalStack()
+        val data = vmParser.getVirtualMemory().popStack()
         Assert.assertEquals(2, data.convertToInteger())
     }
 
@@ -27,7 +27,7 @@ class StackArithmetic {
         instructions.forEach {
             vmParser.processInstruction(it)
         }
-        val result: SixteenBit = vmParser.getVirtualMemory().popLocalStack()
+        val result: SixteenBit = vmParser.getVirtualMemory().popStack()
         Assert.assertEquals(9, result.convertToInteger())
     }
 
@@ -44,7 +44,7 @@ class StackArithmetic {
         instructions.forEach {
             vmParser.processInstruction(it)
         }
-        val result: SixteenBit = vmParser.getVirtualMemory().popLocalStack()
+        val result: SixteenBit = vmParser.getVirtualMemory().popStack()
         Assert.assertEquals(11, result.convertToInteger())
     }
 
@@ -61,7 +61,7 @@ class StackArithmetic {
         instructions.forEach {
             vmParser.processInstruction(it)
         }
-        val result: SixteenBit = vmParser.getVirtualMemory().popLocalStack()
+        val result: SixteenBit = vmParser.getVirtualMemory().popStack()
 
         val trueSixteenBit = SixteenBit(true)
         Assert.assertEquals(trueSixteenBit, result)
@@ -69,8 +69,8 @@ class StackArithmetic {
 
     @Test
     fun testLoadFile() {
-        val vmParser : VMInstructionParser = ReadInputFile().processInputFile("./src/test/StackArithmetic/StackTest/StackTest.vm")
-        val result: SixteenBit = vmParser.getVirtualMemory().popLocalStack()
+        val vmParser : VMInstructionParser = ReadInputFile().processInputFile("./src/test/StackArithmetic/StackTest/StackTest.vm", VMInstructionParser())
+        val result: SixteenBit = vmParser.getVirtualMemory().popStack()
         Assert.assertEquals(65453, result.convertToInteger())
     }
 

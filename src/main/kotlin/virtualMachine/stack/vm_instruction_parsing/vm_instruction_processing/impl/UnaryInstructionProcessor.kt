@@ -7,10 +7,10 @@ import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.Ins
 class UnaryInstructionProcessor : InstructionProcessor {
 
     override fun processInstruction(instruction: String, virtualMemory: GlobalVirtualMemory) {
-        val uniaryInstruction: SixteenBit = virtualMemory.popLocalStack()
+        val uniaryInstruction: SixteenBit = virtualMemory.popStack()
 
         if (instruction == "not") {
-            virtualMemory.pushToLocalStack(uniaryInstruction.not16Bit())
+            virtualMemory.pushToStack(uniaryInstruction.not16Bit())
         }
     }
 }

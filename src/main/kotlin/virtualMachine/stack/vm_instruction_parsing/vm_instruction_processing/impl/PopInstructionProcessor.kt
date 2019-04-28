@@ -9,7 +9,7 @@ class PopInstructionProcessor : InstructionProcessor {
 
     override fun processInstruction(instruction: String, virtualMemory: GlobalVirtualMemory) {
 
-        val head : SixteenBit = virtualMemory.popLocalStack()
+        val head : SixteenBit = virtualMemory.popStack()
         val splitCommand: List<String> = instruction.split(" ")
         val reference = splitCommand[splitCommand.size - 1].toInt()
         val segment = MemorySegments.getFromName(splitCommand[1])

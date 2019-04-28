@@ -2,14 +2,18 @@ package virtualMachine.memory.MemoryAccess.PointerTest
 
 import org.junit.Test
 import virtualMachine.ReadInputFile
+import virtualMachine.stack.datawrappers.SixteenBit
+import virtualMachine.stack.memory.MemorySegments
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 
 class PointerTest {
 
     @Test
     fun testScript() {
+
         val vmParser : VMInstructionParser = ReadInputFile()
-                .processInputFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/StaticTest/StaticTest.vm")
+                .processInputFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/StaticTest/StaticTest.vm",
+                        VMInstructionParser())
 
 
     }

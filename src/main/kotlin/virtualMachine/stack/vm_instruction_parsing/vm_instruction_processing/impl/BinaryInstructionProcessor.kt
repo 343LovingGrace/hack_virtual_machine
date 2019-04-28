@@ -9,12 +9,12 @@ import java.lang.RuntimeException
 class BinaryInstructionProcessor : InstructionProcessor {
 
     override fun processInstruction(instruction: String, virtualMemory: GlobalVirtualMemory) {
-        val latestHead: SixteenBit = virtualMemory.popLocalStack()
-        val secondFromHead : SixteenBit = virtualMemory.popLocalStack()
+        val latestHead: SixteenBit = virtualMemory.popStack()
+        val secondFromHead : SixteenBit = virtualMemory.popStack()
 
         val result : SixteenBit = processComparison(instruction, latestHead, secondFromHead)
         virtualMemory.loadIntoMemory(result, virtualMemory.stackPointer, MemorySegments.GLOBAL_STACK)
-        virtualMemory.pushToLocalStack(result)
+        virtualMemory.pushToStack(result)
     }
 
     private fun processComparison(instruction: String, latestHead: SixteenBit,
