@@ -13,8 +13,7 @@ class StaticTest {
         val vmParser : VMInstructionParser = ReadInputFile()
                 .processInputFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/StaticTest/StaticTest.vm")
 
-        Assert.assertEquals(1110, vmParser.getInstructionStack()
-                .pop()
+        Assert.assertEquals(1110, vmParser.getVirtualMemory().popLocalStack()
                 .convertToInteger())
 
         Assert.assertEquals(888, vmParser.getVirtualMemory()

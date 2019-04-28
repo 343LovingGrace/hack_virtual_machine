@@ -10,7 +10,8 @@ public enum MemorySegments {
     POINTER("pointer"),
     ARGUMENT("argument"),
     GLOBAL("global"),
-    CONSTANT("constant");
+    CONSTANT("constant"),
+    GLOBAL_STACK("global_stack");
 
     private final String name;
     private int fixedAddress = -1;

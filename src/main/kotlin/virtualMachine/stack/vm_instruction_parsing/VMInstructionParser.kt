@@ -1,6 +1,6 @@
 package virtualMachine.stack.vm_instruction_parsing
 
-import virtualMachine.stack.memory.VirtualMemory
+import virtualMachine.stack.memory.GlobalVirtualMemory
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.BinaryInstructionProcessor
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PopInstructionProcessor
@@ -21,12 +21,11 @@ private val allUnaryInstructions: Set<String> = setOf("neg", "not")
 
 class VMInstructionParser {
 
-    private val virtualMemory = VirtualMemory()
-    private val instructionStack = InstructionStack()
+    private val virtualMemory = GlobalVirtualMemory()
 
     fun processInstruction(instruction: String) {
         val processor : InstructionProcessor = getInstructionProcessor(instruction)
-        processor.processInstruction(instruction, instructionStack, virtualMemory)
+        processor.processInstruction(instruction, virtualMemory)
     }
 
     private fun getInstructionProcessor(instruction: String) : InstructionProcessor {
@@ -39,12 +38,8 @@ class VMInstructionParser {
         }
     }
 
-    fun getVirtualMemory() : VirtualMemory {
+    fun getVirtualMemory() : GlobalVirtualMemory {
         return virtualMemory
-    }
-
-    fun getInstructionStack() : InstructionStack {
-        return instructionStack
     }
 
 }

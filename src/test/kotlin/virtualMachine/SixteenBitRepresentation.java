@@ -25,7 +25,7 @@ public class SixteenBitRepresentation {
     }
 
     @Test
-    public void shouldConvertIntegerToBin() {
+    public void shouldConvertIntegerToBinaryArray() {
         String correctResult = "[0000110010111000]";
         int toConvert = 3256;
 
@@ -53,7 +53,6 @@ public class SixteenBitRepresentation {
 
         SixteenBit result16Bit = opA16Bit.add16Bit(opB16Bit);
         int res = result16Bit.convertToInteger();
-        System.out.println(result16Bit.toString());
 
         Assert.assertEquals(opA + opB, res);
     }
@@ -69,10 +68,6 @@ public class SixteenBitRepresentation {
         SixteenBit result16Bit = opA16Bit.add16Bit(opB16Bit);
         SixteenBit correctResult = new SixteenBit(opA + opB);
         int res = result16Bit.convertToInteger();
-
-        System.out.println();
-        System.out.println("correct " + correctResult.toString());
-        System.out.println("attempt " + result16Bit.toString());
 
         Assert.assertEquals(opA + opB, res);
     }

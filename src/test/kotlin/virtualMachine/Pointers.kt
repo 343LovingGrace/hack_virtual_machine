@@ -3,7 +3,6 @@ package virtualMachine
 import org.junit.Test
 import virtualMachine.stack.datawrappers.SixteenBit
 import virtualMachine.stack.memory.MemorySegments
-import virtualMachine.stack.vm_instruction_parsing.InstructionStack
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 import kotlin.test.assertEquals
 

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
 
-public class VirtualMemory {
+public class GlobalVirtualMemory {
 
     //Pointer -> a 2 entry segment that holds the addresses of the this and that segments
     //this, that pseudo heap memory
@@ -18,6 +18,10 @@ public class VirtualMemory {
 
     private static final int SIXTEEN_BIT_LENGTH = 32768;
     private static final SixteenBit[] virtualRam = new SixteenBit[SIXTEEN_BIT_LENGTH];
+    private static final int STACK_POINTER_OFFSET = 256;
+    private int stackPointer = STACK_POINTER_OFFSET;
+
+    private InstructionStack instructionStack = new InstructionStack();
 
     private final Map<MemorySegments, SixteenBit[]> memory =
             Map.of(
@@ -27,7 +31,8 @@ public class VirtualMemory {
                     LOCAL, new SixteenBit[100],
                     ARGUMENT, new SixteenBit[15],
                     GLOBAL, new SixteenBit[10],
-                    POINTER, new SixteenBit[2]);
+                    POINTER, new SixteenBit[2],
+                    GLOBAL_STACK, new SixteenBit[100]);
 
 
     public void loadIntoMemory(SixteenBit variable, int address, MemorySegments segment) {
@@ -38,7 +43,16 @@ public class VirtualMemory {
             memorySegment = Arrays.copyOf(memorySegment, memorySegment.length * 2);
         }
 
-        memorySegment[address] = variable;
+        if (segment == GLOBAL_STACK) {
+            address -= STACK_POINTER_OFFSET;
+        }
+
+        synchronized (this) {
+            memorySegment[address] = variable;
+            stackPointer++;
+        }
+
+
     }
 
     private void checkPointerInBounds(int address, MemorySegments segment) {
@@ -61,7 +75,25 @@ public class VirtualMemory {
         }
 
         var memorySegment = memory.get(segment);
-        return memorySegment[address];
+        SixteenBit value = memorySegment[address];
+        memory.get(GLOBAL_STACK)[stackPointer - STACK_POINTER_OFFSET] = value;
+        stackPointer--;
+
+        return value;
+    }
+
+    public int getStackPointer() {
+        return stackPointer;
+    }
+
+    public SixteenBit popLocalStack() {
+        stackPointer--;
+        return instructionStack.pop();
+    }
+
+    public void pushToLocalStack(SixteenBit value) {
+        stackPointer++;
+        instructionStack.push(value);
     }
 
 }

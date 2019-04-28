@@ -1,20 +1,20 @@
 package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl
 
-import virtualMachine.stack.memory.VirtualMemory
+import virtualMachine.stack.memory.GlobalVirtualMemory
 import virtualMachine.stack.datawrappers.SixteenBit
-import virtualMachine.stack.vm_instruction_parsing.InstructionStack
+import virtualMachine.stack.memory.MemorySegments
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor
 import java.lang.RuntimeException
 
 class BinaryInstructionProcessor : InstructionProcessor {
 
-    override fun processInstruction(instruction: String, instructionStack: InstructionStack,
-                                    virtualMemory: VirtualMemory) {
-        val latestHead: SixteenBit = instructionStack.pop()
-        val secondFromHead : SixteenBit = instructionStack.pop()
+    override fun processInstruction(instruction: String, virtualMemory: GlobalVirtualMemory) {
+        val latestHead: SixteenBit = virtualMemory.popLocalStack()
+        val secondFromHead : SixteenBit = virtualMemory.popLocalStack()
 
         val result : SixteenBit = processComparison(instruction, latestHead, secondFromHead)
-        instructionStack.push(result)
+        virtualMemory.loadIntoMemory(result, virtualMemory.stackPointer, MemorySegments.GLOBAL_STACK)
+        virtualMemory.pushToLocalStack(result)
     }
 
     private fun processComparison(instruction: String, latestHead: SixteenBit,
