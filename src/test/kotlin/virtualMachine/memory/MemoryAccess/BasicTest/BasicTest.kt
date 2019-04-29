@@ -3,7 +3,7 @@ package virtualMachine.memory.MemoryAccess.BasicTest
 import org.junit.Assert
 import org.junit.Test
 import virtualMachine.ReadInputFile
-import virtualMachine.stack.datawrappers.SixteenBit
+import virtualMachine.stack.datawrappers.Word
 import virtualMachine.stack.memory.MemorySegments
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 
@@ -15,8 +15,8 @@ class BasicTest {
         val THAT_OFFSET = 3010
 
         val vmInstructionParser = VMInstructionParser()
-        vmInstructionParser.getVirtualMemory().loadIntoMemory(SixteenBit(THIS_OFFSET), 0, MemorySegments.POINTER)
-        vmInstructionParser.getVirtualMemory().loadIntoMemory(SixteenBit(THAT_OFFSET), 1, MemorySegments.POINTER)
+        vmInstructionParser.getVirtualMemory().loadIntoMemory(Word(THIS_OFFSET), 0, MemorySegments.POINTER)
+        vmInstructionParser.getVirtualMemory().loadIntoMemory(Word(THAT_OFFSET), 1, MemorySegments.POINTER)
 
         val vmParser : VMInstructionParser = ReadInputFile()
                 .processInputFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/BasicTest/BasicTest.vm",

@@ -1,6 +1,6 @@
 package virtualMachine.stack.memory;
 
-import virtualMachine.stack.datawrappers.SixteenBit;
+import virtualMachine.stack.datawrappers.Word;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -19,28 +19,28 @@ public class GlobalVirtualMemory {
     //Important: everything shares same pseudo address space - should be fine to assume that they don't though
 
     private static final int SIXTEEN_BIT_LENGTH = 32768;
-    private static final SixteenBit[] virtualRam = new SixteenBit[SIXTEEN_BIT_LENGTH];
+    private static final Word[] virtualRam = new Word[SIXTEEN_BIT_LENGTH];
     private static final int STACK_POINTER_OFFSET = 256;
     private int stackPointer = STACK_POINTER_OFFSET;
 
     private InstructionStack instructionStack = new InstructionStack();
 
-    private final Map<MemorySegments, SixteenBit[]> memory =
+    private final Map<MemorySegments, Word[]> memory =
             Map.of(
                     THIS, virtualRam,
                     THAT, virtualRam,
-                    STATIC, new SixteenBit[10],
-                    LOCAL, new SixteenBit[10],
-                    ARGUMENT, new SixteenBit[15],
-                    GLOBAL, new SixteenBit[10],
-                    POINTER, new SixteenBit[] {new SixteenBit(0), new SixteenBit(1)},
-                    GLOBAL_STACK, new SixteenBit[100]);
+                    STATIC, new Word[10],
+                    LOCAL, new Word[10],
+                    ARGUMENT, new Word[15],
+                    GLOBAL, new Word[10],
+                    POINTER, new Word[] {new Word(0), new Word(1)},
+                    GLOBAL_STACK, new Word[100]);
 
 
-    public void loadIntoMemory(SixteenBit variable, int address, MemorySegments segment) {
+    public void loadIntoMemory(Word variable, int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
-        SixteenBit[] memorySegment = memory.get(segment);
+        Word[] memorySegment = memory.get(segment);
         while (address > memorySegment.length) {
             memorySegment = Arrays.copyOf(memorySegment, memorySegment.length * 2);
         }
@@ -57,12 +57,12 @@ public class GlobalVirtualMemory {
         }
     }
 
-    public SixteenBit getFromMemory(int address, MemorySegments segment) {
+    public Word getFromMemory(int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
         //constants are not loaded into memory
         if (segment == CONSTANT) {
-            return new SixteenBit(address);
+            return new Word(address);
         }
 
         address += getThisThatOffset(segment);
@@ -81,12 +81,12 @@ public class GlobalVirtualMemory {
         return stackPointer;
     }
 
-    public SixteenBit popStack() {
+    public Word popStack() {
         decremenetSp();
         return instructionStack.pop();
     }
 
-    public void pushToStack(SixteenBit value) {
+    public void pushToStack(Word value) {
         stackPointer++;
         instructionStack.push(value);
         memory.get(GLOBAL_STACK)[stackPointer - STACK_POINTER_OFFSET] = value;
@@ -97,6 +97,10 @@ public class GlobalVirtualMemory {
             return getFromMemory(segment.getFixedAddress(), POINTER).convertToInteger();
         }
         return 0;
+    }
+
+    public void printStack() {
+        instructionStack.printStack();
     }
 
 }

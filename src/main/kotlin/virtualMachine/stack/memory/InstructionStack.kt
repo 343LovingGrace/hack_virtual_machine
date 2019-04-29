@@ -1,17 +1,22 @@
 package virtualMachine.stack.memory
 
-import virtualMachine.stack.datawrappers.SixteenBit
+import virtualMachine.stack.datawrappers.Word
 import java.util.*
 
 class InstructionStack {
 
-    private val instructionStack : Deque<SixteenBit> = ArrayDeque()
+    private val instructionStack : Deque<Word> = ArrayDeque()
 
-    fun pop() : SixteenBit {
+    fun pop() : Word {
         return instructionStack.pop()
     }
 
-    fun push(sixteenBit: SixteenBit) {
-        instructionStack.push(sixteenBit)
+    fun push(word: Word) {
+        instructionStack.push(word)
+    }
+
+    fun printStack() {
+        instructionStack.forEach { println(it.convertToInteger()) }
+        println()
     }
 }

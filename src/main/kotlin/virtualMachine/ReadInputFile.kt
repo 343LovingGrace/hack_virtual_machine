@@ -13,6 +13,9 @@ class ReadInputFile {
     fun processInputFile(pathToInput: String,  vmParser: VMInstructionParser) : VMInstructionParser {
         val file = File(pathToInput)
         val bufferedReader = file.bufferedReader(Charset.defaultCharset())
+
+        var count = 0
+
         bufferedReader
                 .lines()
                 .map {
@@ -27,6 +30,10 @@ class ReadInputFile {
                     !it.isEmpty()
                 }
                 .forEach {
+                    val mem = vmParser.getVirtualMemory()
+                    println(count)
+                    count++
+                    mem.printStack()
                     vmParser.processInstruction(it)
                 }
         //do nothing with processed stack for now

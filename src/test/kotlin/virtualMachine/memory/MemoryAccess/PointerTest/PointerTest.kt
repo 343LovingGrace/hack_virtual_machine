@@ -2,8 +2,6 @@ package virtualMachine.memory.MemoryAccess.PointerTest
 
 import org.junit.Test
 import virtualMachine.ReadInputFile
-import virtualMachine.stack.datawrappers.SixteenBit
-import virtualMachine.stack.memory.MemorySegments
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 
 class PointerTest {
