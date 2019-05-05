@@ -3,8 +3,7 @@ package virtualMachine.memory.MemoryAccess.BasicTest
 import org.junit.Assert
 import org.junit.Test
 import virtualMachine.ProcessVirtualMachineFile
-import virtualMachine.ReadInputFile
-import virtualMachine.stack.datawrappers.Word
+import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
 import virtualMachine.stack.memory.MemorySegments
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
 
@@ -15,10 +14,10 @@ class BasicTest {
 
         val vmReader : VMInstructionParser = ProcessVirtualMachineFile()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/BasicTest/BasicTest.vm",
-                        listOf("push constant 3000",
-                                "pop pointer 0",
-                                "push constant 3010",
-                                "pop pointer 1"))
+                        listOf(getInstructionFromRawInput("push constant 3000"),
+                                getInstructionFromRawInput("pop pointer 0"),
+                                getInstructionFromRawInput("push constant 3010"),
+                                getInstructionFromRawInput("pop pointer 1")))
 
         val memory = vmReader.getVirtualMemory()
 

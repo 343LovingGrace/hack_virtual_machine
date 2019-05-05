@@ -153,6 +153,11 @@ public class Word {
         return new Word(thisVal - operandValue);
     }
 
+    public Word negate() {
+        this.setSign(true);
+        return this;
+    }
+
     public boolean get(byte index) {
         return wordBits[index];
     }

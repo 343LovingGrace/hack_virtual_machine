@@ -1,6 +1,7 @@
 package virtualMachine
 
 import org.junit.Test
+import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
 import virtualMachine.stack.datawrappers.Word
 import virtualMachine.stack.memory.MemorySegments
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
@@ -14,8 +15,8 @@ class Pointers {
         val line2 = "pop pointer 0"
 
         val vmProcessor = VMInstructionParser()
-        vmProcessor.processInstruction(line1)
-        vmProcessor.processInstruction(line2)
+        vmProcessor.processInstruction(getInstructionFromRawInput(line1))
+        vmProcessor.processInstruction(getInstructionFromRawInput(line2))
 
         val memory = vmProcessor.getVirtualMemory()
         val storedInPointer : Word = memory.getFromMemory(0, MemorySegments.POINTER)
