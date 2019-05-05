@@ -32,8 +32,6 @@ public class ProcessVirtualMachineFile {
     private void readInput(String pathToInput, VMInstructionParser vmParser) {
         try (BufferedReader br = new BufferedReader(new FileReader(pathToInput))) {
 
-            List<String> instructionFile = new ArrayList<>();
-
             String line;
             while ((line = br.readLine()) != null) {
 
@@ -41,8 +39,6 @@ public class ProcessVirtualMachineFile {
                 if (line.isEmpty()) {
                     continue;
                 }
-
-                instructionFile.add(line);
 
                 Instruction instruction = getInstructionFromRawInput(line);
 
