@@ -4,10 +4,6 @@ import virtualMachine.stack.datawrappers.instruction.Commands;
 import virtualMachine.stack.datawrappers.instruction.Instruction;
 import virtualMachine.stack.memory.GlobalVirtualMemory;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.BinaryInstructionProcessor;
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PopInstructionProcessor;
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PushInstructionProcessor;
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.UnaryInstructionProcessor;
 
 import java.util.List;
 
@@ -18,6 +14,7 @@ public class VMInstructionParser {
 
     private final List<Instruction> vmInstructions;
     private final GlobalVirtualMemory globalVirtualMemory = new GlobalVirtualMemory();
+    private final AllInstructionProcessors instructionProcessors = new AllInstructionProcessors();
 
     public VMInstructionParser(List<Instruction> vmInstructions) {
         this.vmInstructions = vmInstructions;
@@ -29,6 +26,7 @@ public class VMInstructionParser {
     }
 
     public void processInstructions() {
+        //TODO: eventually will allow jumping between instructions
         for (var instruction: vmInstructions) {
             var instructionProcessor = getInstructionProcessorFromCommand(instruction);
             instructionProcessor.processInstruction(instruction, globalVirtualMemory);
@@ -39,13 +37,13 @@ public class VMInstructionParser {
         Commands command = instruction.getCommand();
 
         if (command == POP) {
-            return new PopInstructionProcessor();
+            return instructionProcessors.getPopInstructionProcessor();
         } else if (command == PUSH) {
-            return new PushInstructionProcessor();
+            return instructionProcessors.getPushInstructionProcessor();
         } else if (Commands.allBinaryCommands().contains(command)) {
-            return new BinaryInstructionProcessor();
+            return instructionProcessors.getBinaryInstructionProcessor();
         } else if (Commands.allUnaryCommands().contains(command)) {
-            return new UnaryInstructionProcessor();
+            return instructionProcessors.getUnaryInstructionProcessor();
         } else {
             throw new RuntimeException("Unknown instruction: " + instruction);
         }

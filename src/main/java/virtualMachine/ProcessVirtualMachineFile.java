@@ -14,7 +14,7 @@ public class ProcessVirtualMachineFile {
 
     public VMInstructionParser processVmFile(String pathToInput, List<Instruction> initSteps) {
 
-        List<Instruction> vmInstructions = readInput(pathToInput);
+        List<Instruction> vmInstructions = processRawInputToArrayOfInstructions(pathToInput);
 
         var vmParser = new VMInstructionParser(vmInstructions);
 
@@ -29,7 +29,7 @@ public class ProcessVirtualMachineFile {
         return vmParser;
     }
 
-    private List<Instruction> readInput(String pathToInput) {
+    private List<Instruction> processRawInputToArrayOfInstructions(String pathToInput) {
         final List<Instruction> vmInstructions = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToInput))) {
 
