@@ -24,10 +24,11 @@ public class ProgramFlowProcessor implements InstructionProcessor {
         var command = instruction.getCommand();
 
         if (command == LABEL) {
-
+            //TODO: add label to some sort of map
         } else if (command == GOTO) {
-
+            //todo: set next instruction to be executed to be the one in the label map
         } else if (command == IF_GOTO) {
+            ////todo: set next instruction to be executed to be the one in the label map (if true)
             Word topValue = virtualMemory.popStack();
             if (topValue.convertToInteger() != 0) {
 

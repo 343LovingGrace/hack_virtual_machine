@@ -14,7 +14,7 @@ class Pointers {
         val line1 = "push constant 1450"
         val line2 = "pop pointer 0"
 
-        val vmProcessor = VMInstructionParser()
+        val vmProcessor = VMInstructionParser(null)
         vmProcessor.processInstruction(getInstructionFromRawInput(line1))
         vmProcessor.processInstruction(getInstructionFromRawInput(line2))
 

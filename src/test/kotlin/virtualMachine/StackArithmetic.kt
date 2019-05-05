@@ -12,7 +12,7 @@ class StackArithmetic {
     @Test
     fun testLoadConstants() {
         val line = "push constant 2"
-        val vmParser = VMInstructionParser()
+        val vmParser = VMInstructionParser(null)
         vmParser.processInstruction(getInstructionFromRawInput(line))
         val data = vmParser.getVirtualMemory().popStack()
         Assert.assertEquals(2, data.convertToInteger())
@@ -20,7 +20,7 @@ class StackArithmetic {
 
     @Test
     fun testSimpleAddition() {
-        val vmParser = VMInstructionParser()
+        val vmParser = VMInstructionParser(null)
         val instructions: List<String> = listOf(
                 "push constant 2",
                 "push constant 7",
@@ -35,7 +35,7 @@ class StackArithmetic {
 
     @Test
     fun testMoreComplexAddition() {
-        val vmParser = VMInstructionParser()
+        val vmParser = VMInstructionParser(null)
         val instructions: List<String> = listOf(
                 "push constant 2",
                 "push constant 7",
@@ -52,7 +52,7 @@ class StackArithmetic {
 
     @Test
     fun testExampleWithLogicalInputs() {
-        val vmParser = VMInstructionParser()
+        val vmParser = VMInstructionParser(null)
         val instructions: List<String> = listOf(
                 "push constant 2",
                 "push constant 7",

@@ -12,24 +12,25 @@ import java.util.List;
 
 public class ProcessVirtualMachineFile {
 
-    //to support gotos
-    private final List<Instruction> vmInstructions = new ArrayList<>();
-
     public VMInstructionParser processVmFile(String pathToInput, List<Instruction> initSteps) {
-        var vmParser = new VMInstructionParser();
-        
+
+        List<Instruction> vmInstructions = readInput(pathToInput);
+
+        var vmParser = new VMInstructionParser(vmInstructions);
+
         if (initSteps != null && !initSteps.isEmpty()) {
             for (var instruction: initSteps) {
                 vmParser.processInstruction(instruction);
             }
         }
 
-        readInput(pathToInput, vmParser);
+        vmParser.processInstructions();
 
         return vmParser;
     }
 
-    private void readInput(String pathToInput, VMInstructionParser vmParser) {
+    private List<Instruction> readInput(String pathToInput) {
+        final List<Instruction> vmInstructions = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(pathToInput))) {
 
             String line;
@@ -40,14 +41,13 @@ public class ProcessVirtualMachineFile {
                     continue;
                 }
 
-                Instruction instruction = getInstructionFromRawInput(line);
-
-                vmParser.processInstruction(instruction);
+                vmInstructions.add(getInstructionFromRawInput(line));
             }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return vmInstructions;
     }
 
     public static Instruction getInstructionFromRawInput(String line) {
