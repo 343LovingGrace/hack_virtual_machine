@@ -14,7 +14,7 @@ class UnaryInstructionProcessor : InstructionProcessor {
         if (instruction == Commands.NOT) {
             virtualMemory.pushToStack(uniaryInstruction.bitWiseNot())
         } else if (instruction == Commands.NEGATIVE) {
-            virtualMemory.pushToStack(uniaryInstruction.negate());
+            virtualMemory.pushToStack(uniaryInstruction.negate())
         }
     }
 }

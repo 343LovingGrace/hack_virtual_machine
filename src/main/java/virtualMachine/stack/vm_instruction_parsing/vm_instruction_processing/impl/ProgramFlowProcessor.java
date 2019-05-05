@@ -2,7 +2,6 @@ package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.im
 
 import org.jetbrains.annotations.NotNull;
 import virtualMachine.stack.datawrappers.Word;
-import virtualMachine.stack.datawrappers.instruction.Commands;
 import virtualMachine.stack.datawrappers.instruction.Instruction;
 import virtualMachine.stack.memory.GlobalVirtualMemory;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
@@ -18,7 +17,7 @@ import static virtualMachine.stack.datawrappers.instruction.Commands.*;
 public class ProgramFlowProcessor implements InstructionProcessor {
 
     @Override
-    public void processInstruction(Instruction instruction, GlobalVirtualMemory virtualMemory) {
+    public void processInstruction(Instruction instruction, @NotNull GlobalVirtualMemory virtualMemory) {
 
         //todo: going to need to change how ProcessVirtual machine file operates to support jumping
 
