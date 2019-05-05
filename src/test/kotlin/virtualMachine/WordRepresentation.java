@@ -74,6 +74,26 @@ public class WordRepresentation {
         Assert.assertEquals(opA + opB, res);
     }
 
+    @Test
+    public void shouldSubtract55And19Correctly() {
+        Word op55 = new Word(55);
+        Word op19 = new Word(19);
+
+        int res = 36;
+        Word calculatedResult = op55.subtract(op19);
+        Assert.assertEquals(res, calculatedResult.convertToInteger());
+    }
+
+    @Test
+    public void shouldSubtractToANegativeNumberCorrectly() {
+        Word op12 = new Word(12);
+        Word op42 = new Word(42);
+
+        int res = -30;
+        Word calculatedResult = op12.subtract(op42);
+        Assert.assertEquals(res, calculatedResult.convertToInteger());
+    }
+
     private Word convertStringToSixteenBit(String input) {
         char[] inp = input.replace(" ", "").toCharArray();
         boolean[] word = new boolean[16];

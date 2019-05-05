@@ -69,7 +69,7 @@ class StackArithmetic {
 
     @Test
     fun testLoadFile() {
-        val vmParser : VMInstructionParser = ReadInputFile().processInputFile("./src/test/StackArithmetic/StackTest/StackTest.vm", VMInstructionParser())
+        val vmParser : VMInstructionParser = ProcessVirtualMachineFile().processVmFile("./src/test/StackArithmetic/StackTest/StackTest.vm", null)
         val result: Word = vmParser.getVirtualMemory().popStack()
         //TODO check this test
         Assert.assertEquals(32685, result.convertToInteger())

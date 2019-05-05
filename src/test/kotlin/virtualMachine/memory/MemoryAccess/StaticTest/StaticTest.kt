@@ -2,6 +2,7 @@ package virtualMachine.memory.MemoryAccess.StaticTest
 
 import org.junit.Assert
 import org.junit.Test
+import virtualMachine.ProcessVirtualMachineFile
 import virtualMachine.ReadInputFile
 import virtualMachine.stack.memory.MemorySegments
 import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
@@ -10,9 +11,9 @@ class StaticTest {
 
     @Test
     fun testScript() {
-        val vmParser : VMInstructionParser = ReadInputFile()
-                .processInputFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/StaticTest/StaticTest.vm",
-                        VMInstructionParser())
+        val vmParser : VMInstructionParser = ProcessVirtualMachineFile()
+                .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/StaticTest/StaticTest.vm",
+                        null)
 
         Assert.assertEquals(1110, vmParser.getVirtualMemory().popStack()
                 .convertToInteger())

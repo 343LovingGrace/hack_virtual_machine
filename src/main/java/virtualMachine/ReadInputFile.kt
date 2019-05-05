@@ -33,6 +33,7 @@ class ReadInputFile {
                     val mem = vmParser.getVirtualMemory()
                     println(count)
                     count++
+                    println(it)
                     mem.printStack()
                     vmParser.processInstruction(it)
                 }

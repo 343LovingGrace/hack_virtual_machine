@@ -2,6 +2,7 @@ package virtualMachine.memory.MemoryAccess.BasicTest
 
 import org.junit.Assert
 import org.junit.Test
+import virtualMachine.ProcessVirtualMachineFile
 import virtualMachine.ReadInputFile
 import virtualMachine.stack.datawrappers.Word
 import virtualMachine.stack.memory.MemorySegments
@@ -11,18 +12,15 @@ class BasicTest {
 
     @Test
     fun testScript() {
-        val THIS_OFFSET = 3000
-        val THAT_OFFSET = 3010
 
-        val vmInstructionParser = VMInstructionParser()
-        vmInstructionParser.getVirtualMemory().loadIntoMemory(Word(THIS_OFFSET), 0, MemorySegments.POINTER)
-        vmInstructionParser.getVirtualMemory().loadIntoMemory(Word(THAT_OFFSET), 1, MemorySegments.POINTER)
+        val vmReader : VMInstructionParser = ProcessVirtualMachineFile()
+                .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/BasicTest/BasicTest.vm",
+                        listOf("push constant 3000",
+                                "pop pointer 0",
+                                "push constant 3010",
+                                "pop pointer 1"))
 
-        val vmParser : VMInstructionParser = ReadInputFile()
-                .processInputFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/BasicTest/BasicTest.vm",
-                        vmInstructionParser)
-
-        val memory = vmParser.getVirtualMemory()
+        val memory = vmReader.getVirtualMemory()
 
         Assert.assertEquals(10, memory.getFromMemory(0, MemorySegments.LOCAL).convertToInteger())
 
@@ -36,10 +34,10 @@ class BasicTest {
         Assert.assertEquals(42, memory.getFromMemory(12, MemorySegments.THIS).convertToInteger())
         Assert.assertEquals(45, memory.getFromMemory(15, MemorySegments.THIS).convertToInteger())
 
-//        Assert.assertEquals(472, memory.getFromMemory(0, MemorySegments.GLOBAL_STACK).convertToInteger())
-//        Assert.assertEquals(510, memory.getFromMemory(1, MemorySegments.GLOBAL_STACK).convertToInteger())
+        Assert.assertEquals(472, memory.getFromMemory(1, MemorySegments.GLOBAL_STACK).convertToInteger())
+        Assert.assertEquals(510, memory.getFromMemory(2, MemorySegments.GLOBAL_STACK).convertToInteger())
 
-        Assert.assertEquals(472, vmParser.getVirtualMemory().popStack()
+        Assert.assertEquals(472, vmReader.getVirtualMemory().popStack()
                 .convertToInteger())
 
     }

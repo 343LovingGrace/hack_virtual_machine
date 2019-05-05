@@ -23,11 +23,13 @@ public class Word {
         if (operand < 0) {
             setSign(true);
         }
-        long bitShift = 1 << (SIZE - NUMBER_START_LOC);
+        operand = Math.abs(operand);
 
+        long bitShift = 1 << (SIZE - NUMBER_START_LOC);
         if (operand > bitShift) {
             throw new RuntimeException("Input out of range");
         }
+
         for (int i = NUMBER_START_LOC; i < SIZE; i++) {
             bitShift = bitShift >> 1;
             long powerOfTwo = bitShift;
@@ -145,9 +147,9 @@ public class Word {
     }
 
     //todo: implement bitwise subtract
-    public Word subtract(Word tobeSubbed) {
+    public Word subtract(Word toBeSubtracted) {
         int thisVal = this.convertToInteger();
-        int operandValue = tobeSubbed.convertToInteger();
+        int operandValue = toBeSubtracted.convertToInteger();
         return new Word(thisVal - operandValue);
     }
 
