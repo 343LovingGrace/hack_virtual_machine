@@ -5,6 +5,7 @@ import java.util.Set;
 public enum Commands {
     PUSH("push"),
     POP("pop"),
+
     ADD("add"),
     SUBTRACT("sub"),
     LESS_THAN("lt"),
@@ -14,9 +15,14 @@ public enum Commands {
     BITWISE_EQUALS("eq"),
     NOT("not"),
     NEGATIVE("neg"),
+
     LABEL("label"),
     GOTO("goto"),
-    IF_GOTO("if-goto");
+    IF_GOTO("if-goto"),
+
+    FUNCTION("function"),
+    CALL("call"),
+    RETURN("return");
 
     private final String name;
 
@@ -43,5 +49,9 @@ public enum Commands {
 
     public static Set<Commands> allUnaryCommands() {
         return Set.of(NEGATIVE, NOT);
+    }
+
+    public static Set<Commands> allFunctionCommands() {
+        return Set.of(FUNCTION, CALL, RETURN);
     }
 }

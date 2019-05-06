@@ -15,7 +15,7 @@ class BinaryInstructionProcessor : InstructionProcessor {
         val secondFromHead : Word = virtualMemory.popStack()
 
         val result : Word = processComparison(instruction, latestHead, secondFromHead)
-        virtualMemory.loadIntoMemory(result, virtualMemory.stackPointer, MemorySegments.GLOBAL_STACK)
+        virtualMemory.pushToGlobalStack(result)
         virtualMemory.pushToStack(result)
     }
 

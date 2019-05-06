@@ -3,6 +3,7 @@ package virtualMachine.stack.vm_instruction_parsing;
 import virtualMachine.stack.datawrappers.instruction.Commands;
 import virtualMachine.stack.datawrappers.instruction.Instruction;
 import virtualMachine.stack.memory.GlobalVirtualMemory;
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.AllInstructionProcessors;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
 
 import java.util.List;
@@ -26,11 +27,14 @@ public class VMInstructionParser {
     }
 
     public void processInstructions() {
-        //TODO: eventually will allow jumping between instructions
-        for (var instruction: vmInstructions) {
+        while (globalVirtualMemory.hasNextInstruction(vmInstructions)) {
+            int instructionPointer = globalVirtualMemory.nextInstruction();
+
+            Instruction instruction = vmInstructions.get(instructionPointer);
             var instructionProcessor = getInstructionProcessorFromCommand(instruction);
             instructionProcessor.processInstruction(instruction, globalVirtualMemory);
         }
+
     }
 
     private InstructionProcessor getInstructionProcessorFromCommand(Instruction instruction) {
@@ -44,6 +48,8 @@ public class VMInstructionParser {
             return instructionProcessors.getBinaryInstructionProcessor();
         } else if (Commands.allUnaryCommands().contains(command)) {
             return instructionProcessors.getUnaryInstructionProcessor();
+        } else if (Commands.allFunctionCommands().contains(command)) {
+            return instructionProcessors.getFunctionProcessor();
         } else {
             throw new RuntimeException("Unknown instruction: " + instruction);
         }

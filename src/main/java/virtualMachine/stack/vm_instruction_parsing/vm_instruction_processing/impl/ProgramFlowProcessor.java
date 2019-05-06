@@ -11,7 +11,7 @@ import static virtualMachine.stack.datawrappers.instruction.Commands.*;
 /**
  * label _label_ labels the current location in the functions code (allows to goto to this location)
  * goto _label_ unconditional goto to location
- * if-goto _label_ conditional goto - top val in stack is popped if val > 0 execution continues from label
+ * if-goto _label_ conditional goto - top val in stack is popped if val is not false execution continues from label
  *                  else execution continues from next command in program
  */
 public class ProgramFlowProcessor implements InstructionProcessor {
@@ -24,16 +24,14 @@ public class ProgramFlowProcessor implements InstructionProcessor {
         var command = instruction.getCommand();
 
         if (command == LABEL) {
-            //TODO: add label to some sort of map
+            virtualMemory.addLabel(instruction.getOperand());
         } else if (command == GOTO) {
-            //todo: set next instruction to be executed to be the one in the label map
+            virtualMemory.setInstructionPointerToLabelAddress(instruction.getOperand());
         } else if (command == IF_GOTO) {
-            ////todo: set next instruction to be executed to be the one in the label map (if true)
+            //set next instruction to be executed to be the one next one in list if false, one in label otherwise
             Word topValue = virtualMemory.popStack();
-            if (topValue.convertToInteger() != 0) {
-
-            } else {
-
+            if (!topValue.isFalse()) {
+                virtualMemory.setInstructionPointerToLabelAddress(instruction.getOperand());
             }
         } else {
             throw new RuntimeException("Command not recognised " + command);

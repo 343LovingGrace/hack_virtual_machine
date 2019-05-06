@@ -3,8 +3,8 @@ package virtualMachine.stack.memory;
 import java.util.Arrays;
 
 public enum MemorySegments {
-    THIS("this", 0),
-    THAT("that", 1),
+    THIS("this"),
+    THAT("that"),
     STATIC("static"),
     LOCAL("local"),
     POINTER("pointer"),
@@ -20,21 +20,8 @@ public enum MemorySegments {
         this.name = input;
     }
 
-    MemorySegments(String input, int fixedAddress) {
-        this.name = input;
-        this.fixedAddress = fixedAddress;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public int getFixedAddress() {
-        return fixedAddress;
-    }
-
-    public boolean hasPointerToSelf() {
-        return fixedAddress != -1;
     }
 
     public static MemorySegments getFromName(String name) {

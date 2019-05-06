@@ -1,20 +1,21 @@
-package virtualMachine.stack.vm_instruction_parsing;
+package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing;
 
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.*;
 
-class AllInstructionProcessors {
+public class AllInstructionProcessors {
 
     private final BinaryInstructionProcessor binaryInstructionProcessor = new BinaryInstructionProcessor();
     private final PopInstructionProcessor popInstructionProcessor = new PopInstructionProcessor();
     private final ProgramFlowProcessor programFlowProcessor = new ProgramFlowProcessor();
     private final PushInstructionProcessor pushInstructionProcessor = new PushInstructionProcessor();
     private final UnaryInstructionProcessor unaryInstructionProcessor = new UnaryInstructionProcessor();
+    private final FunctionProcessor functionProcessor = new FunctionProcessor();
 
-    BinaryInstructionProcessor getBinaryInstructionProcessor() {
+    public BinaryInstructionProcessor getBinaryInstructionProcessor() {
         return binaryInstructionProcessor;
     }
 
-    PopInstructionProcessor getPopInstructionProcessor() {
+    public PopInstructionProcessor getPopInstructionProcessor() {
         return popInstructionProcessor;
     }
 
@@ -22,11 +23,15 @@ class AllInstructionProcessors {
         return programFlowProcessor;
     }
 
-    PushInstructionProcessor getPushInstructionProcessor() {
+    public PushInstructionProcessor getPushInstructionProcessor() {
         return pushInstructionProcessor;
     }
 
-    UnaryInstructionProcessor getUnaryInstructionProcessor() {
+    public UnaryInstructionProcessor getUnaryInstructionProcessor() {
         return unaryInstructionProcessor;
+    }
+
+    public FunctionProcessor getFunctionProcessor() {
+        return functionProcessor;
     }
 }

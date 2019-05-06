@@ -1,9 +1,10 @@
 package virtualMachine.stack.memory;
 
+import virtualMachine.stack.datawrappers.VmFunction;
 import virtualMachine.stack.datawrappers.Word;
+import virtualMachine.stack.datawrappers.instruction.Instruction;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
 
@@ -18,38 +19,35 @@ public class GlobalVirtualMemory {
 
     //Important: everything shares same pseudo address space - should be fine to assume that they don't though
 
-    private static final int SIXTEEN_BIT_LENGTH = 32768;
-    private static final Word[] virtualRam = new Word[SIXTEEN_BIT_LENGTH];
-    private static final int STACK_POINTER_OFFSET = 256;
+    private static final Word[] virtualRam = new Word[32768];
+    private static final int STACK_POINTER_OFFSET = 256; //NO NO NO
     private int stackPointer = STACK_POINTER_OFFSET;
+    private int instructionPointer = 0;
+    private Map<String, Integer> labels = new HashMap<>();
 
+    private Word[] globalStack = new Word[2048]; //todo
     private InstructionStack instructionStack = new InstructionStack();
+    private Deque<VmFunction> callStack = new ArrayDeque<>();
 
-    private final Map<MemorySegments, Word[]> memory =
+    private final Map<MemorySegments, Integer> memorySegmentPointerMap =
             Map.of(
-                    THIS, virtualRam,
-                    THAT, virtualRam,
-                    STATIC, new Word[10],
-                    LOCAL, new Word[10],
-                    ARGUMENT, new Word[15],
-                    GLOBAL, new Word[10],
-                    POINTER, new Word[] {new Word(0), new Word(1)},
-                    GLOBAL_STACK, new Word[100]);
+                    THIS, 0,
+                    THAT, 0,
+                    STATIC, 0,
+                    LOCAL, 0,
+                    ARGUMENT, 0,
+                    GLOBAL, 0,
+                    POINTER, 32766);
 
 
     public void loadIntoMemory(Word variable, int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
-        Word[] memorySegment = memory.get(segment);
-        while (address > memorySegment.length) {
-            memorySegment = Arrays.copyOf(memorySegment, memorySegment.length * 2);
-        }
-
+        address += memorySegmentPointerMap.get(segment);
         address += getThisThatOffset(segment);
 
-        memorySegment[address] = variable;
+        virtualRam[address] = variable;
     }
-
 
     private void checkPointerInBounds(int address, MemorySegments segment) {
         if (segment == POINTER && (address < 0 || address > 1)) {
@@ -66,9 +64,8 @@ public class GlobalVirtualMemory {
         }
 
         address += getThisThatOffset(segment);
-
-        var memorySegment = memory.get(segment);
-        return memorySegment[address];
+        address += memorySegmentPointerMap.get(segment);
+        return virtualRam[address];
     }
 
     private void decremenetSp() {
@@ -89,18 +86,57 @@ public class GlobalVirtualMemory {
     public void pushToStack(Word value) {
         stackPointer++;
         instructionStack.push(value);
-        memory.get(GLOBAL_STACK)[stackPointer - STACK_POINTER_OFFSET] = value;
+        globalStack[stackPointer - STACK_POINTER_OFFSET] = value;
     }
 
     private int getThisThatOffset(MemorySegments segment) {
-        if (segment == THIS || segment == THAT) {
-            return getFromMemory(segment.getFixedAddress(), POINTER).convertToInteger();
+        if (segment == THIS) {
+            return getFromMemory(0, POINTER).convertToInteger();
+        } else if (segment == THAT) {
+            return getFromMemory(1, POINTER).convertToInteger();
         }
         return 0;
     }
 
-    public void printStack() {
-        instructionStack.printStack();
+    public void pushToGlobalStack(Word toAdd) {
+        globalStack[stackPointer] = toAdd;
     }
 
+    public Word getFromGlobalStack(int addressToPop) {
+        return globalStack[addressToPop];
+    }
+    
+    public int nextInstruction() {
+        return instructionPointer++;
+    }
+
+    public boolean hasNextInstruction(List<Instruction> allInstructions) {
+        return instructionPointer < allInstructions.size();
+    }
+
+    public void addLabel(String label) {
+        labels.put(label, instructionPointer);
+    }
+
+    public void setInstructionPointerToLabelAddress(String label) {
+        if (labels.containsKey(label)) {
+            instructionPointer = labels.get(label);
+        }
+        throw new RuntimeException("Label not in map of labels (not been added) " + label);
+    }
+
+    public Integer getLabel(String label) {
+        if (labels.containsKey(label)) {
+            return labels.get(label);
+        }
+        throw new RuntimeException("Label not in map of labels (not been added) " + label);
+    }
+
+    public void pushToCallStack(VmFunction functionName) {
+        callStack.add(functionName);
+    }
+
+    public VmFunction popCallStack() {
+        return callStack.pop();
+    }
 }

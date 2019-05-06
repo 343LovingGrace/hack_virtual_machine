@@ -114,7 +114,7 @@ public class Word {
             for (byte i = SIZE - 1; i >= NUMBER_START_LOC; i--) {
 
                 boolean thisVal = wordBits[i];
-                boolean opVal = operand.get(i);
+                boolean opVal = operand.wordBits[i];
 
                 if (overFlowBit) {
                     if (thisVal && opVal) {
@@ -158,16 +158,25 @@ public class Word {
         return this;
     }
 
-    public boolean get(byte index) {
-        return wordBits[index];
-    }
-
     private void setSign(boolean isNegative) {
         this.wordBits[SIGN_LOC] = isNegative;
     }
 
     private boolean isNegative() {
         return wordBits[SIGN_LOC];
+    }
+
+    /**
+     * word is false if all 0s
+     * @return
+     */
+    public boolean isFalse() {
+        for (int i = NUMBER_START_LOC; i < SIZE; i++) {
+            if (wordBits[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
