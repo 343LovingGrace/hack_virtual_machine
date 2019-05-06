@@ -20,8 +20,7 @@ public class GlobalVirtualMemory {
     //Important: everything shares same pseudo address space - should be fine to assume that they don't though
 
     private static final Word[] virtualRam = new Word[32768];
-    private static final int STACK_POINTER_OFFSET = 256; //NO NO NO
-    private int stackPointer = STACK_POINTER_OFFSET;
+    private int stackPointer = 0;
     private int instructionPointer = 0;
     private Map<String, Integer> labels = new HashMap<>();
 
@@ -29,14 +28,15 @@ public class GlobalVirtualMemory {
     private InstructionStack instructionStack = new InstructionStack();
     private Deque<VmFunction> callStack = new ArrayDeque<>();
 
+    //pointers are never updated!
     private final Map<MemorySegments, Integer> memorySegmentPointerMap =
             Map.of(
                     THIS, 0,
                     THAT, 0,
-                    STATIC, 0,
-                    LOCAL, 0,
-                    ARGUMENT, 0,
-                    GLOBAL, 0,
+                    STATIC, 4000,
+                    LOCAL, 5000,
+                    ARGUMENT, 6000,
+                    GLOBAL, 7000,
                     POINTER, 32766);
 
 
@@ -69,7 +69,7 @@ public class GlobalVirtualMemory {
     }
 
     private void decremenetSp() {
-        if (stackPointer > STACK_POINTER_OFFSET) {
+        if (stackPointer > 0) {
             stackPointer--;
         }
     }
@@ -86,7 +86,7 @@ public class GlobalVirtualMemory {
     public void pushToStack(Word value) {
         stackPointer++;
         instructionStack.push(value);
-        globalStack[stackPointer - STACK_POINTER_OFFSET] = value;
+        globalStack[stackPointer] = value;
     }
 
     private int getThisThatOffset(MemorySegments segment) {
@@ -121,8 +121,9 @@ public class GlobalVirtualMemory {
     public void setInstructionPointerToLabelAddress(String label) {
         if (labels.containsKey(label)) {
             instructionPointer = labels.get(label);
+        } else {
+            throw new RuntimeException("Label not in map of labels (not been added) " + label);
         }
-        throw new RuntimeException("Label not in map of labels (not been added) " + label);
     }
 
     public Integer getLabel(String label) {

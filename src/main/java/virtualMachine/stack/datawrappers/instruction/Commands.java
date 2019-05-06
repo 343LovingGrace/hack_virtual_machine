@@ -54,4 +54,8 @@ public enum Commands {
     public static Set<Commands> allFunctionCommands() {
         return Set.of(FUNCTION, CALL, RETURN);
     }
+
+    public static Set<Commands> programFlowCommands() {
+        return Set.of(LABEL, GOTO, IF_GOTO);
+    }
 }

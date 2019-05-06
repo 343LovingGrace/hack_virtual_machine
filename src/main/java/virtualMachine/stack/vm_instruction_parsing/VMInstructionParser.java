@@ -50,6 +50,8 @@ public class VMInstructionParser {
             return instructionProcessors.getUnaryInstructionProcessor();
         } else if (Commands.allFunctionCommands().contains(command)) {
             return instructionProcessors.getFunctionProcessor();
+        } else if (Commands.programFlowCommands().contains(command)) {
+            return instructionProcessors.getProgramFlowProcessor();
         } else {
             throw new RuntimeException("Unknown instruction: " + instruction);
         }

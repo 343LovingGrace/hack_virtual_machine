@@ -190,9 +190,9 @@ public class Word {
             }
         }
         if (this.isNegative()) {
-            return "[-" + numericRepresentation.toString() + ']';
+            return "-" + numericRepresentation.toString();
         }
-        return "[" + numericRepresentation.toString() + ']';
+        return numericRepresentation.toString();
     }
 
 

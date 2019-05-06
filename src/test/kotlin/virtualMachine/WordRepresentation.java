@@ -20,7 +20,7 @@ public class WordRepresentation {
     public void shouldConvertIntToBooleanArray() {
         Word word = new Word(5);
 
-        Assert.assertEquals("[" + padToCorrectLength("101") + "]", word.toString());
+        Assert.assertEquals(padToCorrectLength("101"), word.toString());
     }
 
     @Test
@@ -30,7 +30,7 @@ public class WordRepresentation {
 
         Word wordResult = new Word(toConvert);
 
-        Assert.assertEquals('[' + padToCorrectLength(correctResult) + ']', wordResult.toString());
+        Assert.assertEquals(padToCorrectLength(correctResult), wordResult.toString());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class WordRepresentation {
 
         Word wordResult = new Word(toConvert);
 
-        Assert.assertEquals('[' + padToCorrectLength(s7490) + ']', wordResult.toString());
+        Assert.assertEquals(padToCorrectLength(s7490), wordResult.toString());
     }
 
     //more tests here

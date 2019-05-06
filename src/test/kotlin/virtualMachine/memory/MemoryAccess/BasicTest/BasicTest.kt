@@ -19,7 +19,7 @@ class BasicTest {
                                 getInstructionFromRawInput("push constant 3010"),
                                 getInstructionFromRawInput("pop pointer 1")))
 
-        val memory = vmReader.getVirtualMemory()
+        val memory = vmReader.virtualMemory
 
         Assert.assertEquals(10, memory.getFromMemory(0, MemorySegments.LOCAL).convertToInteger())
 
