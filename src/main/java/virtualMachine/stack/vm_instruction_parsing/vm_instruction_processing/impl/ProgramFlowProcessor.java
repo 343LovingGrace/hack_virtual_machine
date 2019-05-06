@@ -19,13 +19,9 @@ public class ProgramFlowProcessor implements InstructionProcessor {
     @Override
     public void processInstruction(Instruction instruction, @NotNull GlobalVirtualMemory virtualMemory) {
 
-        //todo: going to need to change how ProcessVirtual machine file operates to support jumping
-
         var command = instruction.getCommand();
 
-        if (command == LABEL) {
-            virtualMemory.addLabel(instruction.getOperand());
-        } else if (command == GOTO) {
+        if (command == GOTO) {
             virtualMemory.setInstructionPointerToLabelAddress(instruction.getOperand());
         } else if (command == IF_GOTO) {
             //set next instruction to be executed to be the one next one in list if false, one in label otherwise
@@ -33,6 +29,8 @@ public class ProgramFlowProcessor implements InstructionProcessor {
             if (!topValue.isFalse()) {
                 virtualMemory.setInstructionPointerToLabelAddress(instruction.getOperand());
             }
+        } else if (command == LABEL) {
+            virtualMemory.getLabelLocation(instruction.getOperand());
         } else {
             throw new RuntimeException("Command not recognised " + command);
         }

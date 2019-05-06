@@ -22,9 +22,7 @@ class Loop {
 
         val memory = vmReader.virtualMemory
 
-        val i = 2
-
-        Assert.assertEquals(3, memory.getLabel("LOOP_START"))
+        Assert.assertEquals(2, memory.getLabelLocation("LOOP_START"))
         Assert.assertEquals(21, memory.popStack().convertToInteger())
     }
 

@@ -3,12 +3,12 @@ package virtualMachine.stack.datawrappers.instruction;
 public class Instruction {
     private final Commands command;
     private final String operand;
-    private final Integer address;
+    private final Integer numericValue;
 
-    public Instruction(Commands command, String operand, Integer address) {
+    public Instruction(Commands command, String operand, Integer numericValue) {
         this.command = command;
         this.operand = operand;
-        this.address = address;
+        this.numericValue = numericValue;
     }
 
     public Commands getCommand() {
@@ -19,7 +19,7 @@ public class Instruction {
         return operand;
     }
 
-    public Integer getAddress() {
-        return address;
+    public Integer getNumericValue() {
+        return numericValue;
     }
 }

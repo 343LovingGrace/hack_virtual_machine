@@ -10,7 +10,7 @@ class PushInstructionProcessor : InstructionProcessor {
 
     override fun processInstruction(instruction: Instruction, virtualMemory: GlobalVirtualMemory) {
 
-        val index = instruction.address
+        val index = instruction.numericValue
         val segment = MemorySegments.getFromName(instruction.operand)
 
         val storedVariable : Word = virtualMemory.getFromMemory(index, segment)

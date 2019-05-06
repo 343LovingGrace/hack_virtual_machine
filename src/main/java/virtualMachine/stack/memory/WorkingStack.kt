@@ -3,7 +3,7 @@ package virtualMachine.stack.memory
 import virtualMachine.stack.datawrappers.Word
 import java.util.*
 
-class InstructionStack {
+class WorkingStack {
 
     private val instructionStack : Deque<Word> = ArrayDeque()
 
@@ -15,8 +15,4 @@ class InstructionStack {
         instructionStack.push(word)
     }
 
-    fun printStack() {
-        instructionStack.forEach { println(it.convertToInteger()) }
-        println()
-    }
 }

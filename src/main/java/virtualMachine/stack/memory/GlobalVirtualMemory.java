@@ -8,6 +8,7 @@ import java.util.*;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
 
+//TODO: becoming a god class watch out
 public class GlobalVirtualMemory {
 
     //Pointer -> a 2 entry segment that holds the addresses of the this and that segments
@@ -19,41 +20,42 @@ public class GlobalVirtualMemory {
 
     //Important: everything shares same pseudo address space - should be fine to assume that they don't though
 
-    private static final Word[] virtualRam = new Word[32768];
+    private static final int RESERVED_MEMORY = 28000;
     private int stackPointer = 0;
     private int instructionPointer = 0;
-    private Map<String, Integer> labels = new HashMap<>();
 
-    private Word[] globalStack = new Word[2048]; //todo
-    private InstructionStack instructionStack = new InstructionStack();
-    private Deque<VmFunction> callStack = new ArrayDeque<>();
+    private final Word[] virtualRam = new Word[32768];
+    private final Word[] globalStack = new Word[2048];
+    private final WorkingStack workingStack = new WorkingStack();
+    private final Deque<VmFunction> callStack = new ArrayDeque<>();
+    private final Map<String, Integer> labelLocations = new HashMap<>();
+    private final Map<String, Integer> functionLocations = new HashMap<>(8);
 
-    //pointers are never updated!
     private final Map<MemorySegments, Integer> memorySegmentPointerMap =
             Map.of(
-                    THIS, 0,
-                    THAT, 0,
-                    STATIC, 4000,
-                    LOCAL, 5000,
-                    ARGUMENT, 6000,
-                    GLOBAL, 7000,
-                    POINTER, 32766);
+                    STATIC, RESERVED_MEMORY,
+                    LOCAL, RESERVED_MEMORY + 500,
+                    ARGUMENT, RESERVED_MEMORY + 1000,
+                    GLOBAL, RESERVED_MEMORY + 1500,
+                    POINTER, virtualRam.length - 2);
 
 
     public void loadIntoMemory(Word variable, int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
-        address += memorySegmentPointerMap.get(segment);
-        address += getThisThatOffset(segment);
+        //THIS/THAT kind of special cases - may look at refactoring this whole memory access approach ...
+        if (segment == THIS || segment == THAT) {
+            address += getThisThatOffset(segment);
+            if (address > RESERVED_MEMORY) {
+                throw new RuntimeException("Heap memory overwriting reserved memory");
+            }
+        } else {
+            address += memorySegmentPointerMap.get(segment);
+        }
 
         virtualRam[address] = variable;
     }
 
-    private void checkPointerInBounds(int address, MemorySegments segment) {
-        if (segment == POINTER && (address < 0 || address > 1)) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-    }
 
     public Word getFromMemory(int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
@@ -63,12 +65,23 @@ public class GlobalVirtualMemory {
             return new Word(address);
         }
 
-        address += getThisThatOffset(segment);
-        address += memorySegmentPointerMap.get(segment);
+        if (segment == THIS || segment == THAT) {
+            address += getThisThatOffset(segment);
+        } else {
+            address += memorySegmentPointerMap.get(segment);
+        }
+
         return virtualRam[address];
     }
 
-    private void decremenetSp() {
+
+    private void checkPointerInBounds(int address, MemorySegments segment) {
+        if (segment == POINTER && (address < 0 || address > 1)) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+
+    private void decrementStackPointer() {
         if (stackPointer > 0) {
             stackPointer--;
         }
@@ -79,23 +92,22 @@ public class GlobalVirtualMemory {
     }
 
     public Word popStack() {
-        decremenetSp();
-        return instructionStack.pop();
+        decrementStackPointer();
+        return workingStack.pop();
     }
 
     public void pushToStack(Word value) {
         stackPointer++;
-        instructionStack.push(value);
+        workingStack.push(value);
         globalStack[stackPointer] = value;
     }
 
     private int getThisThatOffset(MemorySegments segment) {
         if (segment == THIS) {
             return getFromMemory(0, POINTER).convertToInteger();
-        } else if (segment == THAT) {
+        } else {
             return getFromMemory(1, POINTER).convertToInteger();
         }
-        return 0;
     }
 
     public void pushToGlobalStack(Word toAdd) {
@@ -114,23 +126,30 @@ public class GlobalVirtualMemory {
         return instructionPointer < allInstructions.size();
     }
 
-    public void addLabel(String label) {
-        labels.put(label, instructionPointer);
+    public void addLabel(String label, int iP) {
+        labelLocations.put(label, iP);
+    }
+
+    public void addFunctionInstructionLocation(String functionName, int pointer) {
+        if (functionLocations.containsKey(functionName)) {
+            throw new RuntimeException("Duplicate function name, terminating");
+        }
+        functionLocations.put(functionName, pointer);
     }
 
     public void setInstructionPointerToLabelAddress(String label) {
-        if (labels.containsKey(label)) {
-            instructionPointer = labels.get(label);
+        if (labelLocations.containsKey(label)) {
+            instructionPointer = labelLocations.get(label);
         } else {
-            throw new RuntimeException("Label not in map of labels (not been added) " + label);
+            throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
         }
     }
 
-    public Integer getLabel(String label) {
-        if (labels.containsKey(label)) {
-            return labels.get(label);
+    public Integer getLabelLocation(String label) {
+        if (labelLocations.containsKey(label)) {
+            return labelLocations.get(label);
         }
-        throw new RuntimeException("Label not in map of labels (not been added) " + label);
+        throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
     }
 
     public void pushToCallStack(VmFunction functionName) {

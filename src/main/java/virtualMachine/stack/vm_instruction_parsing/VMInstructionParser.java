@@ -8,8 +8,7 @@ import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.Ins
 
 import java.util.List;
 
-import static virtualMachine.stack.datawrappers.instruction.Commands.POP;
-import static virtualMachine.stack.datawrappers.instruction.Commands.PUSH;
+import static virtualMachine.stack.datawrappers.instruction.Commands.*;
 
 public class VMInstructionParser {
 
@@ -19,6 +18,8 @@ public class VMInstructionParser {
 
     public VMInstructionParser(List<Instruction> vmInstructions) {
         this.vmInstructions = vmInstructions;
+
+        initializeFunctions(vmInstructions);
     }
 
     public void processInstruction(Instruction instruction) {
@@ -26,7 +27,7 @@ public class VMInstructionParser {
         instructionProcessor.processInstruction(instruction, globalVirtualMemory);
     }
 
-    public void processInstructions() {
+    public void executeVmInstructions() {
         while (globalVirtualMemory.hasNextInstruction(vmInstructions)) {
             int instructionPointer = globalVirtualMemory.nextInstruction();
 
@@ -41,16 +42,22 @@ public class VMInstructionParser {
         Commands command = instruction.getCommand();
 
         if (command == POP) {
+
             return instructionProcessors.getPopInstructionProcessor();
         } else if (command == PUSH) {
+
             return instructionProcessors.getPushInstructionProcessor();
         } else if (Commands.allBinaryCommands().contains(command)) {
+
             return instructionProcessors.getBinaryInstructionProcessor();
         } else if (Commands.allUnaryCommands().contains(command)) {
+
             return instructionProcessors.getUnaryInstructionProcessor();
         } else if (Commands.allFunctionCommands().contains(command)) {
+
             return instructionProcessors.getFunctionProcessor();
         } else if (Commands.programFlowCommands().contains(command)) {
+
             return instructionProcessors.getProgramFlowProcessor();
         } else {
             throw new RuntimeException("Unknown instruction: " + instruction);
@@ -59,5 +66,17 @@ public class VMInstructionParser {
 
     public GlobalVirtualMemory getVirtualMemory() {
         return globalVirtualMemory;
+    }
+
+
+    private void initializeFunctions(List<Instruction> vmInstructions) {
+        for (int i = 0; i < vmInstructions.size(); i++) {
+            var instruction = vmInstructions.get(i);
+            if (instruction.getCommand() == FUNCTION) {
+                globalVirtualMemory.addFunctionInstructionLocation(instruction.getOperand(), i);
+            } else if (instruction.getCommand() == LABEL) {
+                globalVirtualMemory.addLabel(instruction.getOperand(), i);
+            }
+        }
     }
 }

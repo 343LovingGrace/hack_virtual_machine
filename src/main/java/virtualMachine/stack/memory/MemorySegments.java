@@ -10,11 +10,9 @@ public enum MemorySegments {
     POINTER("pointer"),
     ARGUMENT("argument"),
     GLOBAL("global"),
-    CONSTANT("constant"),
-    GLOBAL_STACK("global_stack");
+    CONSTANT("constant");
 
     private final String name;
-    private int fixedAddress = -1;
 
     MemorySegments(String input) {
         this.name = input;

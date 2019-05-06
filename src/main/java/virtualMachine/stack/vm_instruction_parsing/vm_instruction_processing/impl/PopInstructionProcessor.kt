@@ -11,7 +11,7 @@ class PopInstructionProcessor : InstructionProcessor {
     override fun processInstruction(instruction: Instruction, virtualMemory: GlobalVirtualMemory) {
 
         val head : Word = virtualMemory.popStack()
-        val reference = instruction.address
+        val reference = instruction.numericValue
         val segment = MemorySegments.getFromName(instruction.operand)
 
         virtualMemory.loadIntoMemory(head, reference, segment)

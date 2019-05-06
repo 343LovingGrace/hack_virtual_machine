@@ -24,7 +24,7 @@ public class ProcessVirtualMachineFile {
             }
         }
 
-        vmParser.processInstructions();
+        vmParser.executeVmInstructions();
 
         return vmParser;
     }
