@@ -2,9 +2,7 @@
 
 Kind of a toy stack based virtual machine implementation for interest / curiosity.
 
-TODO: add support for calling functions, add support for control flow (and the big one) implement a high level language to compile to this 
-
-Example of use; 
+Example of use (see tests for more complex examples); 
 
 (nums, bools represented as 16 bit 'binary' numbers) 
 
