@@ -1,42 +1,44 @@
 package virtualMachine.stack.memory;
 
+import virtualMachine.stack.datawrappers.Memory;
 import virtualMachine.stack.datawrappers.VmFunction;
+import virtualMachine.stack.datawrappers.VmStack;
 import virtualMachine.stack.datawrappers.Word;
-import virtualMachine.stack.datawrappers.instruction.Instruction;
 
 import java.util.*;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
 
 //TODO: becoming a god class watch out
-public class GlobalVirtualMemory {
+public final class GlobalVirtualMemory implements Memory {
 
     //Pointer -> a 2 entry segment that holds the addresses of the this and that segments
     //this, that pseudo heap memory
     //static => constants shared across all vm files (i.e. classes)
     //local => stores a functions local variables dynamic and per function
     //argument - methods arguments
-    // global - kind of a clunge
+    // temp - kind of a clunge
 
     //Important: everything shares same pseudo address space - should be fine to assume that they don't though
 
+    //TODO: when calling a function need to store variables on global stack
+    //TODO: when returning from a function need to restore local variables
+
     private static final int RESERVED_MEMORY = 28000;
-    private int stackPointer = 0;
-    private int instructionPointer = 0;
+//    private int globalStackPointer = 0;
 
     private final Word[] virtualRam = new Word[32768];
-    private final Word[] globalStack = new Word[2048];
-    private final WorkingStack workingStack = new WorkingStack();
+    private final GlobalStack globalStack = new GlobalStack();
+    private final VmStack workingStack = new LocalStack();
     private final Deque<VmFunction> callStack = new ArrayDeque<>();
-    private final Map<String, Integer> labelLocations = new HashMap<>();
-    private final Map<String, Integer> functionLocations = new HashMap<>(8);
+    private final ControlFlow controlFlow = new ControlFlow();
 
     private final Map<MemorySegments, Integer> memorySegmentPointerMap =
             Map.of(
                     STATIC, RESERVED_MEMORY,
                     LOCAL, RESERVED_MEMORY + 500,
                     ARGUMENT, RESERVED_MEMORY + 1000,
-                    GLOBAL, RESERVED_MEMORY + 1500,
+                    TEMP, RESERVED_MEMORY + 1500,
                     POINTER, virtualRam.length - 2);
 
 
@@ -81,25 +83,14 @@ public class GlobalVirtualMemory {
         }
     }
 
-    private void decrementStackPointer() {
-        if (stackPointer > 0) {
-            stackPointer--;
-        }
-    }
-
-    public int getStackPointer() {
-        return stackPointer;
-    }
-
     public Word popStack() {
-        decrementStackPointer();
+        globalStack.decrementStackPointer();
         return workingStack.pop();
     }
 
     public void pushToStack(Word value) {
-        stackPointer++;
         workingStack.push(value);
-        globalStack[stackPointer] = value;
+        globalStack.push(value);
     }
 
     private int getThisThatOffset(MemorySegments segment) {
@@ -110,46 +101,16 @@ public class GlobalVirtualMemory {
         }
     }
 
-    public void pushToGlobalStack(Word toAdd) {
-        globalStack[stackPointer] = toAdd;
+    public ControlFlow getControlFlow() {
+        return controlFlow;
     }
 
-    public Word getFromGlobalStack(int addressToPop) {
-        return globalStack[addressToPop];
-    }
-    
-    public int nextInstruction() {
-        return instructionPointer++;
+    public int getGlobalStackPointer() {
+        return globalStack.getGlobalStackPointer();
     }
 
-    public boolean hasNextInstruction(List<Instruction> allInstructions) {
-        return instructionPointer < allInstructions.size();
-    }
-
-    public void addLabel(String label, int iP) {
-        labelLocations.put(label, iP);
-    }
-
-    public void addFunctionInstructionLocation(String functionName, int pointer) {
-        if (functionLocations.containsKey(functionName)) {
-            throw new RuntimeException("Duplicate function name, terminating");
-        }
-        functionLocations.put(functionName, pointer);
-    }
-
-    public void setInstructionPointerToLabelAddress(String label) {
-        if (labelLocations.containsKey(label)) {
-            instructionPointer = labelLocations.get(label);
-        } else {
-            throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
-        }
-    }
-
-    public Integer getLabelLocation(String label) {
-        if (labelLocations.containsKey(label)) {
-            return labelLocations.get(label);
-        }
-        throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
+    public Word popGlobalStack() {
+        return globalStack.pop();
     }
 
     public void pushToCallStack(VmFunction functionName) {

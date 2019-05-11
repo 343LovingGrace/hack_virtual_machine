@@ -22,15 +22,18 @@ public class ProgramFlowProcessor implements InstructionProcessor {
         var command = instruction.getCommand();
 
         if (command == GOTO) {
-            virtualMemory.setInstructionPointerToLabelAddress(instruction.getOperand());
+            virtualMemory.getControlFlow()
+                    .setInstructionPointerToLabelAddress(instruction.getOperand());
         } else if (command == IF_GOTO) {
             //set next instruction to be executed to be the one next one in list if false, one in label otherwise
             Word topValue = virtualMemory.popStack();
             if (!topValue.isFalse()) {
-                virtualMemory.setInstructionPointerToLabelAddress(instruction.getOperand());
+                virtualMemory.getControlFlow()
+                        .setInstructionPointerToLabelAddress(instruction.getOperand());
             }
         } else if (command == LABEL) {
-            virtualMemory.getLabelLocation(instruction.getOperand());
+            virtualMemory.getControlFlow()
+                    .getLabelLocation(instruction.getOperand());
         } else {
             throw new RuntimeException("Command not recognised " + command);
         }

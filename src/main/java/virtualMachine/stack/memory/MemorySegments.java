@@ -9,7 +9,7 @@ public enum MemorySegments {
     LOCAL("local"),
     POINTER("pointer"),
     ARGUMENT("argument"),
-    GLOBAL("global"),
+    TEMP("temp"),
     CONSTANT("constant");
 
     private final String name;

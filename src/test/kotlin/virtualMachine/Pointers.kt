@@ -5,7 +5,7 @@ import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
 import virtualMachine.stack.datawrappers.Word
 import virtualMachine.stack.datawrappers.instruction.Instruction
 import virtualMachine.stack.memory.MemorySegments
-import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
+import virtualMachine.stack.vm_instruction_parsing.VmParser
 import kotlin.test.assertEquals
 
 class Pointers {
@@ -18,7 +18,7 @@ class Pointers {
                 getInstructionFromRawInput("pop pointer 0")
         )
 
-        val vmProcessor = VMInstructionParser(instructions)
+        val vmProcessor = VmParser(instructions)
         vmProcessor.executeVmInstructions()
 
         val memory = vmProcessor.virtualMemory

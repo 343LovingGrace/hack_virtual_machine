@@ -134,6 +134,7 @@ public class Word {
                     }
                 }
             }
+            //noinspection ConstantConditions (makes intent clearer)
             if (this.isNegative() && operand.isNegative()) {
                 return new Word(additionProduct, true);
             }
@@ -168,7 +169,6 @@ public class Word {
 
     /**
      * word is false if all 0s
-     * @return
      */
     public boolean isFalse() {
         for (int i = NUMBER_START_LOC; i < SIZE; i++) {

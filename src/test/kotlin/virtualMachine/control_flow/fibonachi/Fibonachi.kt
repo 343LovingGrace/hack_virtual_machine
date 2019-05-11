@@ -5,7 +5,7 @@ import org.junit.Test
 import virtualMachine.ProcessVirtualMachineFile
 import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
 import virtualMachine.stack.memory.MemorySegments
-import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
+import virtualMachine.stack.vm_instruction_parsing.VmParser
 
 class Fibonachi {
 
@@ -20,7 +20,7 @@ class Fibonachi {
                 getInstructionFromRawInput("push constant $addressToStoreSequenceFrom"), //address to store variables from
                 getInstructionFromRawInput("pop argument 1"))
 
-        val vmReader : VMInstructionParser = ProcessVirtualMachineFile()
+        val vmReader : VmParser = ProcessVirtualMachineFile()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/fibonachi/Fibonachi.vm",
                         setup)
 

@@ -5,7 +5,7 @@ import org.junit.Ignore
 import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
 import virtualMachine.stack.datawrappers.Word
 import virtualMachine.stack.datawrappers.instruction.Instruction
-import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
+import virtualMachine.stack.vm_instruction_parsing.VmParser
 import kotlin.test.Test
 
 class StackArithmetic {
@@ -13,7 +13,7 @@ class StackArithmetic {
     @Test
     fun testLoadConstants() {
         val line = getInstructionFromRawInput("push constant 2")
-        val vmParser = VMInstructionParser(listOf(line))
+        val vmParser = VmParser(listOf(line))
 
         vmParser.executeVmInstructions()
         val data = vmParser.virtualMemory.popStack()
@@ -28,7 +28,7 @@ class StackArithmetic {
                 getInstructionFromRawInput("add")
         )
 
-        val vmParser = VMInstructionParser(instructions)
+        val vmParser = VmParser(instructions)
         vmParser.executeVmInstructions()
 
         val result: Word = vmParser.virtualMemory.popStack()
@@ -45,7 +45,7 @@ class StackArithmetic {
                 getInstructionFromRawInput("add")
         )
 
-        val vmParser = VMInstructionParser(instructions)
+        val vmParser = VmParser(instructions)
         vmParser.executeVmInstructions()
 
         val result: Word = vmParser.virtualMemory.popStack()
@@ -62,7 +62,7 @@ class StackArithmetic {
                 getInstructionFromRawInput("gt")
         )
 
-        val vmParser = VMInstructionParser(instructions)
+        val vmParser = VmParser(instructions)
         vmParser.executeVmInstructions()
 
         val result: Word = vmParser.virtualMemory.popStack()
@@ -74,8 +74,8 @@ class StackArithmetic {
     @Test
     @Ignore
     fun testLoadFile() {
-        val vmParser: VMInstructionParser = ProcessVirtualMachineFile().processVmFile("./src/test/StackArithmetic/StackTest/StackTest.vm", null)
-        val result: Word = vmParser.getVirtualMemory().popStack()
+        val vmParser: VmParser = ProcessVirtualMachineFile().processVmFile("./src/test/StackArithmetic/StackTest/StackTest.vm", null)
+        val result: Word = vmParser.virtualMemory.popStack()
         //TODO check this test
         Assert.assertEquals(32685, result.convertToInteger())
     }

@@ -11,7 +11,7 @@ push constant 45
 pop that 5
 pop that 2
 push constant 510
-pop global 6
+pop temp 6
 push local 0
 push that 5
 add
@@ -21,5 +21,5 @@ push this 6
 push this 6
 add
 sub
-push global 6
+push temp 6
 add

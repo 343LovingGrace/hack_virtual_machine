@@ -1,12 +1,10 @@
 package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl
 
-import virtualMachine.stack.memory.GlobalVirtualMemory
 import virtualMachine.stack.datawrappers.Word
 import virtualMachine.stack.datawrappers.instruction.Commands
 import virtualMachine.stack.datawrappers.instruction.Instruction
-import virtualMachine.stack.memory.MemorySegments
+import virtualMachine.stack.memory.GlobalVirtualMemory
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor
-import java.lang.RuntimeException
 
 class BinaryInstructionProcessor : InstructionProcessor {
 
@@ -15,7 +13,6 @@ class BinaryInstructionProcessor : InstructionProcessor {
         val secondFromHead : Word = virtualMemory.popStack()
 
         val result : Word = processComparison(instruction, latestHead, secondFromHead)
-        virtualMemory.pushToGlobalStack(result)
         virtualMemory.pushToStack(result)
     }
 

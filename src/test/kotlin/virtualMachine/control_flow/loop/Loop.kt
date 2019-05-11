@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import virtualMachine.ProcessVirtualMachineFile
 import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
-import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
+import virtualMachine.stack.vm_instruction_parsing.VmParser
 
 class Loop {
 
@@ -16,13 +16,13 @@ class Loop {
                 getInstructionFromRawInput("push constant 6"),
                 getInstructionFromRawInput("pop argument 0"))
 
-        val vmReader : VMInstructionParser = ProcessVirtualMachineFile()
+        val vmReader : VmParser = ProcessVirtualMachineFile()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/loop/loop.vm",
                         setup)
 
         val memory = vmReader.virtualMemory
 
-        Assert.assertEquals(2, memory.getLabelLocation("LOOP_START"))
+        Assert.assertEquals(2, memory.controlFlow.getLabelLocation("LOOP_START"))
         Assert.assertEquals(21, memory.popStack().convertToInteger())
     }
 
@@ -40,7 +40,7 @@ class Loop {
                 getInstructionFromRawInput("push constant 81"),
                 getInstructionFromRawInput("pop argument 0"))
 
-        val vmReader : VMInstructionParser = ProcessVirtualMachineFile()
+        val vmReader : VmParser = ProcessVirtualMachineFile()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/loop/loop.vm",
                         setup)
 
@@ -64,7 +64,7 @@ class Loop {
                 getInstructionFromRawInput("push constant $counterStart"),
                 getInstructionFromRawInput("pop argument 0"))
 
-        val vmReader : VMInstructionParser = ProcessVirtualMachineFile()
+        val vmReader : VmParser = ProcessVirtualMachineFile()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/loop/loop.vm",
                         setup)
 

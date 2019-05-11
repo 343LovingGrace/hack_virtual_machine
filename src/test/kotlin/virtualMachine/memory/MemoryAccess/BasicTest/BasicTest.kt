@@ -5,14 +5,14 @@ import org.junit.Test
 import virtualMachine.ProcessVirtualMachineFile
 import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
 import virtualMachine.stack.memory.MemorySegments
-import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser
+import virtualMachine.stack.vm_instruction_parsing.VmParser
 
 class BasicTest {
 
     @Test
     fun testScript() {
 
-        val vmReader : VMInstructionParser = ProcessVirtualMachineFile()
+        val vmReader : VmParser = ProcessVirtualMachineFile()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/BasicTest/BasicTest.vm",
                         listOf(getInstructionFromRawInput("push constant 3000"),
                                 getInstructionFromRawInput("pop pointer 0"),
@@ -33,10 +33,10 @@ class BasicTest {
         Assert.assertEquals(42, memory.getFromMemory(12, MemorySegments.THIS).convertToInteger())
         Assert.assertEquals(45, memory.getFromMemory(15, MemorySegments.THIS).convertToInteger())
 
-        Assert.assertEquals(472, memory.getFromGlobalStack(1).convertToInteger())
-        Assert.assertEquals(510, memory.getFromGlobalStack(2).convertToInteger())
+        Assert.assertEquals(510, memory.popGlobalStack().convertToInteger())
+        Assert.assertEquals(472, memory.popGlobalStack().convertToInteger())
 
-        Assert.assertEquals(472, vmReader.getVirtualMemory().popStack()
+        Assert.assertEquals(472, vmReader.virtualMemory.popStack()
                 .convertToInteger())
 
     }

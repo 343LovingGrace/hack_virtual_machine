@@ -27,7 +27,7 @@ public class FunctionProcessor implements InstructionProcessor {
                 //a complex command - need to execute code in the correct vm file
                 //need to push some things to the global stack
                 //think first thing pushed in function address where called from
-                int locCalledFrom = virtualMemory.getStackPointer();
+                int locCalledFrom = virtualMemory.getGlobalStackPointer();
                 //load sp, lcl, arg, this, that into global stack
 
                 int arguments = instruction.getNumericValue();

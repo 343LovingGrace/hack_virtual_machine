@@ -2,7 +2,7 @@ package virtualMachine;
 
 import virtualMachine.stack.datawrappers.instruction.Commands;
 import virtualMachine.stack.datawrappers.instruction.Instruction;
-import virtualMachine.stack.vm_instruction_parsing.VMInstructionParser;
+import virtualMachine.stack.vm_instruction_parsing.VmParser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,11 +12,11 @@ import java.util.List;
 
 public class ProcessVirtualMachineFile {
 
-    public VMInstructionParser processVmFile(String pathToInput, List<Instruction> initSteps) {
+    public VmParser processVmFile(String pathToInput, List<Instruction> initSteps) {
 
         List<Instruction> vmInstructions = processRawInputToArrayOfInstructions(pathToInput);
 
-        var vmParser = new VMInstructionParser(vmInstructions);
+        var vmParser = new VmParser(vmInstructions);
 
         if (initSteps != null && !initSteps.isEmpty()) {
             for (var instruction: initSteps) {

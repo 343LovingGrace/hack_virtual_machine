@@ -10,13 +10,13 @@ import java.util.List;
 
 import static virtualMachine.stack.datawrappers.instruction.Commands.*;
 
-public class VMInstructionParser {
+public class VmParser {
 
     private final List<Instruction> vmInstructions;
     private final GlobalVirtualMemory globalVirtualMemory = new GlobalVirtualMemory();
     private final AllInstructionProcessors instructionProcessors = new AllInstructionProcessors();
 
-    public VMInstructionParser(List<Instruction> vmInstructions) {
+    public VmParser(List<Instruction> vmInstructions) {
         this.vmInstructions = vmInstructions;
 
         initializeFunctions(vmInstructions);
@@ -28,8 +28,8 @@ public class VMInstructionParser {
     }
 
     public void executeVmInstructions() {
-        while (globalVirtualMemory.hasNextInstruction(vmInstructions)) {
-            int instructionPointer = globalVirtualMemory.nextInstruction();
+        while (globalVirtualMemory.getControlFlow().hasNextInstruction(vmInstructions)) {
+            int instructionPointer = globalVirtualMemory.getControlFlow().nextInstruction();
 
             Instruction instruction = vmInstructions.get(instructionPointer);
             var instructionProcessor = getInstructionProcessorFromCommand(instruction);
@@ -73,9 +73,11 @@ public class VMInstructionParser {
         for (int i = 0; i < vmInstructions.size(); i++) {
             var instruction = vmInstructions.get(i);
             if (instruction.getCommand() == FUNCTION) {
-                globalVirtualMemory.addFunctionInstructionLocation(instruction.getOperand(), i);
+                globalVirtualMemory.getControlFlow()
+                        .addFunctionInstructionLocation(instruction.getOperand(), i);
             } else if (instruction.getCommand() == LABEL) {
-                globalVirtualMemory.addLabel(instruction.getOperand(), i);
+                globalVirtualMemory.getControlFlow()
+                        .addLabel(instruction.getOperand(), i);
             }
         }
     }
