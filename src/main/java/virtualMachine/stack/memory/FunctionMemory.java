@@ -8,12 +8,12 @@ import java.util.Map;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
 
-public class Function implements Memory {
+public class FunctionMemory implements Memory, VmStack {
 
     private final VmStack workingStack = new LocalStack();
     //can try and be clever with not overusing memory later
     private final Word[] virtualRam = new Word[256];
-    private final Word[] globalStack;
+    private final GlobalStack globalStack;
     private int globalStackPointer;
     private final Word[] programHeap;
 
@@ -27,11 +27,10 @@ public class Function implements Memory {
                     TEMP, 150,
                     POINTER, 200);
 
-    public Function(Word[] arguments, Word[] staticVariables, Word[] programHeap, Word[] globalStack, int globalStackPointer) {
+    public FunctionMemory(Word[] arguments, Word[] staticVariables, GlobalStack globalStack, Word[] programHeap) {
         initMemorySegment(arguments, ARGUMENT);
         initMemorySegment(staticVariables, STATIC);
         this.globalStack = globalStack;
-        this.globalStackPointer = globalStackPointer;
         this.programHeap = programHeap;
     }
 
@@ -44,6 +43,7 @@ public class Function implements Memory {
         }
     }
 
+    @Override
     public void loadIntoMemory(Word variable, int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
@@ -58,7 +58,7 @@ public class Function implements Memory {
 
     }
 
-
+    @Override
     public Word getFromMemory(int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
@@ -91,32 +91,16 @@ public class Function implements Memory {
         }
     }
 
-    private void decrementStackPointer() {
-        if (globalStackPointer > 0) {
-            globalStackPointer--;
-        }
+    @Override
+    public void push(Word variable) {
+        workingStack.push(variable);
+        globalStack.push(variable);
     }
 
-    public int getStackPointer() {
-        return globalStackPointer;
-    }
-
-    public Word popStack() {
-        decrementStackPointer();
+    @Override
+    public Word pop() {
+        globalStack.decrementStackPointer();
         return workingStack.pop();
     }
 
-    public void pushToStack(Word value) {
-        globalStackPointer++;
-        workingStack.push(value);
-        globalStack[globalStackPointer] = value;
-    }
-
-    public void pushToGlobalStack(Word toAdd) {
-        globalStack[globalStackPointer] = toAdd;
-    }
-
-    public Word getFromGlobalStack(int addressToPop) {
-        return globalStack[addressToPop];
-    }
 }

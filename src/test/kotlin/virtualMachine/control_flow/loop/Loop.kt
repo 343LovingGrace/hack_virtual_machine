@@ -23,7 +23,7 @@ class Loop {
         val memory = vmReader.virtualMemory
 
         Assert.assertEquals(2, memory.controlFlow.getLabelLocation("LOOP_START"))
-        Assert.assertEquals(21, memory.popStack().convertToInteger())
+        Assert.assertEquals(21, memory.pop().convertToInteger())
     }
 
     @Test
@@ -46,7 +46,7 @@ class Loop {
 
         val memory = vmReader.virtualMemory
 
-        Assert.assertEquals(sum, memory.popStack().convertToInteger())
+        Assert.assertEquals(sum, memory.pop().convertToInteger())
     }
 
     @Test
@@ -70,7 +70,7 @@ class Loop {
 
         val memory = vmReader.virtualMemory
 
-        Assert.assertEquals(sum, memory.popStack().convertToInteger())
+        Assert.assertEquals(sum, memory.pop().convertToInteger())
     }
 
 }

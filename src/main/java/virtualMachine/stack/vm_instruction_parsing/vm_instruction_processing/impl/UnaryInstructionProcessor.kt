@@ -9,12 +9,12 @@ import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.Ins
 class UnaryInstructionProcessor : InstructionProcessor {
 
     override fun processInstruction(instruction: Instruction, virtualMemory: GlobalVirtualMemory) {
-        val uniaryInstruction: Word = virtualMemory.popStack()
+        val uniaryInstruction: Word = virtualMemory.pop()
 
         if (instruction == Commands.NOT) {
-            virtualMemory.pushToStack(uniaryInstruction.bitWiseNot())
+            virtualMemory.push(uniaryInstruction.bitWiseNot())
         } else if (instruction == Commands.NEGATIVE) {
-            virtualMemory.pushToStack(uniaryInstruction.negate())
+            virtualMemory.push(uniaryInstruction.negate())
         }
     }
 }

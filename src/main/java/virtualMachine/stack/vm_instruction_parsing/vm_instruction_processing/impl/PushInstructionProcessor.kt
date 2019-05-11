@@ -14,7 +14,7 @@ class PushInstructionProcessor : InstructionProcessor {
         val segment = MemorySegments.getFromName(instruction.operand)
 
         val storedVariable : Word = virtualMemory.getFromMemory(index, segment)
-        virtualMemory.pushToStack(storedVariable)
+        virtualMemory.push(storedVariable)
     }
 
 }

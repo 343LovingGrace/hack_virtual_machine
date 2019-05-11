@@ -16,7 +16,7 @@ class StackArithmetic {
         val vmParser = VmParser(listOf(line))
 
         vmParser.executeVmInstructions()
-        val data = vmParser.virtualMemory.popStack()
+        val data = vmParser.virtualMemory.pop()
         Assert.assertEquals(2, data.convertToInteger())
     }
 
@@ -31,7 +31,7 @@ class StackArithmetic {
         val vmParser = VmParser(instructions)
         vmParser.executeVmInstructions()
 
-        val result: Word = vmParser.virtualMemory.popStack()
+        val result: Word = vmParser.virtualMemory.pop()
         Assert.assertEquals(9, result.convertToInteger())
     }
 
@@ -48,7 +48,7 @@ class StackArithmetic {
         val vmParser = VmParser(instructions)
         vmParser.executeVmInstructions()
 
-        val result: Word = vmParser.virtualMemory.popStack()
+        val result: Word = vmParser.virtualMemory.pop()
         Assert.assertEquals(11, result.convertToInteger())
     }
 
@@ -65,7 +65,7 @@ class StackArithmetic {
         val vmParser = VmParser(instructions)
         vmParser.executeVmInstructions()
 
-        val result: Word = vmParser.virtualMemory.popStack()
+        val result: Word = vmParser.virtualMemory.pop()
 
         val trueSixteenBit = Word(true)
         Assert.assertEquals(trueSixteenBit, result)
@@ -75,7 +75,7 @@ class StackArithmetic {
     @Ignore
     fun testLoadFile() {
         val vmParser: VmParser = ProcessVirtualMachineFile().processVmFile("./src/test/StackArithmetic/StackTest/StackTest.vm", null)
-        val result: Word = vmParser.virtualMemory.popStack()
+        val result: Word = vmParser.virtualMemory.pop()
         //TODO check this test
         Assert.assertEquals(32685, result.convertToInteger())
     }

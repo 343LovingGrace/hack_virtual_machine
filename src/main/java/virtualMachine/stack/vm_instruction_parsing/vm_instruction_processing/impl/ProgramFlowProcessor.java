@@ -26,7 +26,7 @@ public class ProgramFlowProcessor implements InstructionProcessor {
                     .setInstructionPointerToLabelAddress(instruction.getOperand());
         } else if (command == IF_GOTO) {
             //set next instruction to be executed to be the one next one in list if false, one in label otherwise
-            Word topValue = virtualMemory.popStack();
+            Word topValue = virtualMemory.pop();
             if (!topValue.isFalse()) {
                 virtualMemory.getControlFlow()
                         .setInstructionPointerToLabelAddress(instruction.getOperand());

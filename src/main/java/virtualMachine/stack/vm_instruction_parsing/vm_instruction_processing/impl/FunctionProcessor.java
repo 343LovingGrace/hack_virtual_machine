@@ -33,7 +33,7 @@ public class FunctionProcessor implements InstructionProcessor {
                 int arguments = instruction.getNumericValue();
                 int argumentAddress = 0;
                 while (argumentAddress < arguments) {
-                    virtualMemory.loadIntoMemory(virtualMemory.popStack(), argumentAddress, ARGUMENT);
+                    virtualMemory.loadIntoMemory(virtualMemory.pop(), argumentAddress, ARGUMENT);
                     argumentAddress++;
                 }
 

@@ -14,7 +14,7 @@ class StaticTest {
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/StaticTest/StaticTest.vm",
                         null)
 
-        Assert.assertEquals(1110, vmParser.virtualMemory.popStack()
+        Assert.assertEquals(1110, vmParser.virtualMemory.pop()
                 .convertToInteger())
 
         Assert.assertEquals(888, vmParser.virtualMemory

@@ -9,8 +9,7 @@ import java.util.*;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
 
-//TODO: becoming a god class watch out
-public final class GlobalVirtualMemory implements Memory {
+public final class GlobalVirtualMemory implements Memory, VmStack {
 
     //Pointer -> a 2 entry segment that holds the addresses of the this and that segments
     //this, that pseudo heap memory
@@ -25,7 +24,6 @@ public final class GlobalVirtualMemory implements Memory {
     //TODO: when returning from a function need to restore local variables
 
     private static final int RESERVED_MEMORY = 28000;
-//    private int globalStackPointer = 0;
 
     private final Word[] virtualRam = new Word[32768];
     private final GlobalStack globalStack = new GlobalStack();
@@ -42,6 +40,7 @@ public final class GlobalVirtualMemory implements Memory {
                     POINTER, virtualRam.length - 2);
 
 
+    @Override
     public void loadIntoMemory(Word variable, int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
@@ -59,6 +58,7 @@ public final class GlobalVirtualMemory implements Memory {
     }
 
 
+    @Override
     public Word getFromMemory(int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
@@ -76,21 +76,22 @@ public final class GlobalVirtualMemory implements Memory {
         return virtualRam[address];
     }
 
+    @Override
+    public void push(Word variable) {
+        workingStack.push(variable);
+        globalStack.push(variable);
+    }
+
+    @Override
+    public Word pop() {
+        globalStack.decrementStackPointer();
+        return workingStack.pop();
+    }
 
     private void checkPointerInBounds(int address, MemorySegments segment) {
         if (segment == POINTER && (address < 0 || address > 1)) {
             throw new ArrayIndexOutOfBoundsException();
         }
-    }
-
-    public Word popStack() {
-        globalStack.decrementStackPointer();
-        return workingStack.pop();
-    }
-
-    public void pushToStack(Word value) {
-        workingStack.push(value);
-        globalStack.push(value);
     }
 
     private int getThisThatOffset(MemorySegments segment) {

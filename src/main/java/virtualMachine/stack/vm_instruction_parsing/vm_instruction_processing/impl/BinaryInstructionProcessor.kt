@@ -9,11 +9,11 @@ import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.Ins
 class BinaryInstructionProcessor : InstructionProcessor {
 
     override fun processInstruction(instruction: Instruction, virtualMemory: GlobalVirtualMemory) {
-        val latestHead: Word = virtualMemory.popStack()
-        val secondFromHead : Word = virtualMemory.popStack()
+        val latestHead: Word = virtualMemory.pop()
+        val secondFromHead : Word = virtualMemory.pop()
 
         val result : Word = processComparison(instruction, latestHead, secondFromHead)
-        virtualMemory.pushToStack(result)
+        virtualMemory.push(result)
     }
 
     private fun processComparison(instruction: Instruction, latestHead: Word,
