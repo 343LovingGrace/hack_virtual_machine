@@ -36,6 +36,11 @@ public class ProcessVirtualMachineFile {
             String line;
             while ((line = br.readLine()) != null) {
 
+                int commentStart = line.indexOf("//");
+                if (commentStart > -1) {
+                    line = line.substring(0, commentStart);
+                }
+
                 line = line.trim();
                 if (line.isEmpty()) {
                     continue;
