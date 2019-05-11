@@ -2,9 +2,9 @@ package virtualMachine.stack.datawrappers;
 
 public class VmFunction {
     private final String name;
-    private final byte arguments;
+    private final int arguments;
 
-    public VmFunction(String name, byte arguments) {
+    public VmFunction(String name, int arguments) {
         this.name = name;
         this.arguments = arguments;
     }
@@ -13,7 +13,7 @@ public class VmFunction {
         return name;
     }
 
-    public byte getArguments() {
+    public int getArguments() {
         return arguments;
     }
 }

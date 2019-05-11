@@ -31,6 +31,13 @@ public class ControlFlow {
         functionLocations.put(functionName, pointer);
     }
 
+    int getFunctionLocation(String functionName) {
+        if (functionName.contains(functionName)) {
+            return functionLocations.get(functionName);
+        }
+        return -1;
+    }
+
     public void setInstructionPointerToLabelAddress(String label) {
         if (labelLocations.containsKey(label)) {
             instructionPointer = labelLocations.get(label);

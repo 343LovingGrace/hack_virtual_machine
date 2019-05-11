@@ -23,83 +23,62 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
     //TODO: when calling a function need to store variables on global stack
     //TODO: when returning from a function need to restore local variables
 
-    private static final int RESERVED_MEMORY = 28000;
-
-    private final Word[] virtualRam = new Word[32768];
+    private final Word[] virtualRam = new Word[16384];
     private final GlobalStack globalStack = new GlobalStack();
-    private final VmStack workingStack = new LocalStack();
     private final Deque<VmFunction> callStack = new ArrayDeque<>();
     private final ControlFlow controlFlow = new ControlFlow();
 
-    private final Map<MemorySegments, Integer> memorySegmentPointerMap =
-            Map.of(
-                    STATIC, RESERVED_MEMORY,
-                    LOCAL, RESERVED_MEMORY + 500,
-                    ARGUMENT, RESERVED_MEMORY + 1000,
-                    TEMP, RESERVED_MEMORY + 1500,
-                    POINTER, virtualRam.length - 2);
+    private final Map<String, FunctionMemory> functions = new HashMap<>();
 
+    //should be specified in normal vm files but if not, supply an empty function
+    public GlobalVirtualMemory() {
+        functions.put("sys.init", new FunctionMemory(null, null, globalStack, virtualRam));
+        callStack.push(new VmFunction("sys.init", 0));
+    }
 
     @Override
     public void loadIntoMemory(Word variable, int address, MemorySegments segment) {
-        checkPointerInBounds(address, segment);
-
-        //THIS/THAT kind of special cases - may look at refactoring this whole memory access approach ...
-        if (segment == THIS || segment == THAT) {
-            address += getThisThatOffset(segment);
-            if (address > RESERVED_MEMORY) {
-                throw new RuntimeException("Heap memory overwriting reserved memory");
-            }
-        } else {
-            address += memorySegmentPointerMap.get(segment);
-        }
-
-        virtualRam[address] = variable;
+        FunctionMemory functionMemory = getFunctionMemory();
+        functionMemory.loadIntoMemory(variable, address, segment);
     }
 
 
     @Override
     public Word getFromMemory(int address, MemorySegments segment) {
-        checkPointerInBounds(address, segment);
-
-        //constants are not loaded into memory
-        if (segment == CONSTANT) {
-            return new Word(address);
-        }
-
-        if (segment == THIS || segment == THAT) {
-            address += getThisThatOffset(segment);
-        } else {
-            address += memorySegmentPointerMap.get(segment);
-        }
-
-        return virtualRam[address];
+        FunctionMemory functionMemory = getFunctionMemory();
+        return functionMemory.getFromMemory(address, segment);
     }
 
     @Override
     public void push(Word variable) {
-        workingStack.push(variable);
+        var function = getFunctionMemory();
+        function.push(variable);
         globalStack.push(variable);
     }
 
     @Override
     public Word pop() {
         globalStack.decrementStackPointer();
-        return workingStack.pop();
+        var function = getFunctionMemory();
+        return function.pop();
     }
 
-    private void checkPointerInBounds(int address, MemorySegments segment) {
-        if (segment == POINTER && (address < 0 || address > 1)) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-    }
 
-    private int getThisThatOffset(MemorySegments segment) {
-        if (segment == THIS) {
-            return getFromMemory(0, POINTER).convertToInteger();
-        } else {
-            return getFromMemory(1, POINTER).convertToInteger();
+    public void callFunction(String functionName, int numberArguments) {
+        var arguments = new Word[numberArguments];
+        int argumentAddress = 0;
+        var function = getFunctionMemory();
+
+        while (argumentAddress < numberArguments) {
+            arguments[0] = function.pop();
+            argumentAddress++;
         }
+
+        if (controlFlow.getFunctionLocation(functionName) == -1) {
+            throw new RuntimeException("Called function does not exist, aborting");
+        }
+
+        functions.put(functionName, new FunctionMemory(arguments, null, globalStack, virtualRam));
     }
 
     public ControlFlow getControlFlow() {
@@ -120,5 +99,12 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
 
     public VmFunction popCallStack() {
         return callStack.pop();
+    }
+
+    private FunctionMemory getFunctionMemory() {
+        var currentFunction = callStack.peek();
+        Objects.requireNonNull(currentFunction, "Invalid state reached: there must be a currently called function");
+
+        return functions.get(currentFunction.getName());
     }
 }

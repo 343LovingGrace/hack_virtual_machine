@@ -2,6 +2,7 @@ package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.im
 
 import org.jetbrains.annotations.NotNull;
 import virtualMachine.stack.datawrappers.VmFunction;
+import virtualMachine.stack.datawrappers.Word;
 import virtualMachine.stack.datawrappers.instruction.Instruction;
 import virtualMachine.stack.memory.GlobalVirtualMemory;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
@@ -22,6 +23,11 @@ public class FunctionProcessor implements InstructionProcessor {
         switch (command) {
             case FUNCTION:
                 virtualMemory.pushToCallStack(new VmFunction(instruction.getOperand(), instruction.getNumericValue().byteValue()));
+
+                for (int i = 1; i <= instruction.getNumericValue(); i++) {
+                    //advnace stack pointer this many times, push 0s to global stack
+                }
+
                 break;
             case CALL:
                 //a complex command - need to execute code in the correct vm file
@@ -30,13 +36,7 @@ public class FunctionProcessor implements InstructionProcessor {
                 int locCalledFrom = virtualMemory.getGlobalStackPointer();
                 //load sp, lcl, arg, this, that into global stack
 
-                int arguments = instruction.getNumericValue();
-                int argumentAddress = 0;
-                while (argumentAddress < arguments) {
-                    virtualMemory.loadIntoMemory(virtualMemory.pop(), argumentAddress, ARGUMENT);
-                    argumentAddress++;
-                }
-
+                virtualMemory.callFunction(instruction.getOperand(), instruction.getNumericValue());
                 //set sp to the location filled up to into the global stack
                 break;
             case RETURN:

@@ -27,7 +27,7 @@ public class FunctionMemory implements Memory, VmStack {
                     TEMP, 150,
                     POINTER, 200);
 
-    public FunctionMemory(Word[] arguments, Word[] staticVariables, GlobalStack globalStack, Word[] programHeap) {
+    FunctionMemory(Word[] arguments, Word[] staticVariables, GlobalStack globalStack, Word[] programHeap) {
         initMemorySegment(arguments, ARGUMENT);
         initMemorySegment(staticVariables, STATIC);
         this.globalStack = globalStack;
@@ -35,6 +35,8 @@ public class FunctionMemory implements Memory, VmStack {
     }
 
     private void initMemorySegment(Word[] variables, MemorySegments memorySegment) {
+        if (variables == null) return;
+
         if (variables.length > 50) {
             throw new RuntimeException("Too many arguments (>50) provided aborting...");
         }
