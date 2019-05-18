@@ -12,36 +12,34 @@ public class FunctionMemory implements Memory, VmStack {
 
     private final VmStack workingStack = new LocalStack();
     //can try and be clever with not overusing memory later
-    private final Word[] virtualRam = new Word[256];
     private final GlobalStack globalStack;
-    private int globalStackPointer;
-    private final Word[] programHeap;
+    private final PseudoMemory programHeap;
 
     //THIS/THAT will access the SAME programHeap memory as the 'global' memory segment
 
-    private final Map<MemorySegments, Integer> memorySegmentPointerMap =
+    private final Map<MemorySegments, PseudoMemory> memorySegmentMemoryMap =
             Map.of(
-                    STATIC, 0,
-                    LOCAL, 50,
-                    ARGUMENT, 100,
-                    TEMP, 150,
-                    POINTER, 200);
+                    STATIC, new PseudoMemory(16),
+                    LOCAL, new PseudoMemory(16),
+                    ARGUMENT, new PseudoMemory(16),
+                    TEMP, new PseudoMemory(16),
+                    POINTER, new PseudoMemory(2));
 
-    FunctionMemory(Word[] arguments, Word[] staticVariables, GlobalStack globalStack, Word[] programHeap) {
+    FunctionMemory(PseudoMemory arguments, PseudoMemory staticVariables, GlobalStack globalStack, PseudoMemory programHeap) {
         initMemorySegment(arguments, ARGUMENT);
         initMemorySegment(staticVariables, STATIC);
         this.globalStack = globalStack;
         this.programHeap = programHeap;
     }
 
-    private void initMemorySegment(Word[] variables, MemorySegments memorySegment) {
+    private void initMemorySegment(PseudoMemory variables, MemorySegments memorySegment) {
         if (variables == null) return;
 
-        if (variables.length > 50) {
+        if (variables.getLength() > 50) {
             throw new RuntimeException("Too many arguments (>50) provided aborting...");
         }
-        for (int i = 0; i < 50; i++) {
-            loadIntoMemory(variables[i], memorySegmentPointerMap.get(memorySegment) + i, memorySegment);
+        for (int i = 0; i < variables.getLength(); i++) {
+            loadIntoMemory(variables.getAddress(i), i, memorySegment);
         }
     }
 
@@ -52,10 +50,10 @@ public class FunctionMemory implements Memory, VmStack {
         //THIS/THAT kind of special cases - may look at refactoring this whole memory access approach ...
         if (segment == THIS || segment == THAT) {
             address += getThisThatOffset(segment);
-            programHeap[address] = variable;
+            programHeap.setAddress(address, variable);
         } else {
-            address += memorySegmentPointerMap.get(segment);
-            virtualRam[address] = variable;
+            var segmentMemory = memorySegmentMemoryMap.get(segment);
+            segmentMemory.setAddress(address, variable);
         }
 
     }
@@ -71,11 +69,11 @@ public class FunctionMemory implements Memory, VmStack {
 
         if (segment == THIS || segment == THAT) {
             address += getThisThatOffset(segment);
-            return programHeap[address];
+            return programHeap.getAddress(address);
         }
 
-        address += memorySegmentPointerMap.get(segment);
-        return virtualRam[address];
+        var segmentMemory = memorySegmentMemoryMap.get(segment);
+        return segmentMemory.getAddress(address);
     }
 
 

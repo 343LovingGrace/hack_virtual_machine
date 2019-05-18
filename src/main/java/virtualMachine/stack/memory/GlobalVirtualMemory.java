@@ -7,23 +7,12 @@ import virtualMachine.stack.datawrappers.Word;
 
 import java.util.*;
 
+import static java.util.Objects.requireNonNull;
 import static virtualMachine.stack.memory.MemorySegments.*;
 
 public final class GlobalVirtualMemory implements Memory, VmStack {
 
-    //Pointer -> a 2 entry segment that holds the addresses of the this and that segments
-    //this, that pseudo heap memory
-    //static => constants shared across all vm files (i.e. classes)
-    //local => stores a functions local variables dynamic and per function
-    //argument - methods arguments
-    // temp - kind of a clunge
-
-    //Important: everything shares same pseudo address space - should be fine to assume that they don't though
-
-    //TODO: when calling a function need to store variables on global stack
-    //TODO: when returning from a function need to restore local variables
-
-    private final Word[] virtualRam = new Word[16384];
+    private final PseudoMemory virtualRam = new PseudoMemory(8192);
     private final GlobalStack globalStack = new GlobalStack();
     private final Deque<VmFunction> callStack = new ArrayDeque<>();
     private final ControlFlow controlFlow = new ControlFlow();
@@ -51,7 +40,7 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
 
     @Override
     public void push(Word variable) {
-        var function = getFunctionMemory();
+        FunctionMemory function = getFunctionMemory();
         function.push(variable);
         globalStack.push(variable);
     }
@@ -59,33 +48,50 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
     @Override
     public Word pop() {
         globalStack.decrementStackPointer();
-        var function = getFunctionMemory();
+        FunctionMemory function = getFunctionMemory();
         return function.pop();
     }
 
 
     public void callFunction(String functionName, int numberArguments) {
-        var arguments = new Word[numberArguments];
-        int argumentAddress = 0;
+        var arguments = new PseudoMemory(numberArguments);
         var function = getFunctionMemory();
 
-        while (argumentAddress < numberArguments) {
-            arguments[0] = function.pop();
-            argumentAddress++;
+        for (int i = 0; i < numberArguments; i++) {
+            arguments.setAddress(i, function.pop());
         }
 
-        if (controlFlow.getFunctionLocation(functionName) == -1) {
-            throw new RuntimeException("Called function does not exist, aborting");
-        }
+        final int stackPointer = getGlobalStackPointer();
+        saveStateOnGlobalStack(function, stackPointer);
 
         functions.put(functionName, new FunctionMemory(arguments, null, globalStack, virtualRam));
+        callStack.push(new VmFunction(functionName, controlFlow.getInstructionPointer()));
+
+        controlFlow.setInstructionPointerToJumpAddress(functionName);
+    }
+
+    private void saveStateOnGlobalStack(FunctionMemory function, int returnAddress) {
+        globalStack.push(new Word(returnAddress));
+        //save this and that to global stack
+        Word thisPointer = function.getFromMemory(0, POINTER);
+        Word thatPointer = function.getFromMemory(1, POINTER);
+
+        globalStack.push(thisPointer == null ? new Word(0) : thisPointer);
+        globalStack.push(thatPointer == null ? new Word(0) : thatPointer);
+    }
+
+    public void returnFromFunction() {
+        var returnValue = pop();
+        controlFlow.processReturn(callStack);
+        //need to actual return a result and set it as an argument (from local stack)
+        push(returnValue);
     }
 
     public ControlFlow getControlFlow() {
         return controlFlow;
     }
 
-    public int getGlobalStackPointer() {
+    private int getGlobalStackPointer() {
         return globalStack.getGlobalStackPointer();
     }
 
@@ -97,13 +103,10 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
         callStack.add(functionName);
     }
 
-    public VmFunction popCallStack() {
-        return callStack.pop();
-    }
 
     private FunctionMemory getFunctionMemory() {
         var currentFunction = callStack.peek();
-        Objects.requireNonNull(currentFunction, "Invalid state reached: there must be a currently called function");
+        requireNonNull(currentFunction, "Invalid state reached: there must be a currently called function");
 
         return functions.get(currentFunction.getName());
     }

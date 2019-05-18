@@ -10,7 +10,7 @@ import virtualMachine.stack.vm_instruction_parsing.VmParser
 class Fibonachi {
 
     @Test
-    fun fib3() {
+    fun fib10() {
 
         val addressToStoreSequenceFrom = 1000
 
@@ -39,5 +39,19 @@ class Fibonachi {
         assertEquals(34, memory.getFromMemory(1, MemorySegments.THAT).convertToInteger())
     }
 
+    @Test
+    fun fibonachiRecursive() {
+        val addressToStoreSequenceFrom = 1000
 
+        val setup = listOf(
+                getInstructionFromRawInput("push constant 4"),
+                getInstructionFromRawInput("call Main.fibonacci 1")
+        )
+
+        val vmReader : VmParser = ProcessVirtualMachineFile()
+                .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/fibonachi/FibonachiRecursive.vm",
+                        setup)
+
+        val memory = vmReader.virtualMemory
+    }
 }

@@ -22,4 +22,13 @@ public class Instruction {
     public Integer getNumericValue() {
         return numericValue;
     }
+
+    @Override
+    public String toString() {
+        return "Instruction{" +
+                "command=" + command +
+                ", operand='" + operand + '\'' +
+                ", numericValue=" + numericValue +
+                '}';
+    }
 }

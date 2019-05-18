@@ -13,7 +13,7 @@ public class Word {
         this.wordBits = wordBits;
     }
 
-    public Word(boolean[] wordBits, boolean isNegative) {
+    private Word(boolean[] wordBits, boolean isNegative) {
         this.wordBits = wordBits;
         setSign(isNegative);
     }

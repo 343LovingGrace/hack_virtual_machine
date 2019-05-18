@@ -2,18 +2,18 @@ package virtualMachine.stack.datawrappers;
 
 public class VmFunction {
     private final String name;
-    private final int arguments;
+    private final int calledFrom;
 
-    public VmFunction(String name, int arguments) {
+    public VmFunction(String name, int locCalledFrom) {
         this.name = name;
-        this.arguments = arguments;
+        this.calledFrom = locCalledFrom;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getArguments() {
-        return arguments;
+    public int getCalledFrom() {
+        return calledFrom;
     }
 }

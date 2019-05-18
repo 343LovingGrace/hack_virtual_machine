@@ -1,56 +1,55 @@
 package virtualMachine.stack.memory;
 
-import virtualMachine.stack.datawrappers.instruction.Instruction;
+import virtualMachine.stack.datawrappers.VmFunction;
 
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ControlFlow {
 
     private int instructionPointer = 0;
-    private final Map<String, Integer> labelLocations = new HashMap<>();
-    private final Map<String, Integer> functionLocations = new HashMap<>(8);
+    private final Map<String, Integer> jumpLocations = new HashMap<>();
 
     public int nextInstruction() {
         return instructionPointer++;
     }
 
-    public boolean hasNextInstruction(List<Instruction> allInstructions) {
-        return instructionPointer < allInstructions.size();
+    public boolean hasNextInstruction(int allInstructions) {
+        return instructionPointer < allInstructions ;
     }
 
-    public void addLabel(String label, int iP) {
-        labelLocations.put(label, iP);
-    }
-
-    public void addFunctionInstructionLocation(String functionName, int pointer) {
-        if (functionLocations.containsKey(functionName)) {
-            throw new RuntimeException("Duplicate function name, terminating");
+    public void addJumpLocation(String functionName, int pointer) {
+        if (jumpLocations.containsKey(functionName)) {
+            int existingPointer = jumpLocations.get(functionName);
+            if (existingPointer == pointer) {
+                throw new RuntimeException("Cannot have a function with 2 addresses");
+            }
         }
-        functionLocations.put(functionName, pointer);
+        jumpLocations.put(functionName, pointer);
     }
 
-    int getFunctionLocation(String functionName) {
-        if (functionName.contains(functionName)) {
-            return functionLocations.get(functionName);
-        }
-        return -1;
-    }
-
-    public void setInstructionPointerToLabelAddress(String label) {
-        if (labelLocations.containsKey(label)) {
-            instructionPointer = labelLocations.get(label);
+    public void setInstructionPointerToJumpAddress(String label) {
+        if (jumpLocations.containsKey(label)) {
+            instructionPointer = jumpLocations.get(label);
         } else {
             throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
         }
     }
 
-    public Integer getLabelLocation(String label) {
-        if (labelLocations.containsKey(label)) {
-            return labelLocations.get(label);
+    void processReturn(Deque<VmFunction> functions) {
+        var function = functions.pop();
+        instructionPointer = function.getCalledFrom();
+    }
+
+    public Integer getJumpLocation(String label) {
+        if (jumpLocations.containsKey(label)) {
+            return jumpLocations.get(label);
         }
         throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
     }
 
+    int getInstructionPointer() {
+        return instructionPointer;
+    }
 }

@@ -28,10 +28,13 @@ public class VmParser {
     }
 
     public void executeVmInstructions() {
-        while (globalVirtualMemory.getControlFlow().hasNextInstruction(vmInstructions)) {
+        final var totalInstructions = vmInstructions.size();
+
+        while (globalVirtualMemory.getControlFlow().hasNextInstruction(totalInstructions)) {
             int instructionPointer = globalVirtualMemory.getControlFlow().nextInstruction();
 
             Instruction instruction = vmInstructions.get(instructionPointer);
+            System.out.println(instruction.toString());
             var instructionProcessor = getInstructionProcessorFromCommand(instruction);
             instructionProcessor.processInstruction(instruction, globalVirtualMemory);
         }
@@ -72,12 +75,10 @@ public class VmParser {
     private void initializeFunctions(List<Instruction> vmInstructions) {
         for (int i = 0; i < vmInstructions.size(); i++) {
             var instruction = vmInstructions.get(i);
-            if (instruction.getCommand() == FUNCTION) {
-                globalVirtualMemory.getControlFlow()
-                        .addFunctionInstructionLocation(instruction.getOperand(), i);
-            } else if (instruction.getCommand() == LABEL) {
-                globalVirtualMemory.getControlFlow()
-                        .addLabel(instruction.getOperand(), i);
+            if (instruction.getCommand() == FUNCTION
+                    || instruction.getCommand() == LABEL) {
+
+                globalVirtualMemory.getControlFlow().addJumpLocation(instruction.getOperand(), i);
             }
         }
     }
