@@ -4,6 +4,8 @@ import virtualMachine.stack.datawrappers.Memory;
 import virtualMachine.stack.datawrappers.VmStack;
 import virtualMachine.stack.datawrappers.Word;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
@@ -11,7 +13,6 @@ import static virtualMachine.stack.memory.MemorySegments.*;
 public class FunctionMemory implements Memory, VmStack {
 
     private final VmStack workingStack = new LocalStack();
-    //can try and be clever with not overusing memory later
     private final GlobalStack globalStack;
     private final PseudoMemory programHeap;
 
@@ -101,6 +102,21 @@ public class FunctionMemory implements Memory, VmStack {
     public Word pop() {
         globalStack.decrementStackPointer();
         return workingStack.pop();
+    }
+
+    private class LocalStack implements VmStack {
+
+        private final Deque<Word> localStack = new ArrayDeque<>();
+
+        @Override
+        public void push(Word variable) {
+            localStack.push(variable);
+        }
+
+        @Override
+        public Word pop() {
+            return localStack.pop();
+        }
     }
 
 }

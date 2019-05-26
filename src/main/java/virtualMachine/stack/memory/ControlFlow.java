@@ -49,7 +49,7 @@ public class ControlFlow {
         throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
     }
 
-    int getInstructionPointer() {
+    public int getInstructionPointer() {
         return instructionPointer;
     }
 }

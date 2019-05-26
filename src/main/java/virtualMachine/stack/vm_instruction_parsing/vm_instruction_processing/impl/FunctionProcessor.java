@@ -20,7 +20,7 @@ public class FunctionProcessor implements InstructionProcessor {
         switch (command) {
             case FUNCTION:
 
-                virtualMemory.pushToCallStack(new VmFunction(instruction.getOperand(), instruction.getNumericValue().byteValue()));
+                virtualMemory.pushToCallStack(new VmFunction(instruction.getOperand(), virtualMemory.getControlFlow().getInstructionPointer()));
                 break;
             case CALL:
 

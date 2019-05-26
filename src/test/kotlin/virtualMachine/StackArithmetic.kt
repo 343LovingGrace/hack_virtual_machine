@@ -71,13 +71,4 @@ class StackArithmetic {
         Assert.assertEquals(trueSixteenBit, result)
     }
 
-    @Test
-    @Ignore
-    fun testLoadFile() {
-        val vmParser: VmParser = ProcessVirtualMachineFile().processVmFile("./src/test/StackArithmetic/StackTest/StackTest.vm", null)
-        val result: Word = vmParser.virtualMemory.pop()
-        //TODO check this test
-        Assert.assertEquals(32685, result.convertToInteger())
-    }
-
 }
