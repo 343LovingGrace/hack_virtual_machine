@@ -1,7 +1,6 @@
 package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl;
 
 import org.jetbrains.annotations.NotNull;
-import virtualMachine.stack.datawrappers.VmFunction;
 import virtualMachine.stack.datawrappers.instruction.Instruction;
 import virtualMachine.stack.memory.GlobalVirtualMemory;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
@@ -20,7 +19,7 @@ public class FunctionProcessor implements InstructionProcessor {
         switch (command) {
             case FUNCTION:
 
-                virtualMemory.pushToCallStack(new VmFunction(instruction.getOperand(), virtualMemory.getControlFlow().getInstructionPointer()));
+                virtualMemory.pushToCallStack(instruction.getOperand());
                 break;
             case CALL:
 

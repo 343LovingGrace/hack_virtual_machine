@@ -16,7 +16,8 @@ public class FunctionMemory implements Memory, VmStack {
     private final GlobalStack globalStack;
     private final PseudoMemory programHeap;
 
-    //THIS/THAT will access the SAME programHeap memory as the 'global' memory segment
+    private final int locFunctionCalledFrom;
+    private final String name;
 
     private final Map<MemorySegments, PseudoMemory> memorySegmentMemoryMap =
             Map.of(
@@ -26,11 +27,21 @@ public class FunctionMemory implements Memory, VmStack {
                     TEMP, new PseudoMemory(16),
                     POINTER, new PseudoMemory(2));
 
-    FunctionMemory(PseudoMemory arguments, PseudoMemory staticVariables, GlobalStack globalStack, PseudoMemory programHeap) {
+    FunctionMemory(GlobalStack globalStack, PseudoMemory programHeap, int locCalledFrom, String name) {
+        this.globalStack = globalStack;
+        this.programHeap = programHeap;
+        this.locFunctionCalledFrom = locCalledFrom;
+        this.name = name;
+    }
+
+    FunctionMemory(PseudoMemory arguments, PseudoMemory staticVariables, GlobalStack globalStack, PseudoMemory programHeap,
+                   int locCalledFrom, String name) {
         initMemorySegment(arguments, ARGUMENT);
         initMemorySegment(staticVariables, STATIC);
         this.globalStack = globalStack;
         this.programHeap = programHeap;
+        this.locFunctionCalledFrom = locCalledFrom;
+        this.name = name;
     }
 
     private void initMemorySegment(PseudoMemory variables, MemorySegments memorySegment) {
@@ -102,6 +113,10 @@ public class FunctionMemory implements Memory, VmStack {
     public Word pop() {
         globalStack.decrementStackPointer();
         return workingStack.pop();
+    }
+
+    int getLocFunctionCalledFrom() {
+        return locFunctionCalledFrom;
     }
 
     private class LocalStack implements VmStack {

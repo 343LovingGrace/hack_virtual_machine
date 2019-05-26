@@ -4,7 +4,7 @@ import virtualMachine.stack.datawrappers.VmStack;
 import virtualMachine.stack.datawrappers.Word;
 
 public class GlobalStack implements VmStack {
-    private int globalStackPointer;
+    private int globalStackPointer = 0;
     private final PseudoMemory globalStack = new PseudoMemory(2056);
 
     @Override

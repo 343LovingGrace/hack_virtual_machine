@@ -1,7 +1,6 @@
 package virtualMachine.stack.memory;
 
 import virtualMachine.stack.datawrappers.Memory;
-import virtualMachine.stack.datawrappers.VmFunction;
 import virtualMachine.stack.datawrappers.VmStack;
 import virtualMachine.stack.datawrappers.Word;
 
@@ -14,15 +13,12 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
 
     private final PseudoMemory virtualRam = new PseudoMemory(8192);
     private final GlobalStack globalStack = new GlobalStack();
-    private final Deque<VmFunction> callStack = new ArrayDeque<>();
+    private final Deque<FunctionMemory> callStack = new ArrayDeque<>();
     private final ControlFlow controlFlow = new ControlFlow();
-
-    private final Map<String, FunctionMemory> functions = new HashMap<>();
 
     //should be specified in normal vm files but if not, supply an empty function
     public GlobalVirtualMemory() {
-        functions.put("sys.init", new FunctionMemory(null, null, globalStack, virtualRam));
-        callStack.push(new VmFunction("sys.init", 0));
+        callStack.add(new FunctionMemory(globalStack, virtualRam, getGlobalStackPointer(), "Sys.init"));
     }
 
     @Override
@@ -64,8 +60,7 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
         final int stackPointer = getGlobalStackPointer();
         saveStateOnGlobalStack(function, stackPointer);
 
-        functions.put(functionName, new FunctionMemory(arguments, null, globalStack, virtualRam));
-        callStack.push(new VmFunction(functionName, controlFlow.getInstructionPointer()));
+        callStack.push(new FunctionMemory(globalStack, virtualRam, stackPointer, functionName));
 
         controlFlow.setInstructionPointerToJumpAddress(functionName);
     }
@@ -82,7 +77,7 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
 
     public void returnFromFunction() {
         var returnValue = pop();
-        controlFlow.processReturn(callStack);
+        controlFlow.processReturn(getFunctionMemory().getLocFunctionCalledFrom());
         //need to actual return a result and set it as an argument (from local stack)
         push(returnValue);
     }
@@ -99,8 +94,8 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
         return globalStack.pop();
     }
 
-    public void pushToCallStack(VmFunction functionName) {
-        callStack.add(functionName);
+    public void pushToCallStack(String functionName) {
+        callStack.add(new FunctionMemory(globalStack, virtualRam, getGlobalStackPointer(), functionName));
     }
 
 
@@ -108,6 +103,6 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
         var currentFunction = callStack.peek();
         requireNonNull(currentFunction, "Invalid state reached: there must be a currently called function");
 
-        return functions.get(currentFunction.getName());
+        return currentFunction;
     }
 }
