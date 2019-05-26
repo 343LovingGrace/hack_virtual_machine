@@ -11,9 +11,9 @@ import static virtualMachine.stack.memory.MemorySegments.*;
 public class FunctionMemory implements Memory, VmStack {
 
     private final VmStack workingStack = new LocalStack();
-    private final GlobalStack globalStack;
     private final PseudoMemory programHeap;
 
+    //TEMP VARIABLE -> remove when can restore state from global stack
     private final int locFunctionCalledFrom;
     private final String name;
 
@@ -25,18 +25,16 @@ public class FunctionMemory implements Memory, VmStack {
                     TEMP, new PseudoMemory(16),
                     POINTER, new PseudoMemory(2));
 
-    FunctionMemory(GlobalStack globalStack, PseudoMemory programHeap, int locCalledFrom, String name) {
-        this.globalStack = globalStack;
+    FunctionMemory(PseudoMemory programHeap, int locCalledFrom, String name) {
         this.programHeap = programHeap;
         this.locFunctionCalledFrom = locCalledFrom;
         this.name = name;
     }
 
-    FunctionMemory(PseudoMemory arguments, PseudoMemory staticVariables, GlobalStack globalStack, PseudoMemory programHeap,
+    FunctionMemory(PseudoMemory arguments, PseudoMemory staticVariables, PseudoMemory programHeap,
                    int locCalledFrom, String name) {
         initMemorySegment(arguments, ARGUMENT);
         initMemorySegment(staticVariables, STATIC);
-        this.globalStack = globalStack;
         this.programHeap = programHeap;
         this.locFunctionCalledFrom = locCalledFrom;
         this.name = name;
@@ -104,17 +102,19 @@ public class FunctionMemory implements Memory, VmStack {
     @Override
     public void push(Word variable) {
         workingStack.push(variable);
-        globalStack.push(variable);
     }
 
     @Override
     public Word pop() {
-        globalStack.decrementStackPointer();
         return workingStack.pop();
     }
 
     int getLocFunctionCalledFrom() {
         return locFunctionCalledFrom;
+    }
+
+    public String getName() {
+        return name;
     }
 
     private class LocalStack implements VmStack {

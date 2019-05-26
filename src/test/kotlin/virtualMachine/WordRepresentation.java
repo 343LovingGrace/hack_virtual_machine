@@ -66,7 +66,6 @@ public class WordRepresentation {
         Word opB16Bit = new Word(opB);
 
         Word result16Bit = opA16Bit.add16Bit(opB16Bit);
-        Word correctResult = new Word(opA + opB);
         int res = result16Bit.convertToInteger();
 
         Assert.assertEquals(opA + opB, res);
@@ -106,7 +105,7 @@ public class WordRepresentation {
     private String padToCorrectLength(String characterSoFar) {
         characterSoFar = characterSoFar.replace(" ", "");
         while (characterSoFar.length() < 15) { //0 is sign bit
-            characterSoFar = '0' + characterSoFar;
+            characterSoFar = String.format("%s%s", '0', characterSoFar);
         }
         return characterSoFar;
     }

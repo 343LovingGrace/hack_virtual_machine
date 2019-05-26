@@ -16,14 +16,14 @@ public class ControlFlow {
         return instructionPointer < allInstructions ;
     }
 
-    public void addJumpLocation(String functionName, int pointer) {
-        if (jumpLocations.containsKey(functionName)) {
-            int existingPointer = jumpLocations.get(functionName);
+    public void addJumpLocation(String labelName, int pointer) {
+        if (jumpLocations.containsKey(labelName)) {
+            int existingPointer = jumpLocations.get(labelName);
             if (existingPointer == pointer) {
                 throw new RuntimeException("Cannot have a function with 2 addresses");
             }
         }
-        jumpLocations.put(functionName, pointer);
+        jumpLocations.put(labelName, pointer);
     }
 
     public void setInstructionPointerToJumpAddress(String label) {
@@ -45,7 +45,7 @@ public class ControlFlow {
         throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
     }
 
-    public int getInstructionPointer() {
+    int getInstructionPointer() {
         return instructionPointer;
     }
 }

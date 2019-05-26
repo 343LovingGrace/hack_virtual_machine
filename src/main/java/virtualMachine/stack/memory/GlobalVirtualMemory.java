@@ -5,18 +5,17 @@ import virtualMachine.stack.types.Word;
 import java.util.*;
 
 import static java.util.Objects.requireNonNull;
-import static virtualMachine.stack.memory.MemorySegments.*;
 
 public final class GlobalVirtualMemory implements Memory, VmStack {
 
     private final PseudoMemory virtualRam = new PseudoMemory(8192);
-    private final GlobalStack globalStack = new GlobalStack();
+    //given how i've implemented this does is there any point having a global stack?!?!
     private final Deque<FunctionMemory> callStack = new ArrayDeque<>();
     private final ControlFlow controlFlow = new ControlFlow();
 
     //should be specified in normal vm files but if not, supply an empty function
     public GlobalVirtualMemory() {
-        callStack.add(new FunctionMemory(globalStack, virtualRam, getGlobalStackPointer(), "Sys.init"));
+        callStack.add(new FunctionMemory(virtualRam, controlFlow.getInstructionPointer(), "Sys.init"));
     }
 
     @Override
@@ -36,12 +35,10 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
     public void push(Word variable) {
         FunctionMemory function = getFunctionMemory();
         function.push(variable);
-        globalStack.push(variable);
     }
 
     @Override
     public Word pop() {
-        globalStack.decrementStackPointer();
         FunctionMemory function = getFunctionMemory();
         return function.pop();
     }
@@ -55,22 +52,9 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
             arguments.setAddress(i, function.pop());
         }
 
-        final int stackPointer = getGlobalStackPointer();
-        saveStateOnGlobalStack(function, stackPointer);
-
-        callStack.push(new FunctionMemory(globalStack, virtualRam, stackPointer, functionName));
+        callStack.push(new FunctionMemory(virtualRam, controlFlow.getInstructionPointer(), functionName));
 
         controlFlow.setInstructionPointerToJumpAddress(functionName);
-    }
-
-    private void saveStateOnGlobalStack(FunctionMemory function, int returnAddress) {
-        globalStack.push(new Word(returnAddress));
-        //save this and that to global stack
-        Word thisPointer = function.getFromMemory(0, POINTER);
-        Word thatPointer = function.getFromMemory(1, POINTER);
-
-        globalStack.push(thisPointer == null ? new Word(0) : thisPointer);
-        globalStack.push(thatPointer == null ? new Word(0) : thatPointer);
     }
 
     public void returnFromFunction() {
@@ -78,22 +62,17 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
         controlFlow.processReturn(getFunctionMemory().getLocFunctionCalledFrom());
         //need to actual return a result and set it as an argument (from local stack)
         push(returnValue);
+
+        //TODO pop arguments and local vars back off the stack
     }
 
     public ControlFlow getControlFlow() {
         return controlFlow;
     }
 
-    private int getGlobalStackPointer() {
-        return globalStack.getGlobalStackPointer();
-    }
-
-    public Word popGlobalStack() {
-        return globalStack.pop();
-    }
 
     public void pushToCallStack(String functionName) {
-        callStack.add(new FunctionMemory(globalStack, virtualRam, getGlobalStackPointer(), functionName));
+        callStack.add(new FunctionMemory(virtualRam, controlFlow.getInstructionPointer(), functionName));
     }
 
 

@@ -33,9 +33,6 @@ class BasicTest {
         Assert.assertEquals(42, memory.getFromMemory(12, MemorySegments.THIS).convertToInteger())
         Assert.assertEquals(45, memory.getFromMemory(15, MemorySegments.THIS).convertToInteger())
 
-        Assert.assertEquals(510, memory.popGlobalStack().convertToInteger())
-        Assert.assertEquals(472, memory.popGlobalStack().convertToInteger())
-
         Assert.assertEquals(472, vmReader.virtualMemory.pop()
                 .convertToInteger())
 
