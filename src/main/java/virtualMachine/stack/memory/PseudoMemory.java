@@ -1,6 +1,6 @@
 package virtualMachine.stack.memory;
 
-import virtualMachine.stack.datawrappers.Word;
+import virtualMachine.stack.types.Word;
 
 import java.util.Arrays;
 

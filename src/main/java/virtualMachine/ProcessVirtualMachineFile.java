@@ -1,7 +1,7 @@
 package virtualMachine;
 
-import virtualMachine.stack.datawrappers.instruction.Commands;
-import virtualMachine.stack.datawrappers.instruction.Instruction;
+import virtualMachine.stack.types.instruction.Commands;
+import virtualMachine.stack.types.instruction.Instruction;
 import virtualMachine.stack.vm_instruction_parsing.VmParser;
 
 import java.io.BufferedReader;

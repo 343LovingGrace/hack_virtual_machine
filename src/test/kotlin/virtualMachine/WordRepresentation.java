@@ -2,7 +2,7 @@ package virtualMachine;
 
 import org.junit.Assert;
 import org.junit.Test;
-import virtualMachine.stack.datawrappers.Word;
+import virtualMachine.stack.types.Word;
 
 public class WordRepresentation {
 

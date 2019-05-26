@@ -1,10 +1,9 @@
 package virtualMachine
 
 import org.junit.Assert
-import org.junit.Ignore
 import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
-import virtualMachine.stack.datawrappers.Word
-import virtualMachine.stack.datawrappers.instruction.Instruction
+import virtualMachine.stack.types.Word
+import virtualMachine.stack.types.instruction.Instruction
 import virtualMachine.stack.vm_instruction_parsing.VmParser
 import kotlin.test.Test
 

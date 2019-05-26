@@ -1,7 +1,6 @@
 package virtualMachine.stack.memory;
 
-import virtualMachine.stack.datawrappers.VmStack;
-import virtualMachine.stack.datawrappers.Word;
+import virtualMachine.stack.types.Word;
 
 public class GlobalStack implements VmStack {
     private int globalStackPointer = 0;

@@ -1,8 +1,8 @@
 package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl
 
-import virtualMachine.stack.datawrappers.Word
-import virtualMachine.stack.datawrappers.instruction.Commands
-import virtualMachine.stack.datawrappers.instruction.Instruction
+import virtualMachine.stack.types.Word
+import virtualMachine.stack.types.instruction.Commands
+import virtualMachine.stack.types.instruction.Instruction
 import virtualMachine.stack.memory.GlobalVirtualMemory
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor
 

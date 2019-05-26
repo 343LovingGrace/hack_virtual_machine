@@ -1,4 +1,4 @@
-package virtualMachine.stack.datawrappers.instruction;
+package virtualMachine.stack.types.instruction;
 
 public class Instruction {
     private final Commands command;

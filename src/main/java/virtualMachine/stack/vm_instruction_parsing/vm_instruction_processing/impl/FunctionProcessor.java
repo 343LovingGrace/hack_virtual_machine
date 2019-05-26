@@ -1,7 +1,7 @@
 package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl;
 
 import org.jetbrains.annotations.NotNull;
-import virtualMachine.stack.datawrappers.instruction.Instruction;
+import virtualMachine.stack.types.instruction.Instruction;
 import virtualMachine.stack.memory.GlobalVirtualMemory;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
 
