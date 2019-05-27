@@ -4,6 +4,8 @@ import virtualMachine.stack.memory.VirtualMemory;
 import virtualMachine.stack.types.instruction.Instruction;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
 
+import java.util.Objects;
+
 import static virtualMachine.stack.memory.MemorySegments.getFromName;
 
 public class PushInstructionProcessor implements InstructionProcessor {
@@ -13,6 +15,8 @@ public class PushInstructionProcessor implements InstructionProcessor {
         var segment = getFromName(instruction.getOperand());
 
         var loadedVariable = virtualMemory.getFromMemory(memoryAddress, segment);
+        Objects.requireNonNull(loadedVariable, "variable cannot be null. Instruction: " + instruction.toString());
+
         virtualMemory.push(loadedVariable);
     }
 }

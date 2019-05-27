@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
 
-public class FunctionMemory implements Memory, VmStack {
+class FunctionMemory implements Memory, VmStack {
 
     private final VmStack workingStack = new LocalStack();
     private final PseudoMemory programHeap;

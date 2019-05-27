@@ -45,6 +45,10 @@ public class VmParser {
         return command.getInstructionProcessor();
     }
 
+    /**
+     * Only used in tests (candidate for refactoring)
+     * @return mutable virtual memory
+     */
     public VirtualMemory getVirtualMemory() {
         return virtualMemory;
     }

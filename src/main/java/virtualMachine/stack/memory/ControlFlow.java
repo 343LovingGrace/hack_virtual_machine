@@ -35,8 +35,8 @@ public class ControlFlow {
         }
     }
 
-    void setNextAddress(Deque<FunctionMemory> functionPopped) {
-        var function = functionPopped.pop();
+    void processReturn(Deque<FunctionMemory> callStack) {
+        var function = callStack.pop();
         instructionPointer = function.getLocFunctionCalledFrom();
     }
 

@@ -34,7 +34,6 @@ public class BinaryInstructionProcessor implements InstructionProcessor {
                 return second.subtract(head);
             default:
                 throw new RuntimeException("Unrecognised command: " + command.getName());
-
         }
     }
 }

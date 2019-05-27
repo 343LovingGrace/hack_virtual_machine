@@ -8,7 +8,6 @@ pop pointer 0
 push constant 5000
 pop pointer 1
 call Sys.main 0
-pop temp 1
 goto end
 
 // Sys.main()
