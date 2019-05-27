@@ -11,27 +11,27 @@ import static virtualMachine.stack.memory.MemorySegments.*;
 class FunctionMemory implements Memory, VmStack {
 
     private final VmStack workingStack = new LocalStack();
-    private final PseudoMemory programHeap;
+    private final PseudoAddressSpaceMemory programHeap;
 
     //TEMP VARIABLE -> remove when can restore state from global stack
     private final int locFunctionCalledFrom;
     private final String name;
 
-    private final Map<MemorySegments, PseudoMemory> memorySegmentMemoryMap =
+    private final Map<MemorySegments, PseudoAddressSpaceMemory> memorySegmentMemoryMap =
             Map.of(
-                    STATIC, new PseudoMemory(16),
-                    LOCAL, new PseudoMemory(16),
-                    ARGUMENT, new PseudoMemory(16),
-                    TEMP, new PseudoMemory(16),
-                    POINTER, new PseudoMemory(2));
+                    STATIC, new PseudoAddressSpaceMemory(16),
+                    LOCAL, new PseudoAddressSpaceMemory(16),
+                    ARGUMENT, new PseudoAddressSpaceMemory(16),
+                    TEMP, new PseudoAddressSpaceMemory(16),
+                    POINTER, new PseudoAddressSpaceMemory(2));
 
-    FunctionMemory(PseudoMemory programHeap, int locCalledFrom, String name) {
+    FunctionMemory(PseudoAddressSpaceMemory programHeap, int locCalledFrom, String name) {
         this.programHeap = programHeap;
         this.locFunctionCalledFrom = locCalledFrom;
         this.name = name;
     }
 
-    FunctionMemory(PseudoMemory arguments, PseudoMemory staticVariables, PseudoMemory programHeap,
+    FunctionMemory(PseudoAddressSpaceMemory arguments, PseudoAddressSpaceMemory staticVariables, PseudoAddressSpaceMemory programHeap,
                    int locCalledFrom, String name) {
         initMemorySegment(arguments, ARGUMENT);
         initMemorySegment(staticVariables, STATIC);
@@ -40,7 +40,7 @@ class FunctionMemory implements Memory, VmStack {
         this.name = name;
     }
 
-    private void initMemorySegment(PseudoMemory variables, MemorySegments memorySegment) {
+    private void initMemorySegment(PseudoAddressSpaceMemory variables, MemorySegments memorySegment) {
         if (variables == null) return;
 
         if (variables.getLength() > 50) {

@@ -9,8 +9,7 @@ import static java.util.Objects.requireNonNull;
 
 public final class VirtualMemory implements Memory, VmStack {
 
-    private final PseudoMemory virtualRam = new PseudoMemory(8192);
-    //given how i've implemented this does is there any point having a global stack?!?!
+    private final PseudoAddressSpaceMemory virtualRam = new PseudoAddressSpaceMemory(8192);
     private final Deque<FunctionMemory> callStack = new ArrayDeque<>();
     private final ControlFlow controlFlow = new ControlFlow();
 
@@ -46,7 +45,7 @@ public final class VirtualMemory implements Memory, VmStack {
 
 
     public void callFunction(String functionName, int numberArguments) {
-        var arguments = new PseudoMemory(numberArguments);
+        var arguments = new PseudoAddressSpaceMemory(numberArguments);
         var function = getFunctionMemory();
 
         for (int i = 0; i < numberArguments; i++) {
@@ -61,7 +60,6 @@ public final class VirtualMemory implements Memory, VmStack {
     public void returnFromFunction() {
         var returnValue = pop();
         controlFlow.processReturn(callStack);
-        //need to actual return a result and set it as an argument (from local stack)
         push(returnValue);
     }
 

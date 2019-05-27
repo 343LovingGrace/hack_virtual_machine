@@ -4,11 +4,11 @@ import virtualMachine.stack.types.Word;
 
 import java.util.Arrays;
 
-class PseudoMemory {
+class PseudoAddressSpaceMemory {
 
     private Word[] memory;
 
-    PseudoMemory(int size) {
+    PseudoAddressSpaceMemory(int size) {
         this.memory = new Word[size];
     }
 
