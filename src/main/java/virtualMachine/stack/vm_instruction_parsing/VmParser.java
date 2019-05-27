@@ -1,6 +1,6 @@
 package virtualMachine.stack.vm_instruction_parsing;
 
-import virtualMachine.stack.memory.GlobalVirtualMemory;
+import virtualMachine.stack.memory.VirtualMemory;
 import virtualMachine.stack.types.instruction.Commands;
 import virtualMachine.stack.types.instruction.Instruction;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
@@ -13,7 +13,7 @@ import static virtualMachine.stack.types.instruction.Commands.LABEL;
 public class VmParser {
 
     private final List<Instruction> vmInstructions;
-    private final GlobalVirtualMemory globalVirtualMemory = new GlobalVirtualMemory();
+    private final VirtualMemory virtualMemory = new VirtualMemory();
 
     public VmParser(List<Instruction> vmInstructions) {
         this.vmInstructions = vmInstructions;
@@ -23,19 +23,19 @@ public class VmParser {
 
     public void processInstruction(Instruction instruction) {
         var instructionProcessor = getInstructionProcessorFromCommand(instruction);
-        instructionProcessor.processInstruction(instruction, globalVirtualMemory);
+        instructionProcessor.processInstruction(instruction, virtualMemory);
     }
 
     public void executeVmInstructions() {
         final var totalInstructions = vmInstructions.size();
 
-        while (globalVirtualMemory.getControlFlow().hasNextInstruction(totalInstructions)) {
-            int instructionPointer = globalVirtualMemory.getControlFlow().nextInstruction();
+        while (virtualMemory.getControlFlow().hasNextInstruction(totalInstructions)) {
+            int instructionPointer = virtualMemory.getControlFlow().nextInstruction();
 
             Instruction instruction = vmInstructions.get(instructionPointer);
             System.out.println(instruction.toString());
             var instructionProcessor = getInstructionProcessorFromCommand(instruction);
-            instructionProcessor.processInstruction(instruction, globalVirtualMemory);
+            instructionProcessor.processInstruction(instruction, virtualMemory);
         }
 
     }
@@ -45,8 +45,8 @@ public class VmParser {
         return command.getInstructionProcessor();
     }
 
-    public GlobalVirtualMemory getVirtualMemory() {
-        return globalVirtualMemory;
+    public VirtualMemory getVirtualMemory() {
+        return virtualMemory;
     }
 
 
@@ -56,7 +56,7 @@ public class VmParser {
             if (instruction.getCommand() == FUNCTION
                     || instruction.getCommand() == LABEL) {
 
-                globalVirtualMemory.getControlFlow().addJumpLocation(instruction.getOperand(), i);
+                virtualMemory.getControlFlow().addJumpLocation(instruction.getOperand(), i);
             }
         }
     }

@@ -1,12 +1,12 @@
 package virtualMachine.stack.types.instruction;
 
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.BinaryInstructionProcessor;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.FunctionProcessor;
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.BinaryInstructionProcessor;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PopInstructionProcessor;
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.ProgramFlowProcessor;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.PushInstructionProcessor;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.UnaryInstructionProcessor;
+import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl.ProgramFlowProcessor;
 
 public enum Commands {
     PUSH("push", new PushInstructionProcessor()),

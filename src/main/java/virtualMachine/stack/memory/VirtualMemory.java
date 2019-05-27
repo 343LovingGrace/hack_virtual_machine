@@ -6,7 +6,7 @@ import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 
-public final class GlobalVirtualMemory implements Memory, VmStack {
+public final class VirtualMemory implements Memory, VmStack {
 
     private final PseudoMemory virtualRam = new PseudoMemory(8192);
     //given how i've implemented this does is there any point having a global stack?!?!
@@ -14,7 +14,7 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
     private final ControlFlow controlFlow = new ControlFlow();
 
     //should be specified in normal vm files but if not, supply an empty function
-    public GlobalVirtualMemory() {
+    public VirtualMemory() {
         callStack.add(new FunctionMemory(virtualRam, controlFlow.getInstructionPointer(), "Sys.init"));
     }
 
@@ -52,14 +52,14 @@ public final class GlobalVirtualMemory implements Memory, VmStack {
             arguments.setAddress(i, function.pop());
         }
 
-        callStack.push(new FunctionMemory(virtualRam, controlFlow.getInstructionPointer(), functionName));
+        callStack.push(new FunctionMemory(arguments, null, virtualRam, controlFlow.getInstructionPointer(), functionName));
 
         controlFlow.setInstructionPointerToJumpAddress(functionName);
     }
 
     public void returnFromFunction() {
         var returnValue = pop();
-        controlFlow.processReturn(getFunctionMemory().getLocFunctionCalledFrom());
+        controlFlow.setNextAddress(callStack);
         //need to actual return a result and set it as an argument (from local stack)
         push(returnValue);
 

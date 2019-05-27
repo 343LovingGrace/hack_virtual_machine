@@ -1,5 +1,6 @@
 package virtualMachine.stack.memory;
 
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +35,9 @@ public class ControlFlow {
         }
     }
 
-    void processReturn(int jumpLocation) {
-        instructionPointer = jumpLocation;
+    void setNextAddress(Deque<FunctionMemory> functionPopped) {
+        var function = functionPopped.pop();
+        instructionPointer = function.getLocFunctionCalledFrom();
     }
 
     public Integer getJumpLocation(String label) {

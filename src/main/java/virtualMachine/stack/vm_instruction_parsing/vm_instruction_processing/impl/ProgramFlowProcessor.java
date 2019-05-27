@@ -1,12 +1,14 @@
 package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl;
 
 import org.jetbrains.annotations.NotNull;
+import virtualMachine.stack.memory.VirtualMemory;
 import virtualMachine.stack.types.Word;
 import virtualMachine.stack.types.instruction.Instruction;
-import virtualMachine.stack.memory.GlobalVirtualMemory;
 import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
 
-import static virtualMachine.stack.types.instruction.Commands.*;
+import static virtualMachine.stack.types.instruction.Commands.GOTO;
+import static virtualMachine.stack.types.instruction.Commands.IF_GOTO;
+import static virtualMachine.stack.types.instruction.Commands.LABEL;
 
 /**
  * label _label_ labels the current location in the functions code (allows to goto to this location)
@@ -17,7 +19,7 @@ import static virtualMachine.stack.types.instruction.Commands.*;
 public class ProgramFlowProcessor implements InstructionProcessor {
 
     @Override
-    public void processInstruction(Instruction instruction, @NotNull GlobalVirtualMemory virtualMemory) {
+    public void processInstruction(Instruction instruction, @NotNull VirtualMemory virtualMemory) {
 
         var command = instruction.getCommand();
 
