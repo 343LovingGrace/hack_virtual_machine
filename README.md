@@ -1,4 +1,4 @@
-# hack_virtual_machine WIP
+# virtual_machine WIP
 
 Kind of a toy stack based virtual machine implementation for interest / curiosity.
 
