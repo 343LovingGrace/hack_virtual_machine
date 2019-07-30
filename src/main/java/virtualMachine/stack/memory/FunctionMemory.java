@@ -55,7 +55,6 @@ class FunctionMemory implements Memory, VmStack {
     public void loadIntoMemory(Word variable, int address, MemorySegments segment) {
         checkPointerInBounds(address, segment);
 
-        //THIS/THAT kind of special cases - may look at refactoring this whole memory access approach ...
         if (segment == THIS || segment == THAT) {
             address += getThisThatOffset(segment);
             programHeap.setAddress(address, variable);

@@ -2,17 +2,17 @@ package virtualMachine.memory.MemoryAccess.BasicTest
 
 import org.junit.Assert
 import org.junit.Test
-import virtualMachine.ProcessVirtualMachineFile
-import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
+import virtualMachine.VirtualMachineFileParser
+import virtualMachine.VirtualMachineFileParser.getInstructionFromRawInput
 import virtualMachine.stack.memory.MemorySegments
-import virtualMachine.stack.vm_instruction_parsing.VmParser
+import virtualMachine.VirtualMachine
 
 class BasicTest {
 
     @Test
     fun testScript() {
 
-        val vmReader : VmParser = ProcessVirtualMachineFile()
+        val vmReader : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/BasicTest/BasicTest.vm",
                         listOf(getInstructionFromRawInput("push constant 3000"),
                                 getInstructionFromRawInput("pop pointer 0"),

@@ -4,6 +4,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO : move to VirtualMachine
 public class ControlFlow {
 
     private int instructionPointer = 0;

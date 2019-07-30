@@ -2,14 +2,14 @@ package virtualMachine.control_flow.nested
 
 import org.junit.Assert
 import org.junit.Test
-import virtualMachine.ProcessVirtualMachineFile
-import virtualMachine.stack.vm_instruction_parsing.VmParser
+import virtualMachine.VirtualMachineFileParser
+import virtualMachine.VirtualMachine
 
 class NestedCall {
 
     @Test
     fun nestedCalls() {
-        val vmReader : VmParser = ProcessVirtualMachineFile()
+        val vmReader : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/nested/NestedCall.vm",
                         null)
 

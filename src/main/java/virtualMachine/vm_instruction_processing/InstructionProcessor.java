@@ -1,4 +1,4 @@
-package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing;
+package virtualMachine.vm_instruction_processing;
 
 import virtualMachine.stack.memory.VirtualMemory;
 import virtualMachine.stack.types.instruction.Instruction;

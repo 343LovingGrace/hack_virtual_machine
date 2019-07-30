@@ -2,10 +2,10 @@ package virtualMachine.control_flow.fibonachi
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import virtualMachine.ProcessVirtualMachineFile
-import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
+import virtualMachine.VirtualMachineFileParser
+import virtualMachine.VirtualMachineFileParser.getInstructionFromRawInput
 import virtualMachine.stack.memory.MemorySegments
-import virtualMachine.stack.vm_instruction_parsing.VmParser
+import virtualMachine.VirtualMachine
 
 class Fibonachi {
 
@@ -20,7 +20,7 @@ class Fibonachi {
                 getInstructionFromRawInput("push constant $addressToStoreSequenceFrom"), //address to store variables from
                 getInstructionFromRawInput("pop argument 1"))
 
-        val vmReader : VmParser = ProcessVirtualMachineFile()
+        val vmReader : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/fibonachi/Fibonachi.vm",
                         setup)
 
@@ -41,14 +41,12 @@ class Fibonachi {
 
     @Test
     fun fibonachiRecursive() {
-        val addressToStoreSequenceFrom = 1000
-
         val setup = listOf(
                 getInstructionFromRawInput("push constant 4"),
                 getInstructionFromRawInput("call Main.fibonacci 1")
         )
 
-        val vmReader : VmParser = ProcessVirtualMachineFile()
+        val vmReader : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/fibonachi/FibonachiRecursive.vm",
                         setup)
 

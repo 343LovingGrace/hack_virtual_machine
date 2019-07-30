@@ -1,10 +1,9 @@
-package virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.impl;
+package virtualMachine.vm_instruction_processing.impl;
 
-import org.jetbrains.annotations.NotNull;
 import virtualMachine.stack.memory.VirtualMemory;
 import virtualMachine.stack.types.Word;
 import virtualMachine.stack.types.instruction.Instruction;
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
+import virtualMachine.vm_instruction_processing.InstructionProcessor;
 
 import static virtualMachine.stack.types.instruction.Commands.GOTO;
 import static virtualMachine.stack.types.instruction.Commands.IF_GOTO;
@@ -19,7 +18,7 @@ import static virtualMachine.stack.types.instruction.Commands.LABEL;
 public class ProgramFlowProcessor implements InstructionProcessor {
 
     @Override
-    public void processInstruction(Instruction instruction, @NotNull VirtualMemory virtualMemory) {
+    public void processInstruction(Instruction instruction, VirtualMemory virtualMemory) {
 
         var command = instruction.getCommand();
 

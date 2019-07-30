@@ -1,21 +1,21 @@
-package virtualMachine.stack.vm_instruction_parsing;
+package virtualMachine;
 
 import virtualMachine.stack.memory.VirtualMemory;
 import virtualMachine.stack.types.instruction.Commands;
 import virtualMachine.stack.types.instruction.Instruction;
-import virtualMachine.stack.vm_instruction_parsing.vm_instruction_processing.InstructionProcessor;
+import virtualMachine.vm_instruction_processing.InstructionProcessor;
 
 import java.util.List;
 
 import static virtualMachine.stack.types.instruction.Commands.FUNCTION;
 import static virtualMachine.stack.types.instruction.Commands.LABEL;
 
-public class VmParser {
+public class VirtualMachine {
 
     private final List<Instruction> vmInstructions;
     private final VirtualMemory virtualMemory = new VirtualMemory();
 
-    public VmParser(List<Instruction> vmInstructions) {
+    public VirtualMachine(List<Instruction> vmInstructions) {
         this.vmInstructions = vmInstructions;
 
         initializeFunctions(vmInstructions);

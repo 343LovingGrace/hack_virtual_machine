@@ -1,10 +1,9 @@
 package virtualMachine
 
 import org.junit.Assert
-import virtualMachine.ProcessVirtualMachineFile.getInstructionFromRawInput
+import virtualMachine.VirtualMachineFileParser.getInstructionFromRawInput
 import virtualMachine.stack.types.Word
 import virtualMachine.stack.types.instruction.Instruction
-import virtualMachine.stack.vm_instruction_parsing.VmParser
 import kotlin.test.Test
 
 class StackArithmetic {
@@ -12,7 +11,7 @@ class StackArithmetic {
     @Test
     fun testLoadConstants() {
         val line = getInstructionFromRawInput("push constant 2")
-        val vmParser = VmParser(listOf(line))
+        val vmParser = VirtualMachine(listOf(line))
 
         vmParser.executeVmInstructions()
         val data = vmParser.virtualMemory.pop()
@@ -27,7 +26,7 @@ class StackArithmetic {
                 getInstructionFromRawInput("add")
         )
 
-        val vmParser = VmParser(instructions)
+        val vmParser = VirtualMachine(instructions)
         vmParser.executeVmInstructions()
 
         val result: Word = vmParser.virtualMemory.pop()
@@ -44,7 +43,7 @@ class StackArithmetic {
                 getInstructionFromRawInput("add")
         )
 
-        val vmParser = VmParser(instructions)
+        val vmParser = VirtualMachine(instructions)
         vmParser.executeVmInstructions()
 
         val result: Word = vmParser.virtualMemory.pop()
@@ -61,7 +60,7 @@ class StackArithmetic {
                 getInstructionFromRawInput("gt")
         )
 
-        val vmParser = VmParser(instructions)
+        val vmParser = VirtualMachine(instructions)
         vmParser.executeVmInstructions()
 
         val result: Word = vmParser.virtualMemory.pop()
