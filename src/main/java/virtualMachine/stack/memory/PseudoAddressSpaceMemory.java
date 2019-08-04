@@ -4,20 +4,20 @@ import virtualMachine.stack.types.Word;
 
 import java.util.Arrays;
 
-class PseudoAddressSpaceMemory {
+public class PseudoAddressSpaceMemory {
 
     private Word[] memory;
 
-    PseudoAddressSpaceMemory(int size) {
+    public PseudoAddressSpaceMemory(int size) {
         this.memory = new Word[size];
     }
 
-    void setAddress(int address, Word variable) {
+    public void setAddress(int address, Word variable) {
         resizeMemory(address);
         memory[address] = variable;
     }
 
-    Word getAddress(int address) {
+    public Word getAddress(int address) {
         if (address >= memory.length) {
             throw new RuntimeException("Segmentation fault");
         }

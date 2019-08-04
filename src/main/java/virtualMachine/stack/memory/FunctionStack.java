@@ -8,12 +8,15 @@ import java.util.Map;
 
 import static virtualMachine.stack.memory.MemorySegments.*;
 
-class FunctionMemory implements Memory, VmStack {
+/**
+ * Stores variables in a working stack, for addition etc. and also stores persistent variables, e.g. function arguments
+ * in pseudo memory, and has references to the main vm heap
+ */
+public class FunctionStack implements Memory, VmStack {
 
     private final VmStack workingStack = new LocalStack();
     private final PseudoAddressSpaceMemory programHeap;
 
-    //TEMP VARIABLE -> remove when can restore state from global stack
     private final int locFunctionCalledFrom;
     private final String name;
 
@@ -25,14 +28,14 @@ class FunctionMemory implements Memory, VmStack {
                     TEMP, new PseudoAddressSpaceMemory(16),
                     POINTER, new PseudoAddressSpaceMemory(2));
 
-    FunctionMemory(PseudoAddressSpaceMemory programHeap, int locCalledFrom, String name) {
+    public FunctionStack(PseudoAddressSpaceMemory programHeap, int locCalledFrom, String name) {
         this.programHeap = programHeap;
         this.locFunctionCalledFrom = locCalledFrom;
         this.name = name;
     }
 
-    FunctionMemory(PseudoAddressSpaceMemory arguments, PseudoAddressSpaceMemory staticVariables, PseudoAddressSpaceMemory programHeap,
-                   int locCalledFrom, String name) {
+    public FunctionStack(PseudoAddressSpaceMemory arguments, PseudoAddressSpaceMemory staticVariables, PseudoAddressSpaceMemory programHeap,
+                  int locCalledFrom, String name) {
         initMemorySegment(arguments, ARGUMENT);
         initMemorySegment(staticVariables, STATIC);
         this.programHeap = programHeap;
@@ -79,7 +82,7 @@ class FunctionMemory implements Memory, VmStack {
             return programHeap.getAddress(address);
         }
 
-        var segmentMemory = memorySegmentMemoryMap.get(segment);
+        PseudoAddressSpaceMemory segmentMemory = memorySegmentMemoryMap.get(segment);
         return segmentMemory.getAddress(address);
     }
 
@@ -116,7 +119,7 @@ class FunctionMemory implements Memory, VmStack {
         return name;
     }
 
-    private class LocalStack implements VmStack {
+    private static class LocalStack implements VmStack {
 
         private final Deque<Word> localStack = new ArrayDeque<>();
 

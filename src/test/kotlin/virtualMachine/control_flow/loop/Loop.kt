@@ -16,14 +16,11 @@ class Loop {
                 getInstructionFromRawInput("push constant 6"),
                 getInstructionFromRawInput("pop argument 0"))
 
-        val vmReader : VirtualMachine = VirtualMachineFileParser()
+        val virtualMachine : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/loop/loop.vm",
                         setup)
 
-        val memory = vmReader.virtualMemory
-
-        Assert.assertEquals(2, memory.controlFlow.getJumpLocation("LOOP_START"))
-        Assert.assertEquals(21, memory.pop().convertToInteger())
+        Assert.assertEquals(21, virtualMachine.pop().convertToInteger())
     }
 
     @Test
@@ -40,13 +37,11 @@ class Loop {
                 getInstructionFromRawInput("push constant 81"),
                 getInstructionFromRawInput("pop argument 0"))
 
-        val vmReader : VirtualMachine = VirtualMachineFileParser()
+        val virtualMachine : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/loop/loop.vm",
                         setup)
 
-        val memory = vmReader.virtualMemory
-
-        Assert.assertEquals(sum, memory.pop().convertToInteger())
+        Assert.assertEquals(sum, virtualMachine.pop().convertToInteger())
     }
 
     @Test
@@ -64,13 +59,11 @@ class Loop {
                 getInstructionFromRawInput("push constant $counterStart"),
                 getInstructionFromRawInput("pop argument 0"))
 
-        val vmReader : VirtualMachine = VirtualMachineFileParser()
+        val virtualMachine : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/loop/loop.vm",
                         setup)
 
-        val memory = vmReader.virtualMemory
-
-        Assert.assertEquals(sum, memory.pop().convertToInteger())
+        Assert.assertEquals(sum, virtualMachine.pop().convertToInteger())
     }
 
 }

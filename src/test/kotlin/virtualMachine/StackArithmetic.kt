@@ -11,10 +11,10 @@ class StackArithmetic {
     @Test
     fun testLoadConstants() {
         val line = getInstructionFromRawInput("push constant 2")
-        val vmParser = VirtualMachine(listOf(line))
+        val virtualMachine = VirtualMachine(listOf(line))
 
-        vmParser.executeVmInstructions()
-        val data = vmParser.virtualMemory.pop()
+        virtualMachine.executeVmInstructions()
+        val data = virtualMachine.pop()
         Assert.assertEquals(2, data.convertToInteger())
     }
 
@@ -29,7 +29,7 @@ class StackArithmetic {
         val vmParser = VirtualMachine(instructions)
         vmParser.executeVmInstructions()
 
-        val result: Word = vmParser.virtualMemory.pop()
+        val result: Word = vmParser.pop()
         Assert.assertEquals(9, result.convertToInteger())
     }
 
@@ -46,7 +46,7 @@ class StackArithmetic {
         val vmParser = VirtualMachine(instructions)
         vmParser.executeVmInstructions()
 
-        val result: Word = vmParser.virtualMemory.pop()
+        val result: Word = vmParser.pop()
         Assert.assertEquals(11, result.convertToInteger())
     }
 
@@ -63,7 +63,7 @@ class StackArithmetic {
         val vmParser = VirtualMachine(instructions)
         vmParser.executeVmInstructions()
 
-        val result: Word = vmParser.virtualMemory.pop()
+        val result: Word = vmParser.pop()
 
         val trueSixteenBit = Word(true)
         Assert.assertEquals(trueSixteenBit, result)

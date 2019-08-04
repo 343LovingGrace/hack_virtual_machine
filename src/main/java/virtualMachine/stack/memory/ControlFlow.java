@@ -36,7 +36,7 @@ public class ControlFlow {
         }
     }
 
-    void processReturn(Deque<FunctionMemory> callStack) {
+    public void processReturn(Deque<FunctionStack> callStack) {
         var function = callStack.pop();
         instructionPointer = function.getLocFunctionCalledFrom();
     }
@@ -48,7 +48,7 @@ public class ControlFlow {
         throw new RuntimeException("Label not in map of labelLocations (not been added) " + label);
     }
 
-    int getInstructionPointer() {
+    public int getInstructionPointer() {
         return instructionPointer;
     }
 }

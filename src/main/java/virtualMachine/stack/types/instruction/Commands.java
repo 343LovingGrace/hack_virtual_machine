@@ -1,50 +1,44 @@
 package virtualMachine.stack.types.instruction;
 
-import virtualMachine.vm_instruction_processing.InstructionProcessor;
-import virtualMachine.vm_instruction_processing.impl.FunctionProcessor;
-import virtualMachine.vm_instruction_processing.impl.BinaryInstructionProcessor;
-import virtualMachine.vm_instruction_processing.impl.PopInstructionProcessor;
-import virtualMachine.vm_instruction_processing.impl.PushInstructionProcessor;
-import virtualMachine.vm_instruction_processing.impl.UnaryInstructionProcessor;
-import virtualMachine.vm_instruction_processing.impl.ProgramFlowProcessor;
+import static virtualMachine.stack.types.instruction.CommandType.*;
 
 public enum Commands {
-    PUSH("push", new PushInstructionProcessor()),
-    POP("pop", new PopInstructionProcessor()),
+    PUSH("push", PUSH_STACK),
+    POP("pop", POP_STACK),
 
-    ADD("add", new BinaryInstructionProcessor()),
-    SUBTRACT("sub", new BinaryInstructionProcessor()),
-    LESS_THAN("lt", new BinaryInstructionProcessor()),
-    GREATER_THAN("gt", new BinaryInstructionProcessor()),
-    BITWISE_OR("or", new BinaryInstructionProcessor()),
-    BITWISE_AND("and", new BinaryInstructionProcessor()),
-    BITWISE_EQUALS("eq", new BinaryInstructionProcessor()),
+    ADD("add", ARITHMETIC),
+    SUBTRACT("sub", ARITHMETIC),
+    LESS_THAN("lt", ARITHMETIC),
+    GREATER_THAN("gt", ARITHMETIC),
+    BITWISE_OR("or", ARITHMETIC),
+    BITWISE_AND("and", ARITHMETIC),
+    BITWISE_EQUALS("eq", ARITHMETIC),
 
-    NOT("not", new UnaryInstructionProcessor()),
-    NEGATIVE("neg", new UnaryInstructionProcessor()),
+    NOT("not", NEGATION),
+    NEGATIVE("neg", NEGATION),
 
-    LABEL("label", new ProgramFlowProcessor()),
-    GOTO("goto", new ProgramFlowProcessor()),
-    IF_GOTO("if-goto", new ProgramFlowProcessor()),
+    LABEL("label", CONTROL_FLOW_ACCESS),
+    GOTO("goto", CONTROL_FLOW_ACCESS),
+    IF_GOTO("if-goto", CONTROL_FLOW_ACCESS),
 
-    FUNCTION("function", new FunctionProcessor()),
-    CALL("call", new FunctionProcessor()),
-    RETURN("return", new FunctionProcessor());
+    FUNCTION("function", MEMORY_ACCESS),
+    CALL("call", MEMORY_ACCESS),
+    RETURN("return", MEMORY_ACCESS);
 
     private final String name;
-    private final InstructionProcessor instructionProcessor;
+    private final CommandType commandType;
 
-    Commands(String name, InstructionProcessor instructionProcessor) {
+    Commands(String name, CommandType commandType) {
         this.name = name;
-        this.instructionProcessor = instructionProcessor;
+        this.commandType = commandType;
     }
 
     public String getName() {
         return name;
     }
 
-    public InstructionProcessor getInstructionProcessor() {
-        return instructionProcessor;
+    public CommandType getCommandType() {
+        return commandType;
     }
 
     public static Commands getCommandFromValue(String value) {

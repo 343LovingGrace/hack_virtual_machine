@@ -17,11 +17,10 @@ class Pointers {
                 getInstructionFromRawInput("pop pointer 0")
         )
 
-        val vmProcessor = VirtualMachine(instructions)
-        vmProcessor.executeVmInstructions()
+        val virtualMachine = VirtualMachine(instructions)
+        virtualMachine.executeVmInstructions()
 
-        val memory = vmProcessor.virtualMemory
-        val storedInPointer : Word = memory.getFromMemory(0, MemorySegments.POINTER)
+        val storedInPointer : Word = virtualMachine.getFromMemory(0, MemorySegments.POINTER)
 
         assertEquals(1450, storedInPointer.convertToInteger())
     }

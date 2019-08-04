@@ -13,9 +13,7 @@ class NestedCall {
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/nested/NestedCall.vm",
                         null)
 
-        val memory = vmReader.virtualMemory
-
-        val head = memory.pop()
+        val head = vmReader.pop()
         //todo : check this
         Assert.assertEquals(246, head.convertToInteger())
     }

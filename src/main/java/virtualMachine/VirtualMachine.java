@@ -1,19 +1,27 @@
 package virtualMachine;
 
-import virtualMachine.stack.memory.VirtualMemory;
+import virtualMachine.stack.memory.*;
+import virtualMachine.stack.types.Word;
 import virtualMachine.stack.types.instruction.Commands;
 import virtualMachine.stack.types.instruction.Instruction;
-import virtualMachine.vm_instruction_processing.InstructionProcessor;
+import virtualMachine.stack.types.instruction.StackAccessProcessorLookup;
+import virtualMachine.vm_instruction_processing.memory_access.Function;
+import virtualMachine.vm_instruction_processing.control_flow_processing.ProgramFlow;
+import virtualMachine.vm_instruction_processing.stack_access.StackAccessProcessor;
 
 import java.util.List;
 
+import static virtualMachine.stack.types.instruction.CommandType.CONTROL_FLOW_ACCESS;
+import static virtualMachine.stack.types.instruction.CommandType.MEMORY_ACCESS;
 import static virtualMachine.stack.types.instruction.Commands.FUNCTION;
 import static virtualMachine.stack.types.instruction.Commands.LABEL;
 
 public class VirtualMachine {
 
     private final List<Instruction> vmInstructions;
-    private final VirtualMemory virtualMemory = new VirtualMemory();
+    private final PseudoAddressSpaceMemory virtualRam = new PseudoAddressSpaceMemory(8192);
+    private final ControlFlow controlFlow = new ControlFlow();
+    private final CallStack callStack = new CallStack(virtualRam, controlFlow);
 
     public VirtualMachine(List<Instruction> vmInstructions) {
         this.vmInstructions = vmInstructions;
@@ -22,37 +30,39 @@ public class VirtualMachine {
     }
 
     public void processInstruction(Instruction instruction) {
-        var instructionProcessor = getInstructionProcessorFromCommand(instruction);
-        instructionProcessor.processInstruction(instruction, virtualMemory);
+        Commands command = instruction.getCommand();
+
+        if (StackAccessProcessorLookup.stackAccessors().contains(command.getCommandType())) {
+            StackAccessProcessor stackAccessProcessor = StackAccessProcessorLookup.getProcessor(command.getCommandType());
+            stackAccessProcessor.processInstruction(instruction, callStack.peekFirst());
+
+        } else if (MEMORY_ACCESS == command.getCommandType()) {
+            Function.processInstruction(instruction, controlFlow, callStack, virtualRam);
+        } else if (CONTROL_FLOW_ACCESS == command.getCommandType()) {
+            ProgramFlow.processInstruction(instruction, controlFlow, callStack.peekFirst());
+        }
     }
 
     public void executeVmInstructions() {
         final var totalInstructions = vmInstructions.size();
 
-        while (virtualMemory.getControlFlow().hasNextInstruction(totalInstructions)) {
-            int instructionPointer = virtualMemory.getControlFlow().nextInstruction();
+        while (controlFlow.hasNextInstruction(totalInstructions)) {
+            int instructionPointer = controlFlow.nextInstruction();
 
             Instruction instruction = vmInstructions.get(instructionPointer);
             System.out.println(instruction.toString());
-            var instructionProcessor = getInstructionProcessorFromCommand(instruction);
-            instructionProcessor.processInstruction(instruction, virtualMemory);
+            processInstruction(instruction);
         }
 
     }
 
-    private InstructionProcessor getInstructionProcessorFromCommand(Instruction instruction) {
-        Commands command = instruction.getCommand();
-        return command.getInstructionProcessor();
+    public Word getFromMemory(int address, MemorySegments memorySegments) {
+        return callStack.peekFirst().getFromMemory(address, memorySegments);
     }
 
-    /**
-     * Only used in tests (candidate for refactoring)
-     * @return mutable virtual memory
-     */
-    public VirtualMemory getVirtualMemory() {
-        return virtualMemory;
+    public Word pop() {
+        return callStack.peekFirst().pop();
     }
-
 
     private void initializeFunctions(List<Instruction> vmInstructions) {
         for (int i = 0; i < vmInstructions.size(); i++) {
@@ -60,7 +70,7 @@ public class VirtualMachine {
             if (instruction.getCommand() == FUNCTION
                     || instruction.getCommand() == LABEL) {
 
-                virtualMemory.getControlFlow().addJumpLocation(instruction.getOperand(), i);
+                controlFlow.addJumpLocation(instruction.getOperand(), i);
             }
         }
     }

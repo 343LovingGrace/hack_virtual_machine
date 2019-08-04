@@ -1,19 +1,22 @@
-package virtualMachine.vm_instruction_processing.impl;
+package virtualMachine.vm_instruction_processing.stack_access;
 
-import virtualMachine.stack.memory.VirtualMemory;
+import virtualMachine.stack.memory.FunctionStack;
 import virtualMachine.stack.types.Word;
 import virtualMachine.stack.types.instruction.Commands;
 import virtualMachine.stack.types.instruction.Instruction;
-import virtualMachine.vm_instruction_processing.InstructionProcessor;
 
-public class BinaryInstructionProcessor implements InstructionProcessor {
+public class ArithmeticProcessor implements StackAccessProcessor {
+
+    /**
+     * Process arithmetic operation of the 2 top values of a current function's stack
+     */
     @Override
-    public void processInstruction(Instruction instruction, VirtualMemory virtualMemory) {
-        var head = virtualMemory.pop();
-        var secondFromHead = virtualMemory.pop();
+    public void processInstruction(Instruction instruction, FunctionStack functionStack) {
+        var head = functionStack.pop();
+        var secondFromHead = functionStack.pop();
 
         Word result = doComputation(head, secondFromHead, instruction.getCommand());
-        virtualMemory.push(result);
+        functionStack.push(result);
     }
 
     private Word doComputation(Word head, Word second, Commands command) {
@@ -36,4 +39,5 @@ public class BinaryInstructionProcessor implements InstructionProcessor {
                 throw new RuntimeException("Unrecognised command: " + command.getName());
         }
     }
+
 }

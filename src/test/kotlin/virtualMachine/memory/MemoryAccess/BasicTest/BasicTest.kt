@@ -12,28 +12,26 @@ class BasicTest {
     @Test
     fun testScript() {
 
-        val vmReader : VirtualMachine = VirtualMachineFileParser()
+        val virtualMachine : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/memory/MemoryAccess/BasicTest/BasicTest.vm",
                         listOf(getInstructionFromRawInput("push constant 3000"),
                                 getInstructionFromRawInput("pop pointer 0"),
                                 getInstructionFromRawInput("push constant 3010"),
                                 getInstructionFromRawInput("pop pointer 1")))
 
-        val memory = vmReader.virtualMemory
+        Assert.assertEquals(10, virtualMachine.getFromMemory(0, MemorySegments.LOCAL).convertToInteger())
 
-        Assert.assertEquals(10, memory.getFromMemory(0, MemorySegments.LOCAL).convertToInteger())
+        Assert.assertEquals(21, virtualMachine.getFromMemory(1, MemorySegments.ARGUMENT).convertToInteger())
+        Assert.assertEquals(22, virtualMachine.getFromMemory(2, MemorySegments.ARGUMENT).convertToInteger())
 
-        Assert.assertEquals(21, memory.getFromMemory(1, MemorySegments.ARGUMENT).convertToInteger())
-        Assert.assertEquals(22, memory.getFromMemory(2, MemorySegments.ARGUMENT).convertToInteger())
+        Assert.assertEquals(42, virtualMachine.getFromMemory(2, MemorySegments.THAT).convertToInteger())
+        Assert.assertEquals(45, virtualMachine.getFromMemory(5, MemorySegments.THAT).convertToInteger())
 
-        Assert.assertEquals(42, memory.getFromMemory(2, MemorySegments.THAT).convertToInteger())
-        Assert.assertEquals(45, memory.getFromMemory(5, MemorySegments.THAT).convertToInteger())
+        Assert.assertEquals(36, virtualMachine.getFromMemory(6, MemorySegments.THIS).convertToInteger())
+        Assert.assertEquals(42, virtualMachine.getFromMemory(12, MemorySegments.THIS).convertToInteger())
+        Assert.assertEquals(45, virtualMachine.getFromMemory(15, MemorySegments.THIS).convertToInteger())
 
-        Assert.assertEquals(36, memory.getFromMemory(6, MemorySegments.THIS).convertToInteger())
-        Assert.assertEquals(42, memory.getFromMemory(12, MemorySegments.THIS).convertToInteger())
-        Assert.assertEquals(45, memory.getFromMemory(15, MemorySegments.THIS).convertToInteger())
-
-        Assert.assertEquals(472, vmReader.virtualMemory.pop()
+        Assert.assertEquals(472, virtualMachine.pop()
                 .convertToInteger())
 
     }

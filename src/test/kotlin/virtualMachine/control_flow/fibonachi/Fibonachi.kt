@@ -20,23 +20,21 @@ class Fibonachi {
                 getInstructionFromRawInput("push constant $addressToStoreSequenceFrom"), //address to store variables from
                 getInstructionFromRawInput("pop argument 1"))
 
-        val vmReader : VirtualMachine = VirtualMachineFileParser()
+        val virtualMachine : VirtualMachine = VirtualMachineFileParser()
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/fibonachi/Fibonachi.vm",
                         setup)
 
-        val memory = vmReader.virtualMemory
-
         //the script updates THAT pointer to 1008. If need application code to directly query an address this test could be updated
-        assertEquals(0, memory.getFromMemory(-8, MemorySegments.THAT).convertToInteger())
-        assertEquals(1, memory.getFromMemory(-7, MemorySegments.THAT).convertToInteger())
-        assertEquals(1, memory.getFromMemory(-6, MemorySegments.THAT).convertToInteger())
-        assertEquals(2, memory.getFromMemory(-5, MemorySegments.THAT).convertToInteger())
-        assertEquals(3, memory.getFromMemory(-4, MemorySegments.THAT).convertToInteger())
-        assertEquals(5, memory.getFromMemory(-3, MemorySegments.THAT).convertToInteger())
-        assertEquals(8, memory.getFromMemory(-2, MemorySegments.THAT).convertToInteger())
-        assertEquals(13, memory.getFromMemory(-1, MemorySegments.THAT).convertToInteger())
-        assertEquals(21, memory.getFromMemory(0, MemorySegments.THAT).convertToInteger())
-        assertEquals(34, memory.getFromMemory(1, MemorySegments.THAT).convertToInteger())
+        assertEquals(0, virtualMachine.getFromMemory(-8, MemorySegments.THAT).convertToInteger())
+        assertEquals(1, virtualMachine.getFromMemory(-7, MemorySegments.THAT).convertToInteger())
+        assertEquals(1, virtualMachine.getFromMemory(-6, MemorySegments.THAT).convertToInteger())
+        assertEquals(2, virtualMachine.getFromMemory(-5, MemorySegments.THAT).convertToInteger())
+        assertEquals(3, virtualMachine.getFromMemory(-4, MemorySegments.THAT).convertToInteger())
+        assertEquals(5, virtualMachine.getFromMemory(-3, MemorySegments.THAT).convertToInteger())
+        assertEquals(8, virtualMachine.getFromMemory(-2, MemorySegments.THAT).convertToInteger())
+        assertEquals(13, virtualMachine.getFromMemory(-1, MemorySegments.THAT).convertToInteger())
+        assertEquals(21, virtualMachine.getFromMemory(0, MemorySegments.THAT).convertToInteger())
+        assertEquals(34, virtualMachine.getFromMemory(1, MemorySegments.THAT).convertToInteger())
     }
 
     @Test
@@ -50,6 +48,5 @@ class Fibonachi {
                 .processVmFile(System.getProperty("user.dir") + "/src/test/kotlin/virtualMachine/control_flow/fibonachi/FibonachiRecursive.vm",
                         setup)
 
-        val memory = vmReader.virtualMemory
     }
 }
