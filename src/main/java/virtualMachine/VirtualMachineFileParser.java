@@ -1,7 +1,7 @@
 package virtualMachine;
 
-import virtualMachine.stack.types.instruction.Commands;
-import virtualMachine.stack.types.instruction.Instruction;
+import virtualMachine.types.instruction.Commands;
+import virtualMachine.types.instruction.Instruction;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

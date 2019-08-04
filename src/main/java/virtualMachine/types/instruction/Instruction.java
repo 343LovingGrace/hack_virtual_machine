@@ -1,4 +1,4 @@
-package virtualMachine.stack.types.instruction;
+package virtualMachine.types.instruction;
 
 public class Instruction {
     private final Commands command;

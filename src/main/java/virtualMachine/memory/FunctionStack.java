@@ -1,12 +1,12 @@
-package virtualMachine.stack.memory;
+package virtualMachine.memory;
 
-import virtualMachine.stack.types.Word;
+import virtualMachine.types.Word;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 
-import static virtualMachine.stack.memory.MemorySegments.*;
+import static virtualMachine.memory.MemorySegments.*;
 
 /**
  * Stores variables in a working stack, for addition etc. and also stores persistent variables, e.g. function arguments
@@ -111,7 +111,7 @@ public class FunctionStack implements Memory, VmStack {
         return workingStack.pop();
     }
 
-    int getLocFunctionCalledFrom() {
+    public int getLocFunctionCalledFrom() {
         return locFunctionCalledFrom;
     }
 

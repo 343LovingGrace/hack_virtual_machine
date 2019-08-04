@@ -1,9 +1,10 @@
 package virtualMachine.vm_instruction_processing.memory_access;
 
-import virtualMachine.stack.memory.*;
-import virtualMachine.stack.types.Word;
-import virtualMachine.stack.types.instruction.Commands;
-import virtualMachine.stack.types.instruction.Instruction;
+import virtualMachine.memory.*;
+import virtualMachine.types.Word;
+import virtualMachine.types.instruction.Commands;
+import virtualMachine.types.instruction.Instruction;
+import virtualMachine.vm_instruction_processing.control_flow_processing.ControlFlow;
 
 public class Function {
 

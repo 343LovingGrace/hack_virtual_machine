@@ -2,8 +2,8 @@ package virtualMachine
 
 import org.junit.Assert
 import virtualMachine.VirtualMachineFileParser.getInstructionFromRawInput
-import virtualMachine.stack.types.Word
-import virtualMachine.stack.types.instruction.Instruction
+import virtualMachine.types.Word
+import virtualMachine.types.instruction.Instruction
 import kotlin.test.Test
 
 class StackArithmetic {

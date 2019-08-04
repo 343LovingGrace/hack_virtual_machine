@@ -1,6 +1,6 @@
-package virtualMachine.stack.types.instruction;
+package virtualMachine.types.instruction;
 
-import static virtualMachine.stack.types.instruction.CommandType.*;
+import static virtualMachine.types.instruction.CommandType.*;
 
 public enum Commands {
     PUSH("push", PUSH_STACK),

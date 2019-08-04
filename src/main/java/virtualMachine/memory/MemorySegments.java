@@ -1,4 +1,4 @@
-package virtualMachine.stack.memory;
+package virtualMachine.memory;
 
 import java.util.Arrays;
 

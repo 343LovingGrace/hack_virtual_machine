@@ -1,10 +1,11 @@
-package virtualMachine.stack.memory;
+package virtualMachine.vm_instruction_processing.control_flow_processing;
 
-import java.util.Deque;
+import virtualMachine.memory.FunctionStack;
+import virtualMachine.vm_instruction_processing.memory_access.CallStack;
+
 import java.util.HashMap;
 import java.util.Map;
 
-//TODO : move to VirtualMachine
 public class ControlFlow {
 
     private int instructionPointer = 0;
@@ -36,8 +37,8 @@ public class ControlFlow {
         }
     }
 
-    public void processReturn(Deque<FunctionStack> callStack) {
-        var function = callStack.pop();
+    public void processReturn(CallStack callStack) {
+        FunctionStack function = callStack.pop();
         instructionPointer = function.getLocFunctionCalledFrom();
     }
 

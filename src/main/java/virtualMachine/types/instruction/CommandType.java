@@ -1,4 +1,4 @@
-package virtualMachine.stack.types.instruction;
+package virtualMachine.types.instruction;
 
 public enum CommandType {
     PUSH_STACK("push_stack"),

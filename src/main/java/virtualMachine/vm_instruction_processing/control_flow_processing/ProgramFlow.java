@@ -1,11 +1,10 @@
 package virtualMachine.vm_instruction_processing.control_flow_processing;
 
-import virtualMachine.stack.memory.ControlFlow;
-import virtualMachine.stack.memory.FunctionStack;
-import virtualMachine.stack.types.Word;
-import virtualMachine.stack.types.instruction.Instruction;
+import virtualMachine.memory.FunctionStack;
+import virtualMachine.types.Word;
+import virtualMachine.types.instruction.Instruction;
 
-import static virtualMachine.stack.types.instruction.Commands.*;
+import static virtualMachine.types.instruction.Commands.*;
 
 public class ProgramFlow {
 

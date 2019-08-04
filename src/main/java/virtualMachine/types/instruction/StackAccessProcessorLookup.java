@@ -1,11 +1,11 @@
-package virtualMachine.stack.types.instruction;
+package virtualMachine.types.instruction;
 
 import virtualMachine.vm_instruction_processing.stack_access.*;
 
 import java.util.Map;
 import java.util.Set;
 
-import static virtualMachine.stack.types.instruction.CommandType.*;
+import static virtualMachine.types.instruction.CommandType.*;
 
 public class StackAccessProcessorLookup {
 

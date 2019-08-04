@@ -1,4 +1,4 @@
-package virtualMachine.stack.types;
+package virtualMachine.types;
 
 import java.util.Arrays;
 

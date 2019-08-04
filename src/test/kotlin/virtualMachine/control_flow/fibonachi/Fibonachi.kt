@@ -4,7 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import virtualMachine.VirtualMachineFileParser
 import virtualMachine.VirtualMachineFileParser.getInstructionFromRawInput
-import virtualMachine.stack.memory.MemorySegments
+import virtualMachine.memory.MemorySegments
 import virtualMachine.VirtualMachine
 
 class Fibonachi {

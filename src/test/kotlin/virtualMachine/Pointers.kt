@@ -2,9 +2,9 @@ package virtualMachine
 
 import org.junit.Test
 import virtualMachine.VirtualMachineFileParser.getInstructionFromRawInput
-import virtualMachine.stack.types.Word
-import virtualMachine.stack.types.instruction.Instruction
-import virtualMachine.stack.memory.MemorySegments
+import virtualMachine.types.Word
+import virtualMachine.types.instruction.Instruction
+import virtualMachine.memory.MemorySegments
 import kotlin.test.assertEquals
 
 class Pointers {

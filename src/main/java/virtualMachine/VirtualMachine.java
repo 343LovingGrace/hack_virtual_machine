@@ -1,20 +1,22 @@
 package virtualMachine;
 
-import virtualMachine.stack.memory.*;
-import virtualMachine.stack.types.Word;
-import virtualMachine.stack.types.instruction.Commands;
-import virtualMachine.stack.types.instruction.Instruction;
-import virtualMachine.stack.types.instruction.StackAccessProcessorLookup;
+import virtualMachine.memory.*;
+import virtualMachine.types.Word;
+import virtualMachine.types.instruction.Commands;
+import virtualMachine.types.instruction.Instruction;
+import virtualMachine.types.instruction.StackAccessProcessorLookup;
+import virtualMachine.vm_instruction_processing.control_flow_processing.ControlFlow;
+import virtualMachine.vm_instruction_processing.memory_access.CallStack;
 import virtualMachine.vm_instruction_processing.memory_access.Function;
 import virtualMachine.vm_instruction_processing.control_flow_processing.ProgramFlow;
 import virtualMachine.vm_instruction_processing.stack_access.StackAccessProcessor;
 
 import java.util.List;
 
-import static virtualMachine.stack.types.instruction.CommandType.CONTROL_FLOW_ACCESS;
-import static virtualMachine.stack.types.instruction.CommandType.MEMORY_ACCESS;
-import static virtualMachine.stack.types.instruction.Commands.FUNCTION;
-import static virtualMachine.stack.types.instruction.Commands.LABEL;
+import static virtualMachine.types.instruction.CommandType.CONTROL_FLOW_ACCESS;
+import static virtualMachine.types.instruction.CommandType.MEMORY_ACCESS;
+import static virtualMachine.types.instruction.Commands.FUNCTION;
+import static virtualMachine.types.instruction.Commands.LABEL;
 
 public class VirtualMachine {
 

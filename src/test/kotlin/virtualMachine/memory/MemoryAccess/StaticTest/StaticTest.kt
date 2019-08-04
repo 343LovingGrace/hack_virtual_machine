@@ -3,7 +3,7 @@ package virtualMachine.memory.MemoryAccess.StaticTest
 import org.junit.Assert
 import org.junit.Test
 import virtualMachine.VirtualMachineFileParser
-import virtualMachine.stack.memory.MemorySegments
+import virtualMachine.memory.MemorySegments
 import virtualMachine.VirtualMachine
 
 class StaticTest {

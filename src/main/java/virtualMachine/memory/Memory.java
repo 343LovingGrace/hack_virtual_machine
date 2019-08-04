@@ -1,6 +1,6 @@
-package virtualMachine.stack.memory;
+package virtualMachine.memory;
 
-import virtualMachine.stack.types.Word;
+import virtualMachine.types.Word;
 
 public interface Memory {
 

@@ -1,13 +1,13 @@
 package virtualMachine.vm_instruction_processing.stack_access;
 
-import virtualMachine.stack.memory.FunctionStack;
-import virtualMachine.stack.memory.MemorySegments;
-import virtualMachine.stack.types.Word;
-import virtualMachine.stack.types.instruction.Instruction;
+import virtualMachine.memory.FunctionStack;
+import virtualMachine.memory.MemorySegments;
+import virtualMachine.types.Word;
+import virtualMachine.types.instruction.Instruction;
 
 import java.util.Objects;
 
-import static virtualMachine.stack.memory.MemorySegments.getFromName;
+import static virtualMachine.memory.MemorySegments.getFromName;
 
 public class PushStackCommand implements StackAccessProcessor {
 
